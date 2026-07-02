@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" fill="none" preserveAspectRatio="xMidYMid slice">
+  <rect width="1200" height="800" fill="#141519"/>
+  <g stroke="#26272B" stroke-width="2">
+    <path d="M0 520h1200M200 200v320M600 160v360M1000 200v320"/>
+    <path d="M0 300l600-140 600 140"/>
+  </g>
+  <circle cx="600" cy="360" r="160" fill="#8B2828" opacity="0.06"/>
+  <text x="600" y="720" text-anchor="middle" font-family="Inter, sans-serif" font-size="22" letter-spacing="8" fill="#4a4b52">SHOWROOM · BUFFALO GROVE, IL</text>
+</svg>

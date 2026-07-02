@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lux Cars Chicago — Design System v1.0</title>
+  <meta name="theme-color" content="#0B0B0D" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+
+  <!-- Real fonts for the NEW type scheme -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Manrope for body/UI; Special Gothic Expanded One for display/headings. Both real (Google Fonts). -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet" />
+
+  <!-- The REAL project stylesheet — tokens + components are pulled live from here -->
+  <link rel="stylesheet" href="css/styles.css" />
+
+  <!-- Page-specific layout ONLY (prefixed .ds-). Does not modify site styles. -->
+  <style>
+    :root {
+      /* New type scheme (both real Google Fonts) */
+      --ds-font-display: "Special Gothic Expanded One", "Arial Narrow", system-ui, sans-serif;
+      --ds-font-ui: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --ds-sidebar-w: 264px;
+
+      /* Approved spacing scale (documented here; Proposed for styles.css) */
+      --space-4: 4px;   --space-8: 8px;   --space-12: 12px; --space-16: 16px;
+      --space-24: 24px; --space-32: 32px; --space-48: 48px; --space-64: 64px;
+      --space-80: 80px; --space-96: 96px; --space-120: 120px;
+    }
+
+    /* This page's UI/body renders in Manrope (the new UI face) */
+    body { font-family: var(--ds-font-ui); }
+
+    .ds-shell { display: grid; grid-template-columns: var(--ds-sidebar-w) 1fr; min-height: 100vh; }
+
+    /* ---- Sidebar ---- */
+    .ds-sidebar {
+      position: sticky; top: 0; align-self: start; height: 100vh; overflow-y: auto;
+      border-right: 1px solid var(--color-border);
+      padding: 2rem 1.4rem;
+      background: color-mix(in srgb, var(--color-bg) 92%, #000);
+    }
+    .ds-brand { display: flex; flex-direction: column; gap: 4px; margin-bottom: 2rem; }
+    .ds-brand .mark { font-family: var(--ds-font-display); font-weight: 400; font-size: 18px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-text); }
+    .ds-brand .sub { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--color-muted); }
+    .ds-nav-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--color-muted); margin: 1.4rem 0 .5rem .75rem; }
+    .ds-nav a {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .55rem .75rem; border-radius: 8px;
+      color: var(--color-muted); font-size: 13px; font-weight: 500; letter-spacing: .3px;
+      transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+    }
+    .ds-nav a:hover { color: var(--color-text); background: var(--color-surface); }
+    .ds-nav a.is-active { color: var(--color-text); background: var(--color-surface); box-shadow: inset 2px 0 0 var(--red-500); }
+    .ds-nav a[aria-disabled="true"] { opacity: .42; pointer-events: none; }
+    .ds-soon { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--color-muted); border: 1px solid var(--color-border); border-radius: 999px; padding: 2px 6px; }
+
+    /* ---- Main ---- */
+    .ds-main { padding: 0 clamp(1.5rem, 4vw, 4.5rem) 7rem; max-width: 1120px; min-width: 0; }
+    .ds-section { padding-block: 4rem; border-top: 1px solid var(--divider-platinum); scroll-margin-top: 1.5rem; }
+    .ds-section:first-of-type { border-top: 0; }
+    .ds-eyebrow { font-family: var(--ds-font-display); font-size: 12px; line-height: 16px; letter-spacing: 2px; text-transform: uppercase; color: var(--red-400); font-weight: 400; }
+    .ds-h2 { font-family: var(--ds-font-display); font-size: 34px; line-height: 40px; font-weight: 400; letter-spacing: .5px; color: var(--color-text); margin: .5rem 0 .4rem; }
+    .ds-lead { font-size: 15px; line-height: 24px; color: var(--color-muted); max-width: 60ch; }
+    .ds-note { font-size: 13px; line-height: 20px; color: var(--color-muted); background: var(--color-surface); border: 1px solid var(--color-border); border-left: 3px solid var(--red-500); border-radius: 10px; padding: .85rem 1rem; margin-top: 1.6rem; max-width: 70ch; }
+    .ds-note strong { color: var(--color-text); font-weight: 600; }
+    .ds-proposed { display: inline-block; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--red-300); border: 1px solid color-mix(in srgb, var(--red-500) 50%, var(--color-border)); border-radius: 999px; padding: 2px 8px; vertical-align: middle; }
+
+    /* ---- Cover ---- */
+    .ds-cover { min-height: 78vh; display: flex; flex-direction: column; justify-content: center; padding-block: 3rem; border-top: 0; }
+    .ds-cover__title { font-family: var(--ds-font-display); font-weight: 400; font-size: clamp(48px, 8vw, 92px); line-height: .98; letter-spacing: 1px; text-transform: uppercase; color: var(--color-text); margin: 1rem 0; }
+    .ds-cover__title .accent { color: var(--red-500); }
+    .ds-cover__meta { display: flex; flex-wrap: wrap; gap: 1.5rem; font-size: 13px; color: var(--color-muted); margin-top: 1.2rem; }
+    .ds-cover__meta b { color: var(--color-text); font-weight: 600; }
+    .ds-cover__note { margin-top: 2rem; max-width: 52ch; font-size: 15px; line-height: 24px; color: var(--color-muted); }
+
+    /* ---- Color ---- */
+    /* Color swatches — own class (.ds-chip) so we never inherit the site's
+       pill-shaped .chip. Generous full-width color field + refined footer. */
+    .ds-swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(164px, 1fr)); gap: 1.1rem; margin-top: 2rem; }
+    .ds-swatch { border: 1px solid var(--color-border); border-radius: 14px; overflow: hidden; background: var(--color-surface); transition: border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease); }
+    .ds-swatch:hover { border-color: color-mix(in srgb, var(--platinum-400) 45%, var(--color-border)); transform: translateY(-2px); }
+    .ds-chip { display: block; width: 100%; height: 108px; }
+    .ds-chip.is-dark { box-shadow: inset 0 0 0 1px var(--color-border); }
+    .ds-swatch .meta { padding: .9rem 1rem 1.05rem; display: flex; flex-direction: column; gap: 5px; border-top: 1px solid var(--divider-platinum); }
+    .ds-swatch .name { font-size: 13.5px; font-weight: 600; color: var(--color-text); letter-spacing: .2px; display: flex; align-items: center; gap: .5rem; }
+    .ds-swatch .hex { font-size: 12px; color: var(--color-text); font-family: ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: .3px; }
+    .ds-swatch .cssvar { font-size: 11px; color: var(--color-muted); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+    .ds-pill { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; color: #fff; background: var(--red-500); border-radius: 999px; padding: 2px 7px; }
+    .ds-grouplabel { font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--platinum-400); margin: 2.6rem 0 .3rem; }
+
+    /* ---- Typography specimens ---- */
+    .ds-spec { display: grid; grid-template-columns: 1fr 240px; gap: 2.5rem; padding: 2.6rem 0; border-top: 1px dashed var(--color-border); align-items: center; }
+    .ds-spec:first-child { border-top: 0; padding-top: 0.5rem; }
+    .ds-spec .sample { color: var(--color-text); overflow-wrap: anywhere; }
+    .ds-attrs { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+    .ds-attrs li { font-size: 13px; line-height: 1.4; color: var(--color-text); display: grid; grid-template-columns: 78px 1fr; gap: .6rem; }
+    .ds-attrs li span { color: color-mix(in srgb, var(--color-muted) 78%, var(--color-text)); }
+    .ds-attrs li.usage { font-weight: 600; }
+    .ds-attrs li.usage span { color: var(--platinum-400); }
+
+    /* ---- Buttons ---- */
+    .ds-btn-block { margin-top: 2.2rem; }
+    .ds-btn-block h3 { font-family: var(--ds-font-display); font-size: 20px; line-height: 26px; font-weight: 400; color: var(--color-text); margin-bottom: .35rem; }
+    .ds-btn-block .desc { font-size: 13px; color: var(--color-muted); margin-bottom: 1.1rem; }
+    .ds-btn-row { display: flex; flex-wrap: wrap; gap: 1.6rem 2rem; margin-bottom: 1.4rem; }
+    .ds-btn-cell { display: flex; flex-direction: column; gap: .55rem; align-items: flex-start; }
+    .ds-cap { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--color-muted); }
+    .ds-cap b { color: var(--color-text); font-weight: 600; }
+
+    /* Forced visual states for documentation (mirror the real :hover/:active) */
+    .btn.ds-hover.btn-primary { background: var(--red-600); }
+    .btn.ds-pressed.btn-primary { background: var(--red-700); transform: translateY(1px); }
+    .btn.ds-hover.btn-secondary { border-color: var(--red-500); background: var(--color-surface); }
+    .btn.ds-pressed.btn-secondary { border-color: var(--red-500); background: var(--color-surface); transform: translateY(1px); }
+    .btn.ds-hover.btn-ghost { color: var(--platinum-300); }
+    .btn.ds-pressed.btn-ghost { color: var(--platinum-500); transform: translateY(1px); }
+    /* Proposed disabled treatment (no .btn:disabled exists in the real stylesheet yet) */
+    .btn[disabled], .btn:disabled { opacity: .42; cursor: not-allowed; }
+    .btn-secondary[disabled] { background: transparent; }
+
+    /* ---- Metallic note ---- */
+    .ds-metanote { font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--platinum-400); margin-top: 1.4rem; }
+
+    /* ---- Principle / tone cards ---- */
+    .ds-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; margin-top: 2rem; }
+    .ds-card { border: 1px solid var(--color-border); border-radius: 14px; background: var(--color-surface); padding: 1.4rem 1.3rem; display: flex; flex-direction: column; gap: .6rem; }
+    .ds-card__marker { width: 30px; height: 2px; border-radius: 2px; background: var(--platinum-400); margin-bottom: .3rem; }
+    .ds-card__title { font-family: var(--ds-font-display); font-size: 16px; letter-spacing: .5px; text-transform: uppercase; color: var(--color-text); }
+    .ds-card__body { font-size: 13px; line-height: 20px; color: var(--color-muted); }
+    .ds-card__use { font-size: 11px; letter-spacing: .5px; text-transform: uppercase; color: var(--platinum-400); margin-top: auto; padding-top: .5rem; }
+
+    /* Tone do / don't */
+    .ds-tone { display: grid; gap: .55rem; }
+    .ds-tone .ln { display: grid; grid-template-columns: 46px 1fr; gap: .6rem; font-size: 13px; line-height: 19px; align-items: start; }
+    .ds-tone .tag { font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; padding: 2px 0; }
+    .ds-tone .do .tag { color: var(--red-300); }
+    .ds-tone .dont .tag { color: var(--color-muted); }
+    .ds-tone .do span:last-child { color: var(--color-text); }
+    .ds-tone .dont span:last-child { color: var(--color-muted); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--color-muted) 60%, transparent); }
+
+    /* ---- System structure columns ---- */
+    .ds-struct { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem; }
+    .ds-col { border: 1px solid var(--color-border); border-radius: 14px; padding: 1.3rem; background: color-mix(in srgb, var(--color-surface) 70%, var(--color-bg)); }
+    .ds-col > h4 { font-family: var(--ds-font-display); font-size: 15px; letter-spacing: 1px; text-transform: uppercase; color: var(--color-text); padding-bottom: .8rem; margin-bottom: .8rem; border-bottom: 1px solid var(--divider-platinum); }
+    .ds-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
+    .ds-col li { font-size: 13px; color: var(--color-muted); display: flex; align-items: center; gap: .55rem; }
+    .ds-col li::before { content: ""; width: 5px; height: 5px; border-radius: 999px; background: var(--platinum-400); flex: 0 0 auto; }
+    .ds-col li.soon { color: color-mix(in srgb, var(--color-muted) 65%, transparent); }
+
+    /* ---- Documentation model (4 columns) ---- */
+    .ds-docmodel { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: 2rem; border: 1px solid var(--color-border); border-radius: 14px; overflow: hidden; }
+    .ds-docmodel > div { padding: 1.3rem 1.2rem; border-right: 1px solid var(--divider-platinum); display: flex; flex-direction: column; gap: .5rem; }
+    .ds-docmodel > div:last-child { border-right: 0; }
+    .ds-docmodel h4 { font-family: var(--ds-font-display); font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--color-text); }
+    .ds-docmodel p { font-size: 12px; line-height: 18px; color: var(--color-muted); }
+
+    /* ---- Hero preview (palette shown together) ---- */
+    .ds-hero { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--color-border); margin-top: 2rem; min-height: 340px; display: flex; align-items: center; }
+    .ds-hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+    .ds-hero__scrim { position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, var(--color-bg) 6%, color-mix(in srgb, var(--color-bg) 72%, transparent) 46%, transparent 100%); }
+    .ds-hero__in { position: relative; z-index: 2; padding: 2.4rem clamp(1.4rem, 3vw, 2.6rem); max-width: 30rem; }
+    .ds-hero__eyebrow { font-family: var(--ds-font-display); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--red-400); }
+    .ds-hero__title { font-family: var(--ds-font-display); font-size: clamp(30px, 4vw, 44px); line-height: 1.02; text-transform: uppercase; color: var(--color-text); margin: .5rem 0 .7rem; }
+    .ds-hero__title .accent { color: var(--red-500); }
+    .ds-hero__sub { font-size: 14px; line-height: 22px; color: var(--color-muted); margin-bottom: 1.2rem; }
+    .ds-hero__rating { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.1rem; font-size: 12px; color: var(--color-muted); }
+    .ds-lockup { font-family: var(--ds-font-display); font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--color-text); }
+    .ds-lockup .x { color: var(--platinum-400); }
+
+    /* ===== Phase 2A: brand-manual helpers (page-scoped) ===== */
+
+    /* Do / Don't columns (hygiene, content, photography) */
+    .ds-rule { margin-top: 1.5rem; }
+    .ds-rule > h4 { font-family: var(--ds-font-display); font-size: 17px; letter-spacing: .5px; color: var(--color-text); margin-bottom: .15rem; }
+    .ds-rule > .sub { font-size: 12px; color: var(--color-muted); margin-bottom: .8rem; }
+    .ds-dd { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--color-border); border-radius: 14px; overflow: hidden; }
+    .ds-dd > div { padding: 1.1rem 1.25rem; }
+    .ds-dd .do { border-right: 1px solid var(--divider-platinum); }
+    .ds-dd h5 { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: .75rem; }
+    .ds-dd .do h5 { color: var(--platinum-300); }
+    .ds-dd .dont h5 { color: var(--red-300); }
+    .ds-dd ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .5rem; }
+    .ds-dd li { font-size: 13px; line-height: 18px; color: var(--color-text); display: flex; gap: .55rem; }
+    .ds-dd .dont li { color: var(--color-muted); }
+    .ds-dd li::before { content: ""; flex: 0 0 auto; margin-top: 7px; width: 5px; height: 5px; border-radius: 999px; }
+    .ds-dd .do li::before { background: var(--platinum-400); }
+    .ds-dd .dont li::before { background: color-mix(in srgb, var(--red-400) 65%, transparent); }
+
+    /* Color usage ratio bars */
+    .ds-ratio { display: grid; gap: 1.3rem; margin-top: 2rem; }
+    .ds-ratio__head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: .45rem; gap: 1rem; }
+    .ds-ratio__name { font-size: 13.5px; font-weight: 600; color: var(--color-text); }
+    .ds-ratio__pct { font-size: 12px; color: var(--platinum-400); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+    .ds-ratio__bar { height: 16px; border-radius: 999px; background: var(--color-surface); border: 1px solid var(--color-border); overflow: hidden; }
+    .ds-ratio__fill { height: 100%; border-radius: 999px; }
+    .ds-ratio__note { font-size: 12px; line-height: 18px; color: var(--color-muted); margin-top: .45rem; }
+
+    /* Checklist cards + status chips */
+    .ds-check { display: grid; grid-template-columns: repeat(auto-fit, minmax(272px, 1fr)); gap: 1rem; margin-top: 2rem; }
+    .ds-checkcard { border: 1px solid var(--color-border); border-radius: 14px; background: var(--color-surface); padding: 1.25rem 1.3rem 1.35rem; }
+    .ds-checkcard > h4 { font-family: var(--ds-font-display); font-size: 15px; letter-spacing: .5px; text-transform: uppercase; color: var(--color-text); margin-bottom: .9rem; display: flex; justify-content: space-between; align-items: center; gap: .6rem; }
+    .ds-checkcard ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .55rem; }
+    .ds-checkcard li { font-size: 13px; line-height: 18px; color: var(--color-muted); display: flex; gap: .55rem; }
+    .ds-checkcard li::before { content: ""; flex: 0 0 auto; margin-top: 5px; width: 6px; height: 6px; border-radius: 2px; border: 1px solid var(--platinum-400); }
+    .ds-status { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; padding: 2px 9px; border-radius: 999px; border: 1px solid; white-space: nowrap; }
+    .ds-status--pass { color: var(--platinum-300); border-color: color-mix(in srgb, var(--platinum-400) 55%, transparent); }
+    .ds-status--review { color: var(--color-muted); border-color: var(--color-border); }
+    .ds-status--fix { color: var(--red-300); border-color: color-mix(in srgb, var(--red-500) 55%, transparent); }
+
+    /* Photography modules */
+    .ds-photos { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.3rem; margin-top: 2rem; }
+    .ds-photo { border: 1px solid var(--color-border); border-radius: 14px; overflow: hidden; background: var(--color-surface); }
+    .ds-photo__img { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: linear-gradient(135deg, var(--color-surface-2), var(--color-bg)); }
+    .ds-photo__img img { width: 100%; height: 100%; object-fit: cover; }
+    .ds-photo__img.contain img { object-fit: contain; }
+    .ds-photo__scrim { position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, var(--color-bg) 3%, transparent 58%); pointer-events: none; }
+    .ds-photo__tag { position: absolute; left: .75rem; top: .75rem; z-index: 2; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--platinum-300); background: color-mix(in srgb, var(--color-bg) 66%, transparent); border: 1px solid var(--divider-platinum); border-radius: 999px; padding: 3px 9px; }
+    .ds-photo__ph { display: flex; align-items: center; justify-content: center; height: 100%; color: var(--color-muted); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+    .ds-photo__body { padding: 1.15rem 1.25rem 1.35rem; }
+    .ds-photo__body h4 { font-family: var(--ds-font-display); font-size: 16px; color: var(--color-text); margin-bottom: .6rem; }
+    .ds-photo__specs { display: grid; gap: 5px; margin-bottom: .9rem; }
+    .ds-photo__specs .r { font-size: 12px; display: grid; grid-template-columns: 96px 1fr; gap: .5rem; color: var(--color-text); }
+    .ds-photo__specs .r span { color: var(--color-muted); }
+    .ds-photo__dd { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+    .ds-photo__dd h6 { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: .35rem; }
+    .ds-photo__dd .do h6 { color: var(--platinum-300); }
+    .ds-photo__dd .dont h6 { color: var(--red-300); }
+    .ds-photo__dd p { font-size: 12px; line-height: 17px; color: var(--color-muted); }
+
+    /* Icon demo tiles */
+    .ds-iconset { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.6rem; }
+    .ds-icontile { border: 1px solid var(--color-border); border-radius: 12px; background: var(--color-surface); padding: 1.1rem 1.2rem; display: flex; flex-direction: column; align-items: center; gap: .6rem; min-width: 116px; }
+    .ds-icontile .lbl { font-size: 11px; color: var(--color-muted); letter-spacing: .3px; }
+    .ds-icontile.bad { border-style: dashed; }
+    .ds-icontile.bad .lbl { color: var(--red-300); }
+    .ds-icontile .bad-glyph { width: 24px; height: 24px; border-radius: 6px; background: var(--color-muted); display: inline-block; }
+    .ds-icontile .bad-glyph.emoji { border-radius: 999px; background: linear-gradient(135deg, var(--red-400), var(--platinum-400)); }
+
+    /* Faithful preview blocks (header / footer / logo) */
+    .ds-preview { border: 1px solid var(--color-border); border-radius: 14px; overflow: hidden; margin-top: 1.4rem; background: var(--color-bg); }
+    .ds-preview__label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--platinum-400); padding: .7rem 1rem; border-bottom: 1px solid var(--divider-platinum); }
+    .ds-preview__body { padding: 1.1rem 1.2rem; overflow-x: auto; }
+    .ds-mockhead.is-desktop { min-width: 560px; }
+    .ds-mockhead { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .ds-mocknav { display: flex; gap: 1.1rem; font-size: 12px; color: var(--color-muted); letter-spacing: .4px; }
+    .ds-mocknav .on { color: var(--color-text); }
+    .ds-mockcta { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: #fff; background: var(--red-500); border-radius: 8px; padding: .55rem .9rem; }
+    .ds-mockphone { font-size: 12px; color: var(--color-text); }
+    .ds-anat { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .9rem; }
+    .ds-anat span { font-size: 11px; color: var(--color-muted); border: 1px solid var(--divider-platinum); border-radius: 999px; padding: 2px 10px; }
+    .ds-anat b { color: var(--platinum-300); font-weight: 600; }
+    .ds-logo-white { height: 30px; width: auto; }
+    .ds-clearspace { display: inline-flex; align-items: center; justify-content: center; padding: 1.6rem; border: 1px dashed var(--divider-platinum); border-radius: 10px; background: var(--color-bg); }
+
+    /* Reference-discipline callout */
+    .ds-callout { border: 1px solid color-mix(in srgb, var(--platinum-400) 30%, var(--color-border)); border-left: 3px solid var(--platinum-400); border-radius: 12px; background: color-mix(in srgb, var(--color-surface) 80%, var(--color-bg)); padding: 1.2rem 1.3rem; margin-top: 2rem; }
+    .ds-callout p { font-size: 13.5px; line-height: 21px; color: var(--color-muted); }
+    .ds-callout p strong { color: var(--color-text); }
+    .ds-callout ul { margin: .7rem 0 0; padding-left: 1.1rem; display: grid; gap: .35rem; }
+    .ds-callout li { font-size: 13px; color: var(--color-muted); }
+
+    /* ===== Spacing rhythm visualisers ===== */
+    .ds-scale { display: grid; gap: .5rem; margin-top: 1.6rem; }
+    .ds-scale__row { display: grid; grid-template-columns: 96px 52px minmax(0, 1fr); align-items: center; gap: 1rem; }
+    .ds-scale__name { font-size: 12px; font-family: ui-monospace, Menlo, monospace; color: var(--color-text); }
+    .ds-scale__val { font-size: 12px; color: var(--color-muted); font-family: ui-monospace, Menlo, monospace; text-align: right; }
+    .ds-scale__bar { height: 12px; border-radius: 3px; background: var(--platinum-400); max-width: 100%; }
+
+    .ds-spec-list { margin-top: 1.2rem; border: 1px solid var(--color-border); border-radius: 14px; overflow: hidden; }
+    .ds-spec-list > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; padding: .78rem 1.15rem; border-top: 1px solid var(--divider-platinum); align-items: baseline; }
+    .ds-spec-list > div:first-child { border-top: 0; }
+    .ds-spec-list .cap { grid-column: 1 / -1; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--platinum-400); padding-bottom: 0; border-top: 0; }
+    .ds-spec-list .k { font-size: 13px; color: var(--color-text); }
+    .ds-spec-list .v { font-size: 12px; color: var(--platinum-400); font-family: ui-monospace, Menlo, monospace; white-space: nowrap; }
+
+    .ds-diagram { border: 1px solid var(--color-border); border-radius: 14px; padding: 1.5rem; margin-top: 1.4rem; background: color-mix(in srgb, var(--color-surface) 55%, var(--color-bg)); }
+    .ds-blk { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 10px; padding: .9rem 1.1rem; font-size: 12px; color: var(--color-muted); letter-spacing: .3px; }
+    .ds-blk.head { color: var(--color-text); font-family: var(--ds-font-display); text-transform: uppercase; letter-spacing: .5px; font-size: 13px; }
+    .ds-blk.accent { border-color: color-mix(in srgb, var(--red-500) 45%, var(--color-border)); color: var(--color-text); }
+    .ds-gap { display: flex; align-items: center; gap: .6rem; color: var(--platinum-400); font-size: 11px; font-family: ui-monospace, Menlo, monospace; padding: .35rem 0; }
+    .ds-gap::before, .ds-gap::after { content: ""; height: 1px; flex: 1; background: var(--divider-platinum); }
+
+    .ds-twoup { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; margin-top: 1.4rem; align-items: start; }
+
+    .ds-mockcard { border: 1px solid var(--color-border); border-radius: 14px; overflow: hidden; background: var(--color-surface); max-width: 300px; }
+    .ds-mockcard__img { aspect-ratio: 4 / 3; background: linear-gradient(135deg, var(--color-surface-2), var(--color-bg)); }
+    .ds-mockcard__pad { padding: 24px; }
+    .ds-annot { font-size: 10px; color: var(--platinum-400); font-family: ui-monospace, Menlo, monospace; letter-spacing: .3px; }
+    .ds-mockbtn { display: inline-flex; align-items: center; gap: 8px; background: var(--red-500); color: #fff; border-radius: 10px; padding: 13px 22px; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+    .ds-mockfield { max-width: 320px; display: grid; gap: 8px; }
+    .ds-mockfield label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--color-muted); }
+    .ds-mockfield .inp { border: 1px solid var(--color-border); background: var(--color-surface-2); border-radius: 10px; padding: 14px 16px; color: var(--color-muted); font-size: 13px; }
+    .ds-mockfield .err { font-size: 12px; color: var(--red-300); }
+
+    /* ===== Inputs, badges, radius, card previews (Phase 2B) ===== */
+    .ds-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.4rem; margin-top: 1.6rem; align-items: start; }
+    .ds-field { display: grid; gap: 8px; }
+    .ds-field > label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--color-muted); }
+    .ds-field input, .ds-field textarea, .ds-field select, .ds-selwrap select, .ds-selwrap input { width: 100%; background: var(--color-surface-2); color: var(--color-text); border: 1px solid var(--color-border); border-radius: 12px; padding: 14px 16px; font-family: inherit; font-size: 14px; min-height: 50px; outline: none; transition: border-color .18s ease, box-shadow .18s ease; }
+    .ds-field textarea { min-height: 104px; resize: vertical; }
+    .ds-field input::placeholder, .ds-field textarea::placeholder { color: color-mix(in srgb, var(--color-muted) 72%, transparent); }
+    .ds-field input:focus, .ds-field textarea:focus, .ds-field select:focus, .ds-field .is-focus, .ds-selwrap select:focus, .ds-selwrap input:focus { border-color: var(--platinum-300); box-shadow: 0 0 0 3px color-mix(in srgb, var(--platinum-300) 28%, transparent); }
+    .ds-field.err input, .ds-field.err textarea, .ds-field.err select, .ds-field.err .is-focus { border-color: var(--red-400); }
+    .ds-field .help { font-size: 12px; color: var(--color-muted); }
+    .ds-field .errmsg { display: none; font-size: 12px; color: var(--red-300); align-items: center; gap: 6px; }
+    .ds-field.err .errmsg { display: flex; }
+    .ds-field input:disabled, .ds-field select:disabled, .ds-field .is-disabled { opacity: .45; cursor: not-allowed; }
+    .ds-selwrap { position: relative; }
+    .ds-selwrap select { appearance: none; padding-right: 42px; }
+    .ds-selwrap .chev { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--color-muted); width: 16px; height: 16px; }
+    .ds-searchrow { display: flex; gap: 12px; align-items: stretch; }
+    .ds-searchrow .ds-field { flex: 1; }
+    .ds-choice { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--color-text); }
+    .ds-box { width: 20px; height: 20px; border: 1px solid var(--color-border); background: var(--color-surface-2); border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; color: #fff; flex: 0 0 auto; }
+    .ds-box.round { border-radius: 999px; }
+    .ds-box.on { background: var(--red-500); border-color: var(--red-500); }
+    .ds-box.on.round { background: transparent; }
+    .ds-box.on.round::after { content: ""; width: 10px; height: 10px; border-radius: 999px; background: var(--red-500); }
+
+    .ds-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 1.4rem; }
+    .ds-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--color-border); background: color-mix(in srgb, var(--color-surface) 65%, var(--color-bg)); color: var(--color-muted); }
+    .ds-badge.platinum { border-color: color-mix(in srgb, var(--platinum-400) 50%, var(--color-border)); color: var(--platinum-300); }
+    .ds-badge.active { background: var(--red-500); border-color: var(--red-500); color: #fff; }
+    .ds-badge.bad { border-style: dashed; border-color: color-mix(in srgb, var(--red-500) 55%, transparent); color: var(--red-300); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--red-400) 60%, transparent); }
+
+    .ds-radii { display: flex; flex-wrap: wrap; gap: 1.4rem; margin-top: 1.6rem; }
+    .ds-radtile { display: grid; gap: .55rem; justify-items: center; text-align: center; width: 112px; }
+    .ds-radbox { width: 96px; height: 74px; background: var(--color-surface); border: 1px solid var(--platinum-400); }
+    .ds-radtile .lbl { font-size: 12px; color: var(--color-text); font-family: ui-monospace, Menlo, monospace; }
+    .ds-radtile .use { font-size: 11px; line-height: 15px; color: var(--color-muted); }
+
+    .ds-cardgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(258px, 1fr)); gap: 1.4rem; margin-top: 1.6rem; align-items: start; }
+    .ds-vbody { padding: 20px; }
+    .ds-vtitle { font-size: 18px; font-weight: 600; color: var(--color-text); }
+    .ds-vmeta { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 6px; font-size: 12px; color: var(--color-muted); }
+    .ds-vmeta span { display: inline-flex; align-items: center; gap: 6px; }
+    .ds-vfoot { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--color-border); }
+    .ds-badge-pos { position: absolute; top: 12px; left: 12px; z-index: 2; }
+    .vcard.ds-hover { transform: translateY(-6px); border-color: color-mix(in srgb, var(--red-500) 55%, var(--color-border)); }
+    .vcard.ds-focus { outline: 2px solid var(--platinum-300); outline-offset: 2px; }
+    .ds-inv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 1.4rem; }
+    @media (max-width: 900px) { .ds-inv-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 620px) { .ds-inv-grid { grid-template-columns: 1fr; } }
+
+    @media (max-width: 780px) { .ds-twoup { grid-template-columns: 1fr; } .ds-scale__row { grid-template-columns: 82px 46px minmax(0,1fr); } }
+
+    @media (max-width: 720px) {
+      .ds-dd, .ds-photo__dd { grid-template-columns: 1fr; }
+      .ds-dd .do { border-right: 0; border-bottom: 1px solid var(--divider-platinum); }
+    }
+
+    @media (max-width: 980px) {
+      .ds-struct { grid-template-columns: 1fr; }
+      .ds-docmodel { grid-template-columns: 1fr 1fr; }
+      .ds-docmodel > div:nth-child(2) { border-right: 0; }
+      .ds-docmodel > div:nth-child(1), .ds-docmodel > div:nth-child(2) { border-bottom: 1px solid var(--divider-platinum); }
+    }
+    @media (max-width: 860px) {
+      .ds-shell { grid-template-columns: 1fr; }
+      .ds-sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--color-border); }
+      .ds-spec { grid-template-columns: 1fr; gap: 1rem; }
+    }
+    @media (max-width: 560px) {
+      .ds-docmodel { grid-template-columns: 1fr; }
+      .ds-docmodel > div { border-right: 0; border-bottom: 1px solid var(--divider-platinum); }
+      .ds-docmodel > div:last-child { border-bottom: 0; }
+    }
+  </style>
+</head>
+<body class="bg-bg text-text antialiased">
+
+  <!-- Minimal icon sprite (only the glyphs used by button specimens) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
+        <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+        <symbol id="i-financing" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 14.5h3"/></symbol>
+        <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.5 3.5h3l1.5 4-2 1.4a12 12 0 0 0 5.6 5.6l1.4-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5z"/></symbol>
+        <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.85-4.25 4.15 1 5.85L12 17.9l-5.25 2.6 1-5.85L3.5 9.65l5.9-.85z"/></symbol>
+        <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+        <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21c4-4.5 6.5-7.6 6.5-11a6.5 6.5 0 0 0-13 0c0 3.4 2.5 6.5 6.5 11z"/><circle cx="12" cy="10" r="2.4"/></symbol>
+        <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+        <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+        <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3.5 11.5V4.5A1 1 0 0 1 4.5 3.5h7l9 9a1.4 1.4 0 0 1 0 2l-7 7a1.4 1.4 0 0 1-2 0l-9-9z"/><circle cx="7.5" cy="7.5" r="1.2"/></symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 2.5v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10v-5z"/><path d="M9 12l2 2 4-4"/></symbol>
+        <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M15.5 6.5a4 4 0 0 0-5 5L4 18l2 2 6.5-6.5a4 4 0 0 0 5-5l-2.4 2.4-2.1-.5-.5-2.1z"/></symbol>
+        <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4.5 15a7.5 7.5 0 1 1 15 0"/><path d="M12 15l4-3.5"/><circle cx="12" cy="15" r="1"/></symbol>
+      </g>
+    </defs>
+  </svg>
+
+  <div class="ds-shell">
+
+    <!-- ============================ SIDEBAR ============================ -->
+    <aside class="ds-sidebar">
+      <div class="ds-brand">
+        <span class="mark">Lux Cars</span>
+        <span class="sub">Design System</span>
+      </div>
+      <nav class="ds-nav" aria-label="Design system sections">
+        <p class="ds-nav-label">Overview</p>
+        <a href="#cover" class="is-active">Cover</a>
+        <a href="#principles">System principles</a>
+        <a href="#structure">System structure</a>
+        <a href="#reference">Reference discipline</a>
+        <p class="ds-nav-label">Foundations</p>
+        <a href="#color">Color</a>
+        <a href="#ratio">Color usage ratio</a>
+        <a href="#typography">Typography</a>
+        <a href="#content">Content style</a>
+        <a href="#spacing">Spacing rhythm</a>
+        <a href="#radius">Radius</a>
+        <a href="#icons">Iconography</a>
+        <a href="#photography">Photography</a>
+        <p class="ds-nav-label">Components</p>
+        <a href="#buttons">Buttons</a>
+        <a href="#inputs">Inputs and selects</a>
+        <a href="#cards">Cards and badges</a>
+        <a href="#logo">Logo and mark</a>
+        <a href="#chrome">Header and footer</a>
+        <a href="#docmodel">Documentation model</a>
+        <p class="ds-nav-label">Patterns</p>
+        <a href="#hero">Hero search</a>
+        <a href="#inventory">Inventory grid</a>
+        <a href="#qa">Pattern QA</a>
+        <p class="ds-nav-label">Quality</p>
+        <a href="#hygiene">Luxury hygiene</a>
+      </nav>
+    </aside>
+
+    <!-- ============================ MAIN ============================ -->
+    <main class="ds-main">
+
+      <!-- ---------------- 1. COVER ---------------- -->
+      <section id="cover" class="ds-section ds-cover">
+        <p class="ds-eyebrow">Lux Cars Chicago</p>
+        <h1 class="ds-cover__title">Design<br /><span class="accent">System</span></h1>
+        <div class="ds-cover__meta">
+          <span><b>Version</b> 1.0</span>
+          <span><b>Updated</b> July 2, 2026</span>
+          <span><b>Owner</b> Alexander Sigoff</span>
+        </div>
+        <p class="ds-cover__note">Source of truth for color, typography, and component consistency across the Lux Cars Chicago site.</p>
+      </section>
+
+      <!-- ---------------- SYSTEM PRINCIPLES ---------------- -->
+      <section id="principles" class="ds-section">
+        <p class="ds-eyebrow">Overview</p>
+        <h2 class="ds-h2">System principles</h2>
+        <p class="ds-lead">Four rules keep every page reading as one dealership.</p>
+        <div class="ds-cards">
+          <article class="ds-card">
+            <span class="ds-card__marker"></span>
+            <h3 class="ds-card__title">Coherence</h3>
+            <p class="ds-card__body">Every page should feel like the same dealership, not a separate campaign.</p>
+            <p class="ds-card__use">One shared language</p>
+          </article>
+          <article class="ds-card">
+            <span class="ds-card__marker"></span>
+            <h3 class="ds-card__title">Restraint</h3>
+            <p class="ds-card__body">Luxury comes from spacing, hierarchy, contrast, and photography. Not decoration.</p>
+            <p class="ds-card__use">Fewer, better elements</p>
+          </article>
+          <article class="ds-card">
+            <span class="ds-card__marker"></span>
+            <h3 class="ds-card__title">Scalability</h3>
+            <p class="ds-card__body">Components should support homepage, SRP, VDP, finance, service, and trade pages.</p>
+            <p class="ds-card__use">Reusable, not bespoke</p>
+          </article>
+          <article class="ds-card">
+            <span class="ds-card__marker"></span>
+            <h3 class="ds-card__title">Accessibility</h3>
+            <p class="ds-card__body">Contrast, focus states, readable type, and keyboard navigation are part of the brand.</p>
+            <p class="ds-card__use">Built in, not bolted on</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ---------------- SYSTEM STRUCTURE ---------------- -->
+      <section id="structure" class="ds-section">
+        <p class="ds-eyebrow">Overview</p>
+        <h2 class="ds-h2">System structure</h2>
+        <p class="ds-lead">Foundations feed components. Components compose into patterns. Items in grey are documented next.</p>
+        <div class="ds-struct">
+          <div class="ds-col">
+            <h4>Foundations</h4>
+            <ul>
+              <li>Color</li>
+              <li>Typography</li>
+              <li>Tone of voice</li>
+              <li>Accessibility</li>
+              <li>Photography</li>
+              <li class="soon">Iconography</li>
+              <li class="soon">Spacing</li>
+              <li class="soon">Radius</li>
+            </ul>
+          </div>
+          <div class="ds-col">
+            <h4>Components</h4>
+            <ul>
+              <li>Buttons</li>
+              <li class="soon">Links</li>
+              <li class="soon">Forms</li>
+              <li class="soon">Cards</li>
+              <li class="soon">Badges</li>
+              <li class="soon">Trust items</li>
+            </ul>
+          </div>
+          <div class="ds-col">
+            <h4>Patterns</h4>
+            <ul>
+              <li>Hero search</li>
+              <li class="soon">Inventory grid</li>
+              <li class="soon">Trust rail</li>
+              <li class="soon">CTA blocks</li>
+              <li class="soon">Reviews</li>
+              <li class="soon">Footer</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------------- REFERENCE DISCIPLINE ---------------- -->
+      <section id="reference" class="ds-section">
+        <p class="ds-eyebrow">Overview</p>
+        <h2 class="ds-h2">Reference discipline</h2>
+        <p class="ds-lead">These luxury references inform discipline, not identity.</p>
+        <div class="ds-callout">
+          <p><strong>Borrow the principles, never the identity.</strong> We study how mature luxury systems hold their line: restraint, consistency, hierarchy, accessibility, typography discipline, photography quality, and tone control. Lux Cars Chicago stays itself.</p>
+          <ul>
+            <li>Do not copy Ferrari, Bentley, Rolls-Royce, or Rolls-Royce SMR colors.</li>
+            <li>Do not copy their logos, monograms, marks, or layouts.</li>
+            <li>Do not copy their proprietary photography or icons.</li>
+            <li>Borrow only the principles listed above.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ---------------- 2. COLOR ---------------- -->
+      <section id="color" class="ds-section">
+        <p class="ds-eyebrow">01 / Foundations</p>
+        <h2 class="ds-h2">Color</h2>
+        <p class="ds-lead">One accent hue across the whole product. A near black base, a quiet neutral scale, and a muted wine red that carries every call to action.</p>
+
+        <p class="ds-grouplabel">Base</p>
+        <div class="ds-swatches">
+          <div class="ds-swatch"><div class="ds-chip is-dark" style="background:var(--color-bg)"></div><div class="meta"><span class="name">Background</span><span class="hex">#0B0B0D</span><span class="cssvar">--color-bg</span></div></div>
+          <div class="ds-swatch"><div class="ds-chip is-dark" style="background:var(--color-surface)"></div><div class="meta"><span class="name">Surface</span><span class="hex">#16171A</span><span class="cssvar">--color-surface</span></div></div>
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--color-border)"></div><div class="meta"><span class="name">Border</span><span class="hex">#26272B</span><span class="cssvar">--color-border</span></div></div>
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--color-text)"></div><div class="meta"><span class="name">Text</span><span class="hex">#F5F5F5</span><span class="cssvar">--color-text</span></div></div>
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--color-muted)"></div><div class="meta"><span class="name">Muted</span><span class="hex">#9A9CA3</span><span class="cssvar">--color-muted</span></div></div>
+        </div>
+
+        <p class="ds-grouplabel">Red scale</p>
+        <div class="ds-swatches">
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--red-50)"></div><div class="meta"><span class="name">Red 50</span><span class="hex">#F7EAEA</span><span class="cssvar">--red-50</span></div></div>
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--red-100)"></div><div class="meta"><span class="name">Red 100</span><span class="hex">#E9C6C6</span><span class="cssvar">--red-100</span></div></div>
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--red-200)"></div><div class="meta"><span class="name">Red 200</span><span class="hex">#D79A9A</span><span class="cssvar">--red-200</span></div></div>
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--red-300)"></div><div class="meta"><span class="name">Red 300</span><span class="hex">#C16E6E</span><span class="cssvar">--red-300</span></div></div>
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--red-400)"></div><div class="meta"><span class="name">Red 400</span><span class="hex">#A54848</span><span class="cssvar">--red-400</span></div></div>
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--red-500)"></div><div class="meta"><span class="name">Red 500 <span class="ds-pill">Primary</span></span><span class="hex">#8B2828</span><span class="cssvar">--red-500</span></div></div>
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--red-600)"></div><div class="meta"><span class="name">Red 600 <span class="ds-pill">Hover</span></span><span class="hex">#742020</span><span class="cssvar">--red-600</span></div></div>
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--red-700)"></div><div class="meta"><span class="name">Red 700 <span class="ds-pill">Pressed</span></span><span class="hex">#5C1919</span><span class="cssvar">--red-700</span></div></div>
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--red-800)"></div><div class="meta"><span class="name">Red 800</span><span class="hex">#431212</span><span class="cssvar">--red-800</span></div></div>
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--red-900)"></div><div class="meta"><span class="name">Red 900</span><span class="hex">#2B0C0C</span><span class="cssvar">--red-900</span></div></div>
+        </div>
+
+        <p class="ds-note"><strong>One accent hue. Zero blue.</strong> #8B2828 is primary, #742020 is hover, #5C1919 is pressed. Lighter tints (50 to 300) are for subtle backgrounds and states; deeper tints (800, 900) are for large fills and overlays over the dark base.</p>
+
+        <p class="ds-grouplabel">Metallic accent</p>
+        <div class="ds-swatches">
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--platinum-300)"></div><div class="meta"><span class="name">Platinum 300</span><span class="hex">#D8DBDE</span><span class="cssvar">--platinum-300</span></div></div>
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--platinum-400)"></div><div class="meta"><span class="name">Platinum 400</span><span class="hex">#A9AEB4</span><span class="cssvar">--platinum-400</span></div></div>
+          <div class="ds-swatch"><div class="ds-chip" style="background:var(--platinum-500)"></div><div class="meta"><span class="name">Platinum 500</span><span class="hex">#7C8288</span><span class="cssvar">--platinum-500</span></div></div>
+        </div>
+        <p class="ds-metanote">Decorative metallic only. Never a CTA color.</p>
+        <p class="ds-note"><strong>Platinum stays sparse and thin.</strong> Used for hairline highlights and focus rings (300), icon accents, thin dividers, review stars, the LUX "X" mark and text-link hover (400), and pressed metallic details (500). It is cooler than the warm base on purpose. Not allowed on primary buttons, CTA backgrounds, large fills, badges, price emphasis, or major navigation. Actions stay oxblood red.</p>
+      </section>
+
+      <!-- ---------------- COLOR USAGE RATIO ---------------- -->
+      <section id="ratio" class="ds-section">
+        <p class="ds-eyebrow">Foundations</p>
+        <h2 class="ds-h2">Color usage ratio</h2>
+        <p class="ds-lead">Proportion is the luxury signal. Keep the base and negative space dominant; let red and platinum stay rare.</p>
+        <div class="ds-ratio">
+          <div class="ds-ratio__row">
+            <div class="ds-ratio__head"><span class="ds-ratio__name">Warm-neutral base</span><span class="ds-ratio__pct">min 60%</span></div>
+            <div class="ds-ratio__bar"><div class="ds-ratio__fill" style="width:60%;background:var(--color-surface-2)"></div></div>
+            <p class="ds-ratio__note">Page and section backgrounds, card surfaces, footer, main dark structure, and negative space.</p>
+          </div>
+          <div class="ds-ratio__row">
+            <div class="ds-ratio__head"><span class="ds-ratio__name">Oxblood red</span><span class="ds-ratio__pct">8% to 12%</span></div>
+            <div class="ds-ratio__bar"><div class="ds-ratio__fill" style="width:10%;background:var(--red-500)"></div></div>
+            <p class="ds-ratio__note">Primary CTA, active nav, key action states, selected emphasis only. The only action color.</p>
+          </div>
+          <div class="ds-ratio__row">
+            <div class="ds-ratio__head"><span class="ds-ratio__name">Platinum</span><span class="ds-ratio__pct">3% to 6%</span></div>
+            <div class="ds-ratio__bar"><div class="ds-ratio__fill" style="width:5%;background:var(--platinum-400)"></div></div>
+            <p class="ds-ratio__note">Hairline dividers, review stars, focus rings, the LUX "X", subtle icon strokes, text-link hover. Decorative only.</p>
+          </div>
+          <div class="ds-ratio__row">
+            <div class="ds-ratio__head"><span class="ds-ratio__name">Text and muted neutrals</span><span class="ds-ratio__pct">remaining balance</span></div>
+            <div class="ds-ratio__bar"><div class="ds-ratio__fill" style="width:25%;background:var(--color-muted)"></div></div>
+            <p class="ds-ratio__note">Body copy, labels, metadata, and supporting UI. Not a secondary palette.</p>
+          </div>
+        </div>
+
+        <div class="ds-rule">
+          <div class="ds-dd">
+            <div class="do">
+              <h5>Do</h5>
+              <ul>
+                <li>Keep at least 60% base or negative space in every layout.</li>
+                <li>Let red carry one action per section.</li>
+                <li>Keep platinum thin: hairlines, stars, focus, the "X".</li>
+              </ul>
+            </div>
+            <div class="dont">
+              <h5>Don't</h5>
+              <ul>
+                <li>Turn platinum into a second CTA color.</li>
+                <li>Treat supporting tints as a secondary palette.</li>
+                <li>Add extra accent colors, blue, or gold.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------------- 3. TYPOGRAPHY ---------------- -->
+      <section id="typography" class="ds-section">
+        <p class="ds-eyebrow">02 / Foundations</p>
+        <h2 class="ds-h2">Typography</h2>
+        <p class="ds-lead">Two families. Special Gothic Expanded One for display, headings, major labels, and selected eyebrow moments. Manrope for everything you read, scan, click, and type.</p>
+
+        <div style="margin-top:2rem">
+          <div class="ds-spec">
+            <div class="sample" style="font-family:var(--ds-font-display);font-size:64px;line-height:68px;font-weight:400;letter-spacing:.5px">Hand-picked luxury</div>
+            <ul class="ds-attrs">
+              <li class="usage"><span>Usage</span> H1 Display</li>
+              <li><span>Font</span> Special Gothic Exp. One</li>
+              <li><span>Size</span> 64px</li>
+              <li><span>Line</span> 68px</li>
+              <li><span>Weight</span> 400</li>
+              <li><span>Mobile</span> 42px / 46px</li>
+            </ul>
+          </div>
+
+          <div class="ds-spec">
+            <div class="sample" style="font-family:var(--ds-font-display);font-size:34px;line-height:40px;font-weight:400;letter-spacing:.5px">Browse our full collection</div>
+            <ul class="ds-attrs">
+              <li class="usage"><span>Usage</span> H2 Section</li>
+              <li><span>Font</span> Special Gothic Exp. One</li>
+              <li><span>Size</span> 34px</li>
+              <li><span>Line</span> 40px</li>
+              <li><span>Weight</span> 400</li>
+              <li><span>Mobile</span> 28px / 34px</li>
+            </ul>
+          </div>
+
+          <div class="ds-spec">
+            <div class="sample" style="font-family:var(--ds-font-display);font-size:26px;line-height:32px;font-weight:400;letter-spacing:.3px">Peace of mind, included</div>
+            <ul class="ds-attrs">
+              <li class="usage"><span>Usage</span> H3 Sub</li>
+              <li><span>Font</span> Special Gothic Exp. One</li>
+              <li><span>Size</span> 26px</li>
+              <li><span>Line</span> 32px</li>
+              <li><span>Weight</span> 400</li>
+              <li><span>Mobile</span> 22px / 28px</li>
+            </ul>
+          </div>
+
+          <div class="ds-spec">
+            <div class="sample" style="font-family:var(--ds-font-ui);font-size:18px;line-height:24px;font-weight:600">2019 Ferrari Portofino</div>
+            <ul class="ds-attrs">
+              <li class="usage"><span>Usage</span> Card Title</li>
+              <li><span>Font</span> Manrope</li>
+              <li><span>Size</span> 18px</li>
+              <li><span>Line</span> 24px</li>
+              <li><span>Weight</span> 600</li>
+            </ul>
+          </div>
+
+          <div class="ds-spec">
+            <div class="sample" style="font-family:var(--ds-font-display);font-size:12px;line-height:16px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:var(--red-400)">Featured this week</div>
+            <ul class="ds-attrs">
+              <li class="usage"><span>Usage</span> Eyebrow</li>
+              <li><span>Font</span> Special Gothic / Manrope</li>
+              <li><span>Size</span> 12px</li>
+              <li><span>Line</span> 16px</li>
+              <li><span>Weight</span> 400</li>
+              <li><span>Tracking</span> 2px</li>
+            </ul>
+          </div>
+
+          <div class="ds-spec">
+            <div class="sample" style="font-family:var(--ds-font-ui);font-size:13px;line-height:16px;font-weight:500">Inventory</div>
+            <ul class="ds-attrs">
+              <li class="usage"><span>Usage</span> Nav</li>
+              <li><span>Font</span> Manrope</li>
+              <li><span>Size</span> 13px</li>
+              <li><span>Line</span> 16px</li>
+              <li><span>Weight</span> 500</li>
+            </ul>
+          </div>
+
+          <div class="ds-spec">
+            <div class="sample" style="font-family:var(--ds-font-ui);font-size:17px;line-height:26px;font-weight:400;color:var(--color-muted)">100 plus inspected vehicles, updated daily.</div>
+            <ul class="ds-attrs">
+              <li class="usage"><span>Usage</span> Body Large</li>
+              <li><span>Font</span> Manrope</li>
+              <li><span>Size</span> 17px</li>
+              <li><span>Line</span> 26px</li>
+              <li><span>Weight</span> 400</li>
+            </ul>
+          </div>
+
+          <div class="ds-spec">
+            <div class="sample" style="font-family:var(--ds-font-ui);font-size:15px;line-height:24px;font-weight:400;color:var(--color-muted)">Every Lux Cars vehicle is inspected and backed by warranty options.</div>
+            <ul class="ds-attrs">
+              <li class="usage"><span>Usage</span> Body</li>
+              <li><span>Font</span> Manrope</li>
+              <li><span>Size</span> 15px</li>
+              <li><span>Line</span> 24px</li>
+              <li><span>Weight</span> 400</li>
+            </ul>
+          </div>
+
+          <div class="ds-spec">
+            <div class="sample" style="font-family:var(--ds-font-ui);font-size:13px;line-height:18px;font-weight:500;color:var(--color-muted)">52,000 mi / RWD</div>
+            <ul class="ds-attrs">
+              <li class="usage"><span>Usage</span> Small / Meta</li>
+              <li><span>Font</span> Manrope</li>
+              <li><span>Size</span> 13px</li>
+              <li><span>Line</span> 18px</li>
+              <li><span>Weight</span> 500</li>
+            </ul>
+          </div>
+
+          <div class="ds-spec">
+            <div class="sample" style="font-family:var(--ds-font-ui);font-size:22px;line-height:26px;font-weight:600">$169,995</div>
+            <ul class="ds-attrs">
+              <li class="usage"><span>Usage</span> Price</li>
+              <li><span>Font</span> Manrope</li>
+              <li><span>Size</span> 22px</li>
+              <li><span>Line</span> 26px</li>
+              <li><span>Weight</span> 600</li>
+            </ul>
+          </div>
+
+          <div class="ds-spec">
+            <div class="sample" style="font-family:var(--ds-font-ui);font-size:13px;line-height:16px;font-weight:600;letter-spacing:1px;text-transform:uppercase">Search Inventory</div>
+            <ul class="ds-attrs">
+              <li class="usage"><span>Usage</span> Button</li>
+              <li><span>Font</span> Manrope</li>
+              <li><span>Size</span> 13px</li>
+              <li><span>Line</span> 16px</li>
+              <li><span>Weight</span> 600</li>
+              <li><span>Tracking</span> 1px</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="ds-note"><strong>Special Gothic Expanded One</strong> is for display, headings, and selected eyebrow moments only. <strong>Manrope</strong> handles body copy, UI, cards, buttons, filters, and meta text.</p>
+        <p class="ds-note"><strong>Special Gothic Expanded One is already wide.</strong> Keep tracking restrained. Use spacing and contrast for luxury, not excessive letter-spacing.</p>
+      </section>
+
+      <!-- ---------------- TONE OF VOICE ---------------- -->
+      <section id="content" class="ds-section">
+        <p class="ds-eyebrow">Foundations</p>
+        <h2 class="ds-h2">Content style</h2>
+        <p class="ds-lead">Direct, premium, calm, trustworthy, human, and simple. Authoritative without sounding bossy. If it sounds like an ad, rewrite it.</p>
+        <div class="ds-cards">
+          <article class="ds-card">
+            <span class="ds-card__marker"></span>
+            <h3 class="ds-card__title">Direct</h3>
+            <div class="ds-tone">
+              <p class="ln do"><span class="tag">Good</span><span>Search our hand-picked inventory.</span></p>
+              <p class="ln dont"><span class="tag">Bad</span><span>Discover unbeatable deals today!</span></p>
+            </div>
+          </article>
+          <article class="ds-card">
+            <span class="ds-card__marker"></span>
+            <h3 class="ds-card__title">Premium</h3>
+            <div class="ds-tone">
+              <p class="ln do"><span class="tag">Good</span><span>Carefully selected luxury vehicles.</span></p>
+              <p class="ln dont"><span class="tag">Bad</span><span>Huge savings on luxury rides!</span></p>
+            </div>
+          </article>
+          <article class="ds-card">
+            <span class="ds-card__marker"></span>
+            <h3 class="ds-card__title">Calm</h3>
+            <div class="ds-tone">
+              <p class="ln do"><span class="tag">Good</span><span>Get a clear financing path before you visit.</span></p>
+              <p class="ln dont"><span class="tag">Bad</span><span>Apply now before it's gone!</span></p>
+            </div>
+          </article>
+          <article class="ds-card">
+            <span class="ds-card__marker"></span>
+            <h3 class="ds-card__title">Trustworthy</h3>
+            <div class="ds-tone">
+              <p class="ln do"><span class="tag">Good</span><span>Inspected, documented, and ready for delivery.</span></p>
+              <p class="ln dont"><span class="tag">Bad</span><span>Guaranteed approval for everyone!</span></p>
+            </div>
+          </article>
+          <article class="ds-card">
+            <span class="ds-card__marker"></span>
+            <h3 class="ds-card__title">Human</h3>
+            <div class="ds-tone">
+              <p class="ln do"><span class="tag">Good</span><span>We'll help you review the vehicle, numbers, and next steps.</span></p>
+              <p class="ln dont"><span class="tag">Bad</span><span>Customers will be provided with multiple financing solutions.</span></p>
+            </div>
+          </article>
+          <article class="ds-card">
+            <span class="ds-card__marker"></span>
+            <h3 class="ds-card__title">Simple</h3>
+            <div class="ds-tone">
+              <p class="ln do"><span class="tag">Good</span><span>Schedule a private appointment.</span></p>
+              <p class="ln dont"><span class="tag">Bad</span><span>Initiate a personalized vehicle acquisition consultation.</span></p>
+            </div>
+          </article>
+        </div>
+        <div class="ds-rule">
+          <div class="ds-dd">
+            <div class="do">
+              <h5>Do</h5>
+              <ul>
+                <li>One key message per section.</li>
+                <li>Short headings. Short sentences.</li>
+                <li>Plain words over jargon.</li>
+              </ul>
+            </div>
+            <div class="dont">
+              <h5>Don't</h5>
+              <ul>
+                <li>Overly clever luxury copy.</li>
+                <li>Anything that sounds like an ad or sounds desperate.</li>
+                <li>Three adjectives where one works.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <p class="ds-note">No cheap dealer language. No aggressive urgency. No fake exclusivity. No bad-credit tone.</p>
+      </section>
+
+      <!-- ---------------- ICONOGRAPHY ---------------- -->
+      <section id="icons" class="ds-section">
+        <p class="ds-eyebrow">Foundations</p>
+        <h2 class="ds-h2">Iconography</h2>
+        <p class="ds-lead">One simple, single-weight outline set. Quiet by default, red only for action.</p>
+
+        <p class="ds-grouplabel">Sizes and stroke</p>
+        <div class="ds-iconset">
+          <div class="ds-icontile"><svg class="icon" style="width:14px;height:14px" aria-hidden="true"><use href="#i-search"/></svg><span class="lbl">Small 14px</span></div>
+          <div class="ds-icontile"><svg class="icon" style="width:18px;height:18px" aria-hidden="true"><use href="#i-search"/></svg><span class="lbl">Standard 18px</span></div>
+          <div class="ds-icontile"><svg class="icon" style="width:24px;height:24px" aria-hidden="true"><use href="#i-search"/></svg><span class="lbl">Large 24px</span></div>
+          <div class="ds-icontile"><svg class="icon" style="width:18px;height:18px" aria-hidden="true"><use href="#i-financing"/></svg><span class="lbl">Stroke 1.5px</span></div>
+        </div>
+
+        <p class="ds-grouplabel">Color usage</p>
+        <div class="ds-iconset">
+          <div class="ds-icontile"><svg class="icon" style="width:22px;height:22px;color:var(--color-muted)" aria-hidden="true"><use href="#i-phone"/></svg><span class="lbl">Muted: default</span></div>
+          <div class="ds-icontile"><svg class="icon" style="width:22px;height:22px;color:var(--platinum-400)" aria-hidden="true"><use href="#i-star"/></svg><span class="lbl">Platinum: decorative</span></div>
+          <div class="ds-icontile"><svg class="icon" style="width:22px;height:22px;color:var(--red-500)" aria-hidden="true"><use href="#i-arrow-right"/></svg><span class="lbl">Red: action only</span></div>
+        </div>
+
+        <p class="ds-grouplabel">Not this</p>
+        <div class="ds-iconset">
+          <div class="ds-icontile bad"><span class="bad-glyph"></span><span class="lbl">Filled / bulky</span></div>
+          <div class="ds-icontile bad"><span class="bad-glyph emoji"></span><span class="lbl">Emoji-like</span></div>
+          <div class="ds-icontile bad"><svg class="icon" style="width:22px;height:22px;color:var(--red-500);stroke-width:3" aria-hidden="true"><use href="#i-search"/></svg><span class="lbl">Mixed stroke</span></div>
+        </div>
+
+        <div class="ds-rule"><div class="ds-dd">
+          <div class="do"><h5>Do</h5><ul>
+            <li>One outline set, single 1.5px stroke.</li>
+            <li>Muted or platinum by default; red for action or active only.</li>
+            <li>Two colors per icon, maximum.</li>
+          </ul></div>
+          <div class="dont"><h5>Don't</h5><ul>
+            <li>Filled, bulky, or emoji-like glyphs.</li>
+            <li>Mixing icon libraries or stroke widths.</li>
+            <li>Random third-party icon styles.</li>
+          </ul></div>
+        </div></div>
+      </section>
+
+      <!-- ---------------- PHOTOGRAPHY DIRECTION ---------------- -->
+      <section id="photography" class="ds-section">
+        <p class="ds-eyebrow">Foundations</p>
+        <h2 class="ds-h2">Photography direction</h2>
+        <p class="ds-lead">Real, clean, color photography. The car keeps its shape and stance. Nothing loud, nothing promotional.</p>
+        <div class="ds-photos">
+          <article class="ds-photo">
+            <div class="ds-photo__img"><span class="ds-photo__tag">Hero</span><img src="assets/img/hero.jpg" alt="Hero photography example" /><div class="ds-photo__scrim"></div></div>
+            <div class="ds-photo__body">
+              <h4>Hero photography</h4>
+              <div class="ds-photo__specs">
+                <div class="r"><span>Crop</span> 16:9, negative space for copy</div>
+                <div class="r"><span>object-fit</span> cover</div>
+                <div class="r"><span>Lighting</span> cinematic, calm, natural color</div>
+                <div class="r"><span>Scrim</span> side fade, aids text, never hides the car</div>
+              </div>
+              <div class="ds-photo__dd">
+                <div class="do"><h6>Do</h6><p>Leave room for copy. Keep it calm.</p></div>
+                <div class="dont"><h6>Don't</h6><p>Heavy copy over busy car detail.</p></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="ds-photo">
+            <div class="ds-photo__img contain"><span class="ds-photo__tag">Vehicle</span><img src="assets/img/porsche-panamera.jpg" alt="Vehicle card photography example" /></div>
+            <div class="ds-photo__body">
+              <h4>Vehicle card photography</h4>
+              <div class="ds-photo__specs">
+                <div class="r"><span>Crop</span> 4:3, full car uncropped</div>
+                <div class="r"><span>object-fit</span> contain</div>
+                <div class="r"><span>Lighting</span> even, natural, clean background</div>
+                <div class="r"><span>Stance</span> keep shape and styling lines</div>
+              </div>
+              <div class="ds-photo__dd">
+                <div class="do"><h6>Do</h6><p>Preserve stance. Headlights on when it fits.</p></div>
+                <div class="dont"><h6>Don't</h6><p>Wide-angle distortion or dirty pavement.</p></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="ds-photo">
+            <div class="ds-photo__img"><span class="ds-photo__tag">Proposed</span><div class="ds-photo__ph">Interior / detail asset needed</div></div>
+            <div class="ds-photo__body">
+              <h4>Interior / detail photography</h4>
+              <div class="ds-photo__specs">
+                <div class="r"><span>Crop</span> detail crop, intentional lines</div>
+                <div class="r"><span>Lighting</span> even across the cabin</div>
+                <div class="r"><span>Condition</span> no dust, fingerprints, or wear</div>
+                <div class="r"><span>Framing</span> wheel centered, seats aligned</div>
+              </div>
+              <div class="ds-photo__dd">
+                <div class="do"><h6>Do</h6><p>Clean cabin, soft even light.</p></div>
+                <div class="dont"><h6>Don't</h6><p>Harsh flash or lot reflections.</p></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="ds-photo">
+            <div class="ds-photo__img"><span class="ds-photo__tag">Service</span><img src="assets/img/showroom.jpg" alt="Service and showroom photography example" /><div class="ds-photo__scrim"></div></div>
+            <div class="ds-photo__body">
+              <h4>Service / showroom photography</h4>
+              <div class="ds-photo__specs">
+                <div class="r"><span>Crop</span> wide, clean workspace</div>
+                <div class="r"><span>People</span> natural, engaged, real tasks</div>
+                <div class="r"><span>Lighting</span> natural, color-accurate</div>
+                <div class="r"><span>Environment</span> tidy, uncluttered</div>
+              </div>
+              <div class="ds-photo__dd">
+                <div class="do"><h6>Do</h6><p>Real conversations and real work.</p></div>
+                <div class="dont"><h6>Don't</h6><p>Staged handshakes or camera stares.</p></div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="ds-rule"><div class="ds-dd">
+          <div class="do"><h5>Do</h5><ul>
+            <li>Real, color photography with natural balance.</li>
+            <li>Keep the environment clean and uncluttered.</li>
+            <li>Intentional crops with flexible space around the subject.</li>
+          </ul></div>
+          <div class="dont"><h5>Don't</h5><ul>
+            <li>AI-looking cars or low-quality stock cliches.</li>
+            <li>Black-and-white or duotone vehicle imagery.</li>
+            <li>Over- or under-saturation, or crops that lose context.</li>
+          </ul></div>
+        </div></div>
+      </section>
+
+      <!-- ---------------- LOGO AND MARK ---------------- -->
+      <section id="logo" class="ds-section">
+        <p class="ds-eyebrow">Foundations</p>
+        <h2 class="ds-h2">Logo and mark</h2>
+        <p class="ds-lead">One wordmark. White on the dark base, with a subtle platinum "X". An identity mark, not decoration.</p>
+
+        <div class="ds-preview">
+          <div class="ds-preview__label">Preferred lockup: white on dark</div>
+          <div class="ds-preview__body" style="display:flex;align-items:center;gap:2.4rem;flex-wrap:wrap">
+            <img class="ds-logo-white" src="assets/img/logo/brand-logo-white.svg" alt="Lux Cars Chicago" />
+            <span class="ds-clearspace"><img class="ds-logo-white" src="assets/img/logo/brand-logo-white.svg" alt="" /></span>
+            <p class="ds-lockup" style="font-size:22px">LU<span class="x">X</span>CARS</p>
+          </div>
+        </div>
+        <div class="ds-anat">
+          <span><b>Wordmark</b> brand-logo-white.svg</span>
+          <span><b>X mark</b> --platinum-400</span>
+          <span><b>Header</b> 34px tall</span>
+          <span><b>Footer</b> 40px tall</span>
+          <span><b>Clear space</b> cap height all sides (Proposed)</span>
+          <span><b>Min digital</b> 120px wide (Proposed)</span>
+        </div>
+
+        <div class="ds-rule"><div class="ds-dd">
+          <div class="do"><h5>Do</h5><ul>
+            <li>Use the white wordmark on the dark base.</li>
+            <li>Keep the "X" platinum treatment subtle.</li>
+            <li>Give it clear space and enough contrast.</li>
+          </ul></div>
+          <div class="dont"><h5>Don't</h5><ul>
+            <li>Stretch, recolor, or add glow, shadow, outline, or gradient.</li>
+            <li>Place it over busy imagery without contrast.</li>
+            <li>Treat the logo as decoration.</li>
+          </ul></div>
+        </div></div>
+        <p class="ds-note">Clear-space and minimum-size values are <strong>Proposed</strong> until brand sign-off. A dark-on-light version is not produced yet (<strong>Proposed</strong>).</p>
+      </section>
+
+      <!-- ---------------- SPACING RHYTHM ---------------- -->
+      <section id="spacing" class="ds-section">
+        <p class="ds-eyebrow">Foundations</p>
+        <h2 class="ds-h2">Spacing rhythm</h2>
+        <p class="ds-lead">Space is the loudest luxury signal. More room between sections, less noise inside components. Build hierarchy with spacing before adding decoration.</p>
+
+        <p class="ds-grouplabel">Scale</p>
+        <div class="ds-scale">
+          <div class="ds-scale__row"><span class="ds-scale__name">--space-4</span><span class="ds-scale__val">4px</span><span class="ds-scale__track"><span class="ds-scale__bar" style="width:3%"></span></span></div>
+          <div class="ds-scale__row"><span class="ds-scale__name">--space-8</span><span class="ds-scale__val">8px</span><span class="ds-scale__track"><span class="ds-scale__bar" style="width:7%"></span></span></div>
+          <div class="ds-scale__row"><span class="ds-scale__name">--space-12</span><span class="ds-scale__val">12px</span><span class="ds-scale__track"><span class="ds-scale__bar" style="width:10%"></span></span></div>
+          <div class="ds-scale__row"><span class="ds-scale__name">--space-16</span><span class="ds-scale__val">16px</span><span class="ds-scale__track"><span class="ds-scale__bar" style="width:13%"></span></span></div>
+          <div class="ds-scale__row"><span class="ds-scale__name">--space-24</span><span class="ds-scale__val">24px</span><span class="ds-scale__track"><span class="ds-scale__bar" style="width:20%"></span></span></div>
+          <div class="ds-scale__row"><span class="ds-scale__name">--space-32</span><span class="ds-scale__val">32px</span><span class="ds-scale__track"><span class="ds-scale__bar" style="width:27%"></span></span></div>
+          <div class="ds-scale__row"><span class="ds-scale__name">--space-48</span><span class="ds-scale__val">48px</span><span class="ds-scale__track"><span class="ds-scale__bar" style="width:40%"></span></span></div>
+          <div class="ds-scale__row"><span class="ds-scale__name">--space-64</span><span class="ds-scale__val">64px</span><span class="ds-scale__track"><span class="ds-scale__bar" style="width:53%"></span></span></div>
+          <div class="ds-scale__row"><span class="ds-scale__name">--space-80</span><span class="ds-scale__val">80px</span><span class="ds-scale__track"><span class="ds-scale__bar" style="width:67%"></span></span></div>
+          <div class="ds-scale__row"><span class="ds-scale__name">--space-96</span><span class="ds-scale__val">96px</span><span class="ds-scale__track"><span class="ds-scale__bar" style="width:80%"></span></span></div>
+          <div class="ds-scale__row"><span class="ds-scale__name">--space-120</span><span class="ds-scale__val">120px</span><span class="ds-scale__track"><span class="ds-scale__bar" style="width:100%"></span></span></div>
+        </div>
+        <p class="ds-note">Approved scale. Documented here as <strong>--space-*</strong> and marked <strong>Proposed</strong> for styles.css; not yet applied across the site.</p>
+
+        <p class="ds-grouplabel">Section to section</p>
+        <div class="ds-twoup">
+          <div class="ds-diagram">
+            <div class="ds-blk head">Hero</div>
+            <div class="ds-gap">80px to 96px</div>
+            <div class="ds-blk head">Section</div>
+            <div class="ds-gap">96px standard</div>
+            <div class="ds-blk head">Related section</div>
+            <div class="ds-gap">64px compact</div>
+            <div class="ds-blk">Footer (80px top)</div>
+          </div>
+          <div>
+            <div class="ds-spec-list">
+              <div><span class="cap">Desktop</span></div>
+              <div><span class="k">Hero to next section</span><span class="v">80 to 96px</span></div>
+              <div><span class="k">Standard section spacing</span><span class="v">96px</span></div>
+              <div><span class="k">Compact related section</span><span class="v">64px</span></div>
+              <div><span class="k">Footer top spacing</span><span class="v">80px</span></div>
+            </div>
+            <div class="ds-spec-list">
+              <div><span class="cap">Mobile</span></div>
+              <div><span class="k">Hero to next section</span><span class="v">56 to 64px</span></div>
+              <div><span class="k">Standard section spacing</span><span class="v">64px</span></div>
+              <div><span class="k">Compact related section</span><span class="v">40 to 48px</span></div>
+            </div>
+          </div>
+        </div>
+
+        <p class="ds-grouplabel">Section header</p>
+        <div class="ds-twoup">
+          <div class="ds-diagram">
+            <div class="ds-blk" style="color:var(--red-400);text-transform:uppercase;letter-spacing:1px;font-size:11px">Eyebrow</div>
+            <div class="ds-gap">10 to 12px</div>
+            <div class="ds-blk head">Section title</div>
+            <div class="ds-gap">16 to 20px</div>
+            <div class="ds-blk">Body copy</div>
+            <div class="ds-gap">24 to 32px</div>
+            <div class="ds-blk accent">Primary CTA</div>
+            <div class="ds-gap">40 to 48px</div>
+            <div class="ds-blk">Content grid</div>
+          </div>
+          <div class="ds-spec-list">
+            <div><span class="k">Eyebrow to title</span><span class="v">10 to 12px</span></div>
+            <div><span class="k">Title to body copy</span><span class="v">16 to 20px</span></div>
+            <div><span class="k">Body copy to CTA</span><span class="v">24 to 32px</span></div>
+            <div><span class="k">Header to content grid</span><span class="v">40 to 48px</span></div>
+          </div>
+        </div>
+
+        <p class="ds-grouplabel">Card</p>
+        <div class="ds-twoup">
+          <div class="ds-mockcard">
+            <div class="ds-mockcard__img"></div>
+            <div class="ds-mockcard__pad">
+              <p class="ds-annot">padding 24px</p>
+              <div style="margin-top:16px;font-size:16px;font-weight:600;color:var(--color-text)">2019 Ferrari Portofino</div>
+              <p class="ds-annot">image to title 16px</p>
+              <div style="margin-top:8px;font-size:12px;color:var(--color-muted)">Convertible / 8,900 mi / RWD</div>
+              <p class="ds-annot">title to meta 8px</p>
+              <div style="margin-top:12px;font-size:20px;font-weight:600;color:var(--color-text)">$169,995</div>
+              <p class="ds-annot">meta to price 12px</p>
+              <div style="margin-top:16px;font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:var(--platinum-300)">View details</div>
+              <p class="ds-annot">price to link 16px</p>
+            </div>
+          </div>
+          <div class="ds-spec-list">
+            <div><span class="k">Card padding desktop</span><span class="v">24px</span></div>
+            <div><span class="k">Card padding compact</span><span class="v">16px</span></div>
+            <div><span class="k">Image to title</span><span class="v">16px</span></div>
+            <div><span class="k">Title to meta</span><span class="v">8px</span></div>
+            <div><span class="k">Meta to price</span><span class="v">12px</span></div>
+            <div><span class="k">Price to CTA / link</span><span class="v">16px</span></div>
+            <div><span class="k">Grid gap desktop</span><span class="v">24px</span></div>
+            <div><span class="k">Grid gap mobile</span><span class="v">16px</span></div>
+          </div>
+        </div>
+
+        <p class="ds-grouplabel">Button</p>
+        <div class="ds-twoup">
+          <div class="ds-diagram">
+            <span class="ds-mockbtn"><svg class="icon" style="width:14px;height:14px" aria-hidden="true"><use href="#i-search"/></svg>Search inventory</span>
+            <p class="ds-annot" style="margin-top:14px">icon to label 8px / padding 13px x 22px</p>
+            <div style="display:flex;gap:12px;margin-top:16px">
+              <span class="ds-mockbtn">Primary</span>
+              <span class="ds-mockbtn" style="background:transparent;border:1px solid var(--color-border);color:var(--color-text)">Secondary</span>
+            </div>
+            <p class="ds-annot" style="margin-top:14px">button group gap 12px</p>
+          </div>
+          <div class="ds-spec-list">
+            <div><span class="k">Icon to label</span><span class="v">8px</span></div>
+            <div><span class="k">Horizontal padding</span><span class="v">20 to 24px</span></div>
+            <div><span class="k">Vertical padding</span><span class="v">12 to 14px</span></div>
+            <div><span class="k">Button group gap</span><span class="v">12px</span></div>
+            <div><span class="k">CTA block: buttons from text</span><span class="v">24px</span></div>
+          </div>
+        </div>
+
+        <p class="ds-grouplabel">Form</p>
+        <div class="ds-twoup">
+          <div class="ds-diagram">
+            <div class="ds-mockfield">
+              <label>Email</label>
+              <div class="inp">you@email.com</div>
+              <span class="err">Enter a valid email address</span>
+            </div>
+            <p class="ds-annot" style="margin-top:12px">label to input 8px / input to error 6px</p>
+          </div>
+          <div class="ds-spec-list">
+            <div><span class="k">Filter control internal padding</span><span class="v">14 to 16px</span></div>
+            <div><span class="k">Filter group gap desktop</span><span class="v">12px</span></div>
+            <div><span class="k">Filter group gap mobile</span><span class="v">10px</span></div>
+            <div><span class="k">Form label to input</span><span class="v">8px</span></div>
+            <div><span class="k">Input to helper / error</span><span class="v">6px</span></div>
+            <div><span class="k">Search button gap from filters</span><span class="v">12 to 16px</span></div>
+          </div>
+        </div>
+
+        <p class="ds-grouplabel">Text rhythm</p>
+        <div class="ds-spec-list">
+          <div><span class="k">Paragraph gap</span><span class="v">12 to 16px</span></div>
+          <div><span class="k">List item gap</span><span class="v">8px</span></div>
+          <div><span class="k">Small meta group gap</span><span class="v">6 to 8px</span></div>
+          <div><span class="k">Inside small components</span><span class="v">no huge gaps</span></div>
+        </div>
+
+        <p class="ds-grouplabel">Before and after</p>
+        <div class="ds-twoup">
+          <div class="ds-diagram">
+            <p class="ds-annot" style="color:var(--red-300)">Cramped: everything 8px apart</p>
+            <div class="ds-blk head" style="margin-top:10px">Title</div>
+            <div class="ds-blk" style="margin-top:8px">Body copy</div>
+            <div style="margin-top:8px"><span class="ds-mockbtn">Get pre-approved</span></div>
+          </div>
+          <div class="ds-diagram">
+            <p class="ds-annot">Rhythm: 16px then 24px</p>
+            <div class="ds-blk head" style="margin-top:10px">Title</div>
+            <div class="ds-blk" style="margin-top:16px">Body copy</div>
+            <div style="margin-top:24px"><span class="ds-mockbtn">Get pre-approved</span></div>
+          </div>
+        </div>
+
+        <div class="ds-rule">
+          <div class="ds-dd">
+            <div class="do"><h5>Do</h5><ul>
+              <li>More space between sections, less noise inside components.</li>
+              <li>Use spacing to create hierarchy before adding decoration.</li>
+              <li>If a section feels cheap, remove elements before adding effects.</li>
+            </ul></div>
+            <div class="dont"><h5>Don't</h5><ul>
+              <li>Crowd CTAs or place headings tight to borders.</li>
+              <li>Make card grids feel like a discount inventory wall.</li>
+              <li>Overuse huge gaps inside small components.</li>
+            </ul></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------------- RADIUS ---------------- -->
+      <section id="radius" class="ds-section">
+        <p class="ds-eyebrow">Foundations</p>
+        <h2 class="ds-h2">Radius</h2>
+        <p class="ds-lead">Refined, not bubbly. Soft enough to feel considered, never so round it reads as generic SaaS.</p>
+
+        <div class="ds-radii">
+          <div class="ds-radtile"><span class="ds-radbox" style="border-radius:4px"></span><span class="lbl">4px</span><span class="use">Small internal details</span></div>
+          <div class="ds-radtile"><span class="ds-radbox" style="border-radius:8px"></span><span class="lbl">8px</span><span class="use">Small buttons, chips</span></div>
+          <div class="ds-radtile"><span class="ds-radbox" style="border-radius:12px"></span><span class="lbl">12px</span><span class="use">Inputs, selects</span></div>
+          <div class="ds-radtile"><span class="ds-radbox" style="border-radius:16px"></span><span class="lbl">16px</span><span class="use">Cards, larger surfaces</span></div>
+          <div class="ds-radtile"><span class="ds-radbox" style="border-radius:24px"></span><span class="lbl">24px</span><span class="use">Large editorial panels only</span></div>
+          <div class="ds-radtile"><span class="ds-radbox" style="border-radius:999px;width:96px;height:40px"></span><span class="lbl">999px</span><span class="use">Pills, badges, icon buttons</span></div>
+        </div>
+
+        <div class="ds-twoup">
+          <div class="ds-spec-list">
+            <div><span class="cap">Recommended usage</span></div>
+            <div><span class="k">4px</span><span class="v">small details</span></div>
+            <div><span class="k">8px</span><span class="v">small buttons, chips</span></div>
+            <div><span class="k">12px</span><span class="v">inputs, selects</span></div>
+            <div><span class="k">16px</span><span class="v">cards, surfaces</span></div>
+            <div><span class="k">24px</span><span class="v">editorial panels</span></div>
+            <div><span class="k">999px</span><span class="v">pills, badges</span></div>
+          </div>
+          <div>
+            <div class="ds-spec-list">
+              <div><span class="cap">Existing tokens (styles.css)</span></div>
+              <div><span class="k">--radius</span><span class="v">14px</span></div>
+              <div><span class="k">--radius-sm</span><span class="v">10px</span></div>
+            </div>
+            <p class="ds-note">The full 4 to 24px scale is <strong>Proposed</strong>; only <strong>--radius</strong> and <strong>--radius-sm</strong> exist today. Keep related components on one radius step.</p>
+          </div>
+        </div>
+
+        <div class="ds-rule"><div class="ds-dd">
+          <div class="do"><h5>Do</h5><ul>
+            <li>Softly round cards and filters; moderate radius on buttons.</li>
+            <li>Reserve pills for compact labels, chips, and icon buttons.</li>
+            <li>Keep one radius across related components.</li>
+          </ul></div>
+          <div class="dont"><h5>Don't</h5><ul>
+            <li>Overly rounded SaaS corners on everything.</li>
+            <li>Pills on large surfaces or content cards.</li>
+            <li>Mixed radius across a related component set.</li>
+          </ul></div>
+        </div></div>
+      </section>
+
+      <!-- ---------------- 4. BUTTONS ---------------- -->
+      <section id="buttons" class="ds-section">
+        <p class="ds-eyebrow">03 / Components</p>
+        <h2 class="ds-h2">Buttons</h2>
+        <p class="ds-lead">Real components pulled from the site stylesheet. Text spec: 13px / 16px, weight 600, 1px tracking, uppercase, Manrope.</p>
+
+        <!-- Primary -->
+        <div class="ds-btn-block">
+          <h3>Primary</h3>
+          <p class="desc">Solid wine red. One primary action per view.</p>
+          <div class="ds-btn-row">
+            <div class="ds-btn-cell"><button class="btn btn-primary">Search inventory</button><span class="ds-cap"><b>Default</b> · --red-500 #8B2828</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-primary ds-hover">Search inventory</button><span class="ds-cap"><b>Hover</b> · --red-600 #742020</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-primary ds-pressed">Search inventory</button><span class="ds-cap"><b>Pressed</b> · --red-700 #5C1919</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-primary" disabled>Search inventory</button><span class="ds-cap"><b>Disabled</b> · 42% opacity <span class="ds-proposed">Proposed</span></span></div>
+          </div>
+          <div class="ds-btn-row">
+            <div class="ds-btn-cell"><button class="btn btn-primary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-search"/></svg>Search inventory</button><span class="ds-cap"><b>Default</b> · with icon</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-primary ds-hover"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-search"/></svg>Search inventory</button><span class="ds-cap"><b>Hover</b> · with icon</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-primary ds-pressed"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-search"/></svg>Search inventory</button><span class="ds-cap"><b>Pressed</b> · with icon</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-primary" disabled><svg class="icon icon-sm" aria-hidden="true"><use href="#i-search"/></svg>Search inventory</button><span class="ds-cap"><b>Disabled</b> · with icon</span></div>
+          </div>
+        </div>
+
+        <!-- Secondary -->
+        <div class="ds-btn-block">
+          <h3>Secondary outline</h3>
+          <p class="desc">Transparent with a hairline border. Pairs beside a primary.</p>
+          <div class="ds-btn-row">
+            <div class="ds-btn-cell"><button class="btn btn-secondary">Get pre-approved</button><span class="ds-cap"><b>Default</b> · border --color-border</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-secondary ds-hover">Get pre-approved</button><span class="ds-cap"><b>Hover</b> · border --red-500</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-secondary ds-pressed">Get pre-approved</button><span class="ds-cap"><b>Pressed</b> · border --red-500</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-secondary" disabled>Get pre-approved</button><span class="ds-cap"><b>Disabled</b> · 42% opacity <span class="ds-proposed">Proposed</span></span></div>
+          </div>
+          <div class="ds-btn-row">
+            <div class="ds-btn-cell"><button class="btn btn-secondary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-financing"/></svg>Get pre-approved</button><span class="ds-cap"><b>Default</b> · with icon</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-secondary ds-hover"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-financing"/></svg>Get pre-approved</button><span class="ds-cap"><b>Hover</b> · with icon</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-secondary ds-pressed"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-financing"/></svg>Get pre-approved</button><span class="ds-cap"><b>Pressed</b> · with icon</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-secondary" disabled><svg class="icon icon-sm" aria-hidden="true"><use href="#i-financing"/></svg>Get pre-approved</button><span class="ds-cap"><b>Disabled</b> · with icon</span></div>
+          </div>
+        </div>
+
+        <!-- Tertiary -->
+        <div class="ds-btn-block">
+          <h3>Tertiary text link</h3>
+          <p class="desc">No container. For low emphasis inline actions.</p>
+          <div class="ds-btn-row">
+            <div class="ds-btn-cell"><button class="btn btn-ghost">View details</button><span class="ds-cap"><b>Default</b> · --color-text</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-ghost ds-hover">View details</button><span class="ds-cap"><b>Hover</b> · --platinum-300 #D8DBDE</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-ghost ds-pressed">View details</button><span class="ds-cap"><b>Pressed</b> · --platinum-500 #7C8288</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-ghost" disabled>View details</button><span class="ds-cap"><b>Disabled</b> · 42% opacity <span class="ds-proposed">Proposed</span></span></div>
+          </div>
+          <div class="ds-btn-row">
+            <div class="ds-btn-cell"><button class="btn btn-ghost">View details<svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></button><span class="ds-cap"><b>Default</b> · with icon</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-ghost ds-hover">View details<svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></button><span class="ds-cap"><b>Hover</b> · with icon</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-ghost ds-pressed">View details<svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></button><span class="ds-cap"><b>Pressed</b> · with icon</span></div>
+            <div class="ds-btn-cell"><button class="btn btn-ghost" disabled>View details<svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></button><span class="ds-cap"><b>Disabled</b> · with icon</span></div>
+          </div>
+        </div>
+
+        <p class="ds-note">Hover and pressed cells force the state for documentation; the live components use the real <strong>:hover</strong> and <strong>:active</strong> rules from styles.css. Focus rings are platinum (2px <strong>--platinum-300</strong>, offset 2px). A <strong>.btn:disabled</strong> rule does not exist in the stylesheet yet, so the disabled treatment is marked Proposed.</p>
+      </section>
+
+      <!-- ---------------- INPUTS AND SELECTS ---------------- -->
+      <section id="inputs" class="ds-section">
+        <p class="ds-eyebrow">Components</p>
+        <h2 class="ds-h2">Inputs and selects</h2>
+        <p class="ds-lead">Premium and quiet. Dark surfaces, restrained borders, a platinum focus ring, and errors that never rely on color alone.</p>
+
+        <div class="ds-fields">
+          <div class="ds-field">
+            <label for="di-name">Full name</label>
+            <input id="di-name" type="text" placeholder="Jane Kessler" />
+            <span class="help">Text input. Placeholder is muted, not white.</span>
+          </div>
+          <div class="ds-field">
+            <label for="di-make">Make</label>
+            <div class="ds-selwrap"><select id="di-make"><option>Any make</option><option>BMW</option><option>Porsche</option><option>Mercedes-Benz</option></select><svg class="chev icon" aria-hidden="true"><use href="#i-chevron"/></svg></div>
+            <span class="help">Select. Custom chevron, native menu.</span>
+          </div>
+          <div class="ds-field">
+            <label>Focus state</label>
+            <input class="is-focus" value="Focused input" readonly />
+            <span class="help">Focus ring: platinum 300, visible on dark.</span>
+          </div>
+          <div class="ds-field err">
+            <label for="di-email">Email</label>
+            <input id="di-email" type="email" value="jane@" />
+            <span class="errmsg"><svg class="icon" style="width:14px;height:14px" aria-hidden="true"><use href="#i-close"/></svg>Enter a valid email address</span>
+          </div>
+          <div class="ds-field">
+            <label>Disabled</label>
+            <input value="Not editable" disabled />
+            <span class="help">Reduced opacity, not-allowed cursor.</span>
+          </div>
+          <div class="ds-field">
+            <label for="di-msg">Message</label>
+            <textarea id="di-msg" placeholder="How can we help?"></textarea>
+          </div>
+        </div>
+
+        <p class="ds-grouplabel">Search input</p>
+        <div class="ds-searchrow" style="max-width:520px">
+          <div class="ds-field"><div class="ds-selwrap"><input type="search" placeholder="Search inventory" style="padding-left:44px" /><svg class="chev icon" style="left:15px;right:auto" aria-hidden="true"><use href="#i-search"/></svg></div></div>
+          <button class="btn btn-primary" type="button"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-search"/></svg>Search</button>
+        </div>
+
+        <p class="ds-grouplabel">Checkbox and radio</p>
+        <div style="display:flex;flex-wrap:wrap;gap:1.6rem;margin-top:1rem">
+          <span class="ds-choice"><span class="ds-box on"><svg class="icon" style="width:13px;height:13px" aria-hidden="true"><use href="#i-check"/></svg></span>Certified only</span>
+          <span class="ds-choice"><span class="ds-box"></span>Includes warranty</span>
+          <span class="ds-choice"><span class="ds-box on round"></span>Any mileage</span>
+          <span class="ds-choice"><span class="ds-box round"></span>Under 30,000 mi</span>
+        </div>
+
+        <p class="ds-grouplabel">Filter select group</p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:1rem;align-items:stretch">
+          <div class="ds-selwrap" style="flex:1;min-width:150px"><select><option>Make</option></select><svg class="chev icon" aria-hidden="true"><use href="#i-chevron"/></svg></div>
+          <div class="ds-selwrap" style="flex:1;min-width:150px"><select><option>Body style</option></select><svg class="chev icon" aria-hidden="true"><use href="#i-chevron"/></svg></div>
+          <div class="ds-selwrap" style="flex:1;min-width:150px"><select><option>Price</option></select><svg class="chev icon" aria-hidden="true"><use href="#i-chevron"/></svg></div>
+          <button class="btn btn-primary" type="button"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-search"/></svg>Search</button>
+        </div>
+
+        <div class="ds-twoup">
+          <div class="ds-spec-list">
+            <div><span class="cap">Specs</span></div>
+            <div><span class="k">Height</span><span class="v">50px min</span></div>
+            <div><span class="k">Padding</span><span class="v">14 to 16px</span></div>
+            <div><span class="k">Border</span><span class="v">--color-border</span></div>
+            <div><span class="k">Background</span><span class="v">--color-surface-2</span></div>
+            <div><span class="k">Text size</span><span class="v">14px</span></div>
+            <div><span class="k">Radius</span><span class="v">12px</span></div>
+            <div><span class="k">Focus</span><span class="v">--platinum-300 ring</span></div>
+            <div><span class="k">Error</span><span class="v">--red-400 border + icon + text</span></div>
+            <div><span class="k">Disabled</span><span class="v">45% opacity</span></div>
+          </div>
+          <div class="ds-rule" style="margin-top:0"><div class="ds-dd">
+            <div class="do"><h5>Do</h5><ul>
+              <li>Keep controls quiet; platinum focus ring, visible on dark.</li>
+              <li>Pair error color with an icon and message.</li>
+              <li>Keep search and submit actions red.</li>
+            </ul></div>
+            <div class="dont"><h5>Don't</h5><ul>
+              <li>Generic SaaS styling or bright fills.</li>
+              <li>Color-only error states.</li>
+              <li>Oversized controls outside the hero search.</li>
+            </ul></div>
+          </div></div>
+        </div>
+      </section>
+
+      <!-- ---------------- CARDS AND BADGES ---------------- -->
+      <section id="cards" class="ds-section">
+        <p class="ds-eyebrow">Components</p>
+        <h2 class="ds-h2">Cards and badges</h2>
+        <p class="ds-lead">Consistent surfaces, calm hierarchy. Badges are functional, never stickers.</p>
+
+        <p class="ds-grouplabel">Card types</p>
+        <div class="ds-cardgrid">
+          <article class="vcard">
+            <div class="vcard__media"><span class="ds-badge platinum ds-badge-pos">New arrival</span><img src="assets/img/ferrari-portofino.jpg" alt="2019 Ferrari Portofino" /></div>
+            <div class="ds-vbody">
+              <h3 class="ds-vtitle">2019 Ferrari Portofino</h3>
+              <p class="ds-vmeta"><span><svg class="icon" style="width:14px;height:14px" aria-hidden="true"><use href="#i-tag"/></svg>Convertible</span><span><svg class="icon" style="width:14px;height:14px" aria-hidden="true"><use href="#i-gauge"/></svg>28,800 mi</span><span>RWD</span></p>
+              <div class="ds-vfoot"><span class="vcard__price" style="font-size:20px">$169,995</span><span class="link-arrow" style="font-size:12px">View details <svg class="icon" style="width:14px;height:14px" aria-hidden="true"><use href="#i-arrow-right"/></svg></span></div>
+            </div>
+          </article>
+
+          <figure class="surface" style="padding:24px;display:flex;flex-direction:column;gap:14px;margin:0">
+            <span class="stars"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg></span>
+            <blockquote style="color:var(--color-muted);font-size:14px;line-height:22px;margin:0">Calm, transparent, and no pressure. The car was exactly as described.</blockquote>
+            <figcaption style="font-size:13px"><span style="color:var(--color-text);font-weight:600">Marcus Reilly</span><br /><span style="color:var(--color-muted)">Bought a Porsche Panamera</span></figcaption>
+          </figure>
+
+          <div class="feature-tile"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-shield"/></svg><h3 style="font-size:16px;color:var(--color-text)">3-month warranty</h3><p style="font-size:13px;color:var(--color-muted);line-height:20px">Every vehicle inspected and documented before delivery.</p></div>
+
+          <div class="surface" style="padding:24px;display:flex;flex-direction:column;gap:14px;align-items:flex-start">
+            <h3 style="font-size:18px;color:var(--color-text)">Ready when you are</h3>
+            <p style="font-size:13px;color:var(--color-muted);line-height:20px">Book a private appointment and we will have the vehicle ready.</p>
+            <button class="btn btn-primary" type="button"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-phone"/></svg>Book appointment</button>
+          </div>
+
+          <div class="feature-tile"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-wrench"/></svg><h3 style="font-size:16px;color:var(--color-text)">Service department</h3><p style="font-size:13px;color:var(--color-muted);line-height:20px">Factory-quality maintenance for every make we sell.</p></div>
+
+          <div class="surface" style="padding:18px 20px;display:flex;align-items:center;gap:14px">
+            <svg class="icon icon-lg" style="color:var(--platinum-400)" aria-hidden="true"><use href="#i-pin"/></svg>
+            <div><div style="font-size:14px;color:var(--color-text);font-weight:600">Buffalo Grove, IL</div><div style="font-size:12px;color:var(--color-muted)">88 E Dundee Rd</div></div>
+          </div>
+        </div>
+
+        <p class="ds-grouplabel">Vehicle card states</p>
+        <div class="ds-cardgrid">
+          <div><article class="vcard"><div class="vcard__media"><img src="assets/img/porsche-panamera.jpg" alt="" /></div><div class="ds-vbody"><h3 class="ds-vtitle" style="font-size:16px">2020 Porsche Panamera 4</h3><div class="ds-vfoot"><span class="vcard__price" style="font-size:18px">$47,995</span><span class="link-arrow" style="font-size:12px">View</span></div></div></article><p class="ds-annot" style="margin-top:8px">Default</p></div>
+          <div><article class="vcard ds-hover"><div class="vcard__media"><img src="assets/img/porsche-panamera.jpg" alt="" /></div><div class="ds-vbody"><h3 class="ds-vtitle" style="font-size:16px">2020 Porsche Panamera 4</h3><div class="ds-vfoot"><span class="vcard__price" style="font-size:18px">$47,995</span><span class="link-arrow" style="font-size:12px">View</span></div></div></article><p class="ds-annot" style="margin-top:8px">Hover: lift + red border</p></div>
+          <div><article class="vcard ds-focus"><div class="vcard__media"><img src="assets/img/porsche-panamera.jpg" alt="" /></div><div class="ds-vbody"><h3 class="ds-vtitle" style="font-size:16px">2020 Porsche Panamera 4</h3><div class="ds-vfoot"><span class="vcard__price" style="font-size:18px">$47,995</span><span class="link-arrow" style="font-size:12px">View</span></div></div></article><p class="ds-annot" style="margin-top:8px">Focus: platinum ring</p></div>
+        </div>
+
+        <div class="ds-spec-list" style="margin-top:1.6rem">
+          <div><span class="cap">Vehicle card anatomy</span></div>
+          <div><span class="k">Image ratio</span><span class="v">4:3, contain, full car</span></div>
+          <div><span class="k">Title</span><span class="v">18px / 600, text</span></div>
+          <div><span class="k">Meta</span><span class="v">12px muted, icon + value</span></div>
+          <div><span class="k">Price</span><span class="v">20px / 600, calm, never distressed</span></div>
+          <div><span class="k">Link</span><span class="v">uppercase, platinum on hover</span></div>
+          <div><span class="k">Padding</span><span class="v">24px (compact 16px)</span></div>
+          <div><span class="k">Border / radius</span><span class="v">1px --color-border / 14px</span></div>
+          <div><span class="k">Hover</span><span class="v">translateY -6px, red-tinted border</span></div>
+        </div>
+
+        <p class="ds-grouplabel">Badges</p>
+        <div class="ds-badges">
+          <span class="ds-badge platinum">New arrival</span>
+          <span class="ds-badge platinum">Certified</span>
+          <span class="ds-badge active">Reserved</span>
+          <span class="ds-badge">Low mileage</span>
+          <span class="ds-badge">Coming soon</span>
+          <span class="ds-badge">Sold</span>
+        </div>
+        <p class="ds-metanote" style="margin-top:1rem;color:var(--red-300)">Prohibited: sticker-style pricing badges</p>
+        <div class="ds-badges" style="margin-top:.6rem">
+          <span class="ds-badge bad">Huge savings</span>
+          <span class="ds-badge bad">Price reduced</span>
+          <span class="ds-badge bad">Manager special</span>
+          <span class="ds-badge bad">Blowout</span>
+        </div>
+
+        <div class="ds-rule"><div class="ds-dd">
+          <div class="do"><h5>Do</h5><ul>
+            <li>Keep badges functional: muted surface and border by default.</li>
+            <li>Red only for a meaningful active or primary status.</li>
+            <li>Platinum only as a subtle border or icon detail.</li>
+          </ul></div>
+          <div class="dont"><h5>Don't</h5><ul>
+            <li>Sticker-style badges or oversized trust seals.</li>
+            <li>Random certification clutter.</li>
+            <li>Distressed pricing badges of any kind.</li>
+          </ul></div>
+        </div></div>
+      </section>
+
+      <!-- ---------------- DOCUMENTATION MODEL ---------------- -->
+      <section id="docmodel" class="ds-section">
+        <p class="ds-eyebrow">Components</p>
+        <h2 class="ds-h2">Documentation model</h2>
+        <p class="ds-lead">Every component in this system is documented the same four ways, so any teammate can pick it up.</p>
+        <div class="ds-docmodel">
+          <div>
+            <h4>Usage</h4>
+            <p>Where and why the component is used, and when to reach for something else.</p>
+          </div>
+          <div>
+            <h4>Specs</h4>
+            <p>Size, spacing, color token, font, radius, and border, pulled from real variables.</p>
+          </div>
+          <div>
+            <h4>States</h4>
+            <p>Default, hover, focus, pressed, disabled, and error where relevant.</p>
+          </div>
+          <div>
+            <h4>Do / Don't</h4>
+            <p>Keeps the brand consistent and prevents cheap dealer patterns.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------------- HEADER AND FOOTER ---------------- -->
+      <section id="chrome" class="ds-section">
+        <p class="ds-eyebrow">Patterns</p>
+        <h2 class="ds-h2">Header and footer</h2>
+        <p class="ds-lead">Predictable navigation, an easy-to-find phone number, and a quiet, complete footer.</p>
+
+        <div class="ds-preview">
+          <div class="ds-preview__label">Desktop header (faithful preview, Proposed)</div>
+          <div class="ds-preview__body">
+            <div class="ds-mockhead is-desktop">
+              <img class="ds-logo-white" src="assets/img/logo/brand-logo-white.svg" alt="Lux Cars Chicago" style="height:26px" />
+              <nav class="ds-mocknav"><span class="on">Inventory</span><span>Financing</span><span>Sell / Trade</span><span>Service</span><span>Contact</span></nav>
+              <span class="ds-mockcta"><svg class="icon" style="width:13px;height:13px;vertical-align:-2px" aria-hidden="true"><use href="#i-phone"/></svg> 847-947-2900</span>
+            </div>
+          </div>
+        </div>
+        <div class="ds-anat"><span><b>Left</b> white wordmark</span><span><b>Center</b> primary nav</span><span><b>Right</b> red phone CTA</span></div>
+
+        <div class="ds-preview">
+          <div class="ds-preview__label">Mobile header (faithful preview, Proposed)</div>
+          <div class="ds-preview__body" style="max-width:360px">
+            <div class="ds-mockhead">
+              <img class="ds-logo-white" src="assets/img/logo/brand-logo-white.svg" alt="Lux Cars Chicago" style="height:22px" />
+              <span style="display:inline-flex;align-items:center;gap:.7rem">
+                <span class="ds-mockcta" style="padding:.4rem .6rem"><svg class="icon" style="width:13px;height:13px;vertical-align:-2px" aria-hidden="true"><use href="#i-phone"/></svg></span>
+                <svg class="icon" style="width:22px;height:22px;color:var(--color-text)" aria-hidden="true"><use href="#i-menu"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="ds-anat"><span><b>Keeps</b> Inventory</span><span>Financing</span><span>Sell / Trade</span><span>Service</span><span>Contact</span></div>
+
+        <div class="ds-preview">
+          <div class="ds-preview__label">Footer (faithful preview, Proposed)</div>
+          <div class="ds-preview__body">
+            <div class="ds-struct" style="margin-top:0">
+              <div class="ds-col" style="border:0;padding:0;background:none">
+                <img class="ds-logo-white" src="assets/img/logo/brand-logo-white.svg" alt="Lux Cars Chicago" style="height:26px;margin-bottom:.9rem" />
+                <ul>
+                  <li><svg class="icon" style="width:13px;height:13px;color:var(--platinum-400)" aria-hidden="true"><use href="#i-pin"/></svg> 88 E Dundee Rd, Buffalo Grove, IL</li>
+                  <li><svg class="icon" style="width:13px;height:13px;color:var(--platinum-400)" aria-hidden="true"><use href="#i-phone"/></svg> 847-947-2900</li>
+                </ul>
+              </div>
+              <div class="ds-col" style="border:0;padding:0;background:none">
+                <h4>Shop</h4>
+                <ul><li>Inventory</li><li>Sell / Trade</li><li>Financing</li><li>Warranty</li></ul>
+              </div>
+              <div class="ds-col" style="border:0;padding:0;background:none">
+                <h4>Company</h4>
+                <ul><li>About</li><li>Service</li><li>Contact</li><li>Reviews</li></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ds-rule">
+          <div class="ds-dd">
+            <div class="do"><h5>Do</h5><ul>
+              <li>Keep nav clear and predictable; phone easy to find; CTA red.</li>
+              <li>Footer: address, phone, core nav, legal, social. Quiet and complete.</li>
+              <li>Maintain contrast and visible keyboard focus.</li>
+            </ul></div>
+            <div class="dont"><h5>Don't</h5><ul>
+              <li>Overcrowd the nav or add "specials" and discount items.</li>
+              <li>Let the footer become a second homepage or brand clutter.</li>
+              <li>Hide the phone number or drop mobile nav items.</li>
+            </ul></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------------- HERO PREVIEW (palette together) ---------------- -->
+      <section id="hero" class="ds-section">
+        <p class="ds-eyebrow">Patterns</p>
+        <h2 class="ds-h2">Hero search</h2>
+        <p class="ds-lead">The full palette in context: warm charcoal base, oxblood red action, platinum details (stars, LUX "X", focus ring).</p>
+        <div class="ds-hero">
+          <img src="assets/img/hero.jpg" alt="Lux Cars Chicago hero preview" />
+          <div class="ds-hero__scrim"></div>
+          <div class="ds-hero__in">
+            <p class="ds-lockup">LU<span class="x">X</span>CARS</p>
+            <p class="ds-hero__eyebrow" style="margin-top:.7rem">Buffalo Grove, IL</p>
+            <h3 class="ds-hero__title">Hand-picked luxury.<br /><span class="accent">Honest pricing.</span></h3>
+            <p class="ds-hero__sub">Over 100 inspected vehicles, updated daily.</p>
+            <div style="display:flex;gap:.7rem;flex-wrap:wrap">
+              <button class="btn btn-primary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-search"/></svg>Search inventory</button>
+              <button class="btn btn-secondary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-financing"/></svg>Get pre-approved</button>
+            </div>
+            <div class="ds-hero__rating">
+              <span class="stars" aria-label="4.8 out of 5">
+                <svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg>
+              </span>
+              <span>4.8 from 180+ reviews</span>
+            </div>
+          </div>
+        </div>
+        <p class="ds-note">Red carries the two actions. Platinum stays thin: five stars and the LUX "X" only. The base stays warm. Nothing glows.</p>
+      </section>
+
+      <!-- ---------------- INVENTORY GRID ---------------- -->
+      <section id="inventory" class="ds-section">
+        <p class="ds-eyebrow">Patterns</p>
+        <h2 class="ds-h2">Inventory grid</h2>
+        <p class="ds-lead">Curated, not crowded. Three across on desktop, two on tablet, one on mobile. Consistent heights, aligned title, meta, price, and CTA.</p>
+
+        <p class="ds-grouplabel">Desktop 3 / tablet 2 / mobile 1 (resize to preview)</p>
+        <div class="ds-inv-grid">
+          <article class="vcard">
+            <div class="vcard__media"><img src="assets/img/ferrari-portofino.jpg" alt="2019 Ferrari Portofino" /></div>
+            <div class="ds-vbody">
+              <h3 class="ds-vtitle" style="font-size:17px">2019 Ferrari Portofino</h3>
+              <p class="ds-vmeta"><span>Convertible</span><span>28,800 mi</span><span>RWD</span></p>
+              <div class="ds-vfoot"><span class="vcard__price" style="font-size:19px">$169,995</span><span class="link-arrow" style="font-size:12px">View details</span></div>
+            </div>
+          </article>
+          <article class="vcard">
+            <div class="vcard__media"><img src="assets/img/porsche-panamera.jpg" alt="2020 Porsche Panamera 4" /></div>
+            <div class="ds-vbody">
+              <h3 class="ds-vtitle" style="font-size:17px">2020 Porsche Panamera 4</h3>
+              <p class="ds-vmeta"><span>Sedan</span><span>34,200 mi</span><span>AWD</span></p>
+              <div class="ds-vfoot"><span class="vcard__price" style="font-size:19px">$47,995</span><span class="link-arrow" style="font-size:12px">View details</span></div>
+            </div>
+          </article>
+          <article class="vcard">
+            <div class="vcard__media"><img src="assets/img/porsche-taycan.jpg" alt="2021 Porsche Taycan 4S" /></div>
+            <div class="ds-vbody">
+              <h3 class="ds-vtitle" style="font-size:17px">2021 Porsche Taycan 4S</h3>
+              <p class="ds-vmeta"><span>Sedan</span><span>19,700 mi</span><span>AWD</span></p>
+              <div class="ds-vfoot"><span class="vcard__price" style="font-size:19px">$61,995</span><span class="link-arrow" style="font-size:12px">View details</span></div>
+            </div>
+          </article>
+        </div>
+        <div class="ds-spec-list" style="margin-top:1.4rem">
+          <div><span class="k">Grid gap</span><span class="v">24px desktop / 16px mobile</span></div>
+          <div><span class="k">Columns</span><span class="v">3 desktop / 2 tablet / 1 mobile</span></div>
+          <div><span class="k">Alignment</span><span class="v">title, meta, price, CTA aligned across cards</span></div>
+          <div><span class="k">Card height</span><span class="v">consistent per row</span></div>
+        </div>
+
+        <p class="ds-grouplabel">Loading (skeleton)</p>
+        <div class="ds-inv-grid">
+          <article class="vcard vcard--skeleton" aria-hidden="true"><div class="skel-media skeleton"></div><div style="padding:20px"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line skeleton" style="margin-top:1.25rem"></div></div></article>
+          <article class="vcard vcard--skeleton" aria-hidden="true"><div class="skel-media skeleton"></div><div style="padding:20px"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line skeleton" style="margin-top:1.25rem"></div></div></article>
+          <article class="vcard vcard--skeleton" aria-hidden="true"><div class="skel-media skeleton"></div><div style="padding:20px"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div><div class="skel-line skeleton" style="margin-top:1.25rem"></div></div></article>
+        </div>
+
+        <p class="ds-grouplabel">Empty / no results</p>
+        <div class="empty-state">
+          <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <p class="empty-state__title">No vehicles match those filters</p>
+          <p class="empty-state__text">Try widening your price or year range, or reset to see the full collection.</p>
+          <button type="button" class="btn btn-secondary">Reset filters</button>
+        </div>
+
+        <p class="ds-grouplabel">Inventory QA</p>
+        <div class="ds-check">
+          <div class="ds-checkcard">
+            <h4>Inventory checklist <span class="ds-status ds-status--review">Needs review</span></h4>
+            <ul>
+              <li>Are photos clean and full?</li>
+              <li>Are titles aligned across cards?</li>
+              <li>Is price styling calm, not distressed?</li>
+              <li>Are badges quiet?</li>
+              <li>Is spacing consistent?</li>
+              <li>Is mobile readable and tappable?</li>
+              <li>Are filters accessible?</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="ds-rule"><div class="ds-dd">
+          <div class="do"><h5>Do</h5><ul>
+            <li>Full, clean photos; consistent card heights; aligned content.</li>
+            <li>Keep price styling calm; use clean pagination and filters.</li>
+            <li>Make mobile cards easy to scan and tap.</li>
+          </ul></div>
+          <div class="dont"><h5>Don't</h5><ul>
+            <li>Over-compress cards or crowd the grid.</li>
+            <li>Discount-style badges or distressed price styling.</li>
+            <li>Heavy overlays covering the vehicle.</li>
+          </ul></div>
+        </div></div>
+      </section>
+
+      <!-- ---------------- LUXURY HYGIENE ---------------- -->
+      <section id="hygiene" class="ds-section">
+        <p class="ds-eyebrow">Quality</p>
+        <h2 class="ds-h2">Luxury hygiene</h2>
+        <p class="ds-lead">The rules that keep the site out of cheap-dealership territory.</p>
+
+        <div class="ds-rule">
+          <h4>No distressed pricing</h4>
+          <div class="ds-dd">
+            <div class="do"><h5>Do</h5><ul><li>View curated inventory</li><li>Request details</li><li>Get a clear number</li></ul></div>
+            <div class="dont"><h5>Don't</h5><ul><li>Huge savings, discounted, price reduced</li><li>Special offer, was / now pricing</li><li>Blowout, manager special</li></ul></div>
+          </div>
+        </div>
+
+        <div class="ds-rule">
+          <h4>No desperate inventory language</h4>
+          <div class="ds-dd">
+            <div class="do"><h5>Do</h5><ul><li>Hand-picked inventory</li><li>Carefully selected vehicles</li><li>Updated collection</li></ul></div>
+            <div class="dont"><h5>Don't</h5><ul><li>Large inventory, huge selection</li><li>Immediate delivery, in stock now</li><li>Must go, limited time only</li></ul></div>
+          </div>
+        </div>
+
+        <div class="ds-rule">
+          <h4>No fake exclusivity</h4>
+          <div class="ds-dd">
+            <div class="do"><h5>Do</h5><ul><li>Private appointments available</li><li>Curated luxury vehicles</li><li>A more personal buying experience</li></ul></div>
+            <div class="dont"><h5>Don't</h5><ul><li>VIP only, ultra exclusive deals</li><li>Rare chance today</li><li>Once in a lifetime offer</li></ul></div>
+          </div>
+        </div>
+
+        <div class="ds-rule">
+          <h4>No visual clutter</h4>
+          <div class="ds-dd">
+            <div class="do"><h5>Do</h5><ul><li>One clear message per section</li><li>One primary CTA per section</li><li>Clean imagery, strong negative space</li></ul></div>
+            <div class="dont"><h5>Don't</h5><ul><li>Multiple badges, sticker-style labels</li><li>Heavy overlays, too many CTAs</li><li>Crowded cards</li></ul></div>
+          </div>
+        </div>
+
+        <div class="ds-rule">
+          <h4>No badge abuse</h4>
+          <div class="ds-dd">
+            <div class="do"><h5>Do</h5><ul><li>Small labels only when useful</li><li>Keep badges quiet and functional</li></ul></div>
+            <div class="dont"><h5>Don't</h5><ul><li>Oversized certification badges</li><li>Random trust seals, sticker graphics</li><li>Report-style visual clutter</li></ul></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------------- PATTERN QA CHECKLIST ---------------- -->
+      <section id="qa" class="ds-section">
+        <p class="ds-eyebrow">Quality</p>
+        <h2 class="ds-h2">Pattern QA</h2>
+        <p class="ds-lead">Run this before shipping any new page. Status chips are examples: Pass, Needs review, Fix.</p>
+        <div class="ds-check">
+          <div class="ds-checkcard">
+            <h4>Page identity <span class="ds-status ds-status--pass">Pass</span></h4>
+            <ul><li>Feels like Lux Cars Chicago?</li><li>Uses the approved fonts?</li><li>Approved colors only?</li></ul>
+          </div>
+          <div class="ds-checkcard">
+            <h4>Action hierarchy <span class="ds-status ds-status--pass">Pass</span></h4>
+            <ul><li>One primary CTA per section?</li><li>Buttons red only?</li><li>Platinum decorative only?</li></ul>
+          </div>
+          <div class="ds-checkcard">
+            <h4>Content quality <span class="ds-status ds-status--review">Needs review</span></h4>
+            <ul><li>Copy calm and premium?</li><li>Any distressed language?</li><li>Any fake urgency?</li></ul>
+          </div>
+          <div class="ds-checkcard">
+            <h4>Photography <span class="ds-status ds-status--review">Needs review</span></h4>
+            <ul><li>Car shapes preserved?</li><li>Clean and not distorted?</li><li>Crop intentional?</li></ul>
+          </div>
+          <div class="ds-checkcard">
+            <h4>Component consistency <span class="ds-status ds-status--pass">Pass</span></h4>
+            <ul><li>Buttons, cards, forms, links share tokens?</li><li>Hover and focus states consistent?</li></ul>
+          </div>
+          <div class="ds-checkcard">
+            <h4>Accessibility <span class="ds-status ds-status--pass">Pass</span></h4>
+            <ul><li>Focus states visible?</li><li>Contrast strong enough?</li><li>Form errors readable? Tap targets large? Usable without hover?</li></ul>
+          </div>
+          <div class="ds-checkcard">
+            <h4>Mobile <span class="ds-status ds-status--fix">Fix</span></h4>
+            <ul><li>Stacks cleanly?</li><li>Filters usable? Cards readable?</li><li>Nav accessible?</li></ul>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Scroll-spy: highlight the active section in the sidebar -->
+  <script>
+    (function () {
+      'use strict';
+      const links = Array.from(document.querySelectorAll('.ds-nav a[href^="#"]:not([aria-disabled])'));
+      const map = new Map(links.map((a) => [a.getAttribute('href').slice(1), a]));
+      const sections = links.map((a) => document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            links.forEach((l) => l.classList.remove('is-active'));
+            const active = map.get(e.target.id);
+            if (active) active.classList.add('is-active');
+          }
+        });
+      }, { rootMargin: '-45% 0px -50% 0px' });
+      sections.forEach((s) => obs.observe(s));
+    })();
+  </script>
+</body>
+</html>

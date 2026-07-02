@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inventory — Lux Cars Chicago</title>
+  <meta name="description" content="Browse 100+ hand-picked luxury vehicles at Lux Cars Chicago in Buffalo Grove, IL. Filter by make, body style, price and year." />
+  <meta name="theme-color" content="#0B0B0D" />
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { theme: { extend: {
+      colors: { bg:'#0B0B0D', surface:'#16171A', 'surface-2':'#1D1E22', text:'#F5F5F5', muted:'#9A9CA3', accent:'#8B2828', 'accent-hover':'#742020', border:'#26272B' },
+      fontFamily: { sans: ['Inter','sans-serif'] }, maxWidth: { site:'1240px' },
+    }}};
+  </script>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body class="bg-bg text-text antialiased" data-base="../" data-page="inventory">
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-3 focus:left-3 focus:bg-accent focus:text-white focus:px-4 focus:py-2 focus:rounded">Skip to content</a>
+
+  <main id="main">
+    <!-- Page hero -->
+    <section class="page-hero">
+      <div class="container max-w-site py-12 md:py-16">
+        <p class="eyebrow mb-3" data-reveal>The Collection</p>
+        <h1 class="section-title text-4xl md:text-5xl" data-reveal data-reveal-delay="1">Inventory</h1>
+        <p class="text-muted mt-4 max-w-xl" data-reveal data-reveal-delay="2">100+ hand-picked vehicles, updated daily. Every one inspected and backed by our 3-month warranty.</p>
+      </div>
+    </section>
+
+    <!-- Filter bar -->
+    <section class="border-y hairline bg-surface sticky top-0 z-40" style="top:0">
+      <div class="container max-w-site py-4">
+        <form class="filter-bar" id="heroFilter" action="inventory.html" method="get">
+          <div class="filter-field">
+            <select name="make" aria-label="Make"><option value="">Make — Any</option><option>BMW</option><option>Mercedes-Benz</option><option>Porsche</option><option>Land Rover</option><option>Audi</option><option>Lexus</option></select>
+            <svg class="icon icon-sm chevron" aria-hidden="true"><use href="#i-chevron"/></svg>
+          </div>
+          <div class="filter-field">
+            <select name="body" aria-label="Body style"><option value="">Body style — Any</option><option>Sedan</option><option>SUV</option><option>Coupe</option><option>Truck</option><option>Convertible</option></select>
+            <svg class="icon icon-sm chevron" aria-hidden="true"><use href="#i-chevron"/></svg>
+          </div>
+          <div class="filter-field">
+            <select name="price" aria-label="Price"><option value="">Price — Any</option><option value="0-25000">Under $25,000</option><option value="25000-45000">$25,000 – $45,000</option><option value="45000-70000">$45,000 – $70,000</option><option value="70000-">$70,000+</option></select>
+            <svg class="icon icon-sm chevron" aria-hidden="true"><use href="#i-chevron"/></svg>
+          </div>
+          <div class="filter-field">
+            <select name="year" aria-label="Year"><option value="">Year — Any</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2021</option><option>2020 &amp; older</option></select>
+            <svg class="icon icon-sm chevron" aria-hidden="true"><use href="#i-chevron"/></svg>
+          </div>
+          <button type="submit" class="btn btn-primary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-filter"/></svg><span>Apply filters</span></button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="py-10 md:py-14">
+      <div class="container max-w-site">
+        <div class="flex items-center justify-between mb-8">
+          <p class="text-muted text-sm"><strong class="text-text" id="resultCount">8</strong> of 100+ vehicles shown</p>
+          <div class="filter-field w-auto">
+            <select id="sortBy" aria-label="Sort by" class="!min-h-0 !py-2"><option>Sort: Newest</option><option>Price: Low to High</option><option>Price: High to Low</option><option>Mileage: Low to High</option></select>
+            <svg class="icon icon-sm chevron" aria-hidden="true"><use href="#i-chevron"/></svg>
+          </div>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3" id="inventoryGrid">
+          <article class="vcard" data-body="Convertible" data-reveal>
+            <a href="vdp.html?stock=C005" class="block">
+              <div class="vcard__media"><span class="vcard__badge">Featured</span><img src="../assets/img/ferrari-portofino.jpg" alt="2019 Ferrari Portofino" loading="lazy" width="767" height="575" /></div>
+              <div class="p-5">
+                <h3 class="text-lg font-medium">2019 Ferrari Portofino</h3>
+                <p class="vcard__meta mt-1 flex items-center gap-4"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Convertible</span><span>RWD · #C005</span></p>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                  <span class="vcard__price text-xl">$169,995</span>
+                  <span class="link-arrow text-xs">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                </div>
+              </div>
+            </a>
+          </article>
+          <article class="vcard" data-body="Sedan" data-reveal>
+            <a href="vdp.html?stock=10219" class="block">
+              <div class="vcard__media"><img src="../assets/img/porsche-panamera.jpg" alt="2020 Porsche Panamera 4" loading="lazy" width="767" height="575" /></div>
+              <div class="p-5">
+                <h3 class="text-lg font-medium">2020 Porsche Panamera 4</h3>
+                <p class="vcard__meta mt-1 flex items-center gap-4"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Sedan</span><span>AWD · #10219</span></p>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                  <span class="vcard__price text-xl">$47,995</span>
+                  <span class="link-arrow text-xs">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                </div>
+              </div>
+            </a>
+          </article>
+          <article class="vcard" data-body="Sedan" data-reveal>
+            <a href="vdp.html?stock=10267" class="block">
+              <div class="vcard__media"><span class="vcard__badge">Electric</span><img src="../assets/img/porsche-taycan.jpg" alt="2021 Porsche Taycan 4S" loading="lazy" width="767" height="575" /></div>
+              <div class="p-5">
+                <h3 class="text-lg font-medium">2021 Porsche Taycan 4S</h3>
+                <p class="vcard__meta mt-1 flex items-center gap-4"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Sedan</span><span>AWD · #10267</span></p>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                  <span class="vcard__price text-xl">$47,995</span>
+                  <span class="link-arrow text-xs">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                </div>
+              </div>
+            </a>
+          </article>
+          <article class="vcard" data-body="Sedan" data-reveal>
+            <a href="vdp.html?stock=A016" class="block">
+              <div class="vcard__media"><img src="../assets/img/bmw-7-series.jpg" alt="2022 BMW 750i xDrive M Sport" loading="lazy" width="767" height="575" /></div>
+              <div class="p-5">
+                <h3 class="text-lg font-medium">2022 BMW 750i xDrive M Sport</h3>
+                <p class="vcard__meta mt-1 flex items-center gap-4"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Sedan</span><span>AWD · #A016</span></p>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                  <span class="vcard__price text-xl">$46,985</span>
+                  <span class="link-arrow text-xs">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                </div>
+              </div>
+            </a>
+          </article>
+          <article class="vcard" data-body="SUV" data-reveal>
+            <a href="vdp.html?stock=10259" class="block">
+              <div class="vcard__media"><img src="../assets/img/bmw-x6.jpg" alt="2021 BMW X6 xDrive40i M Sport" loading="lazy" width="767" height="575" /></div>
+              <div class="p-5">
+                <h3 class="text-lg font-medium">2021 BMW X6 xDrive40i M Sport</h3>
+                <p class="vcard__meta mt-1 flex items-center gap-4"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>SUV</span><span>AWD · #10259</span></p>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                  <span class="vcard__price text-xl">$43,995</span>
+                  <span class="link-arrow text-xs">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                </div>
+              </div>
+            </a>
+          </article>
+          <article class="vcard" data-body="Coupe" data-reveal>
+            <a href="vdp.html?stock=L017" class="block">
+              <div class="vcard__media"><img src="../assets/img/bmw-m2.jpg" alt="2019 BMW M2 Competition" loading="lazy" width="767" height="575" /></div>
+              <div class="p-5">
+                <h3 class="text-lg font-medium">2019 BMW M2 Competition</h3>
+                <p class="vcard__meta mt-1 flex items-center gap-4"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Coupe</span><span>RWD · #L017</span></p>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                  <span class="vcard__price text-xl">$40,998</span>
+                  <span class="link-arrow text-xs">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                </div>
+              </div>
+            </a>
+          </article>
+          <article class="vcard" data-body="SUV" data-reveal>
+            <a href="vdp.html?stock=10229" class="block">
+              <div class="vcard__media"><img src="../assets/img/porsche-cayenne.jpg" alt="2020 Porsche Cayenne Coupe" loading="lazy" width="767" height="575" /></div>
+              <div class="p-5">
+                <h3 class="text-lg font-medium">2020 Porsche Cayenne Coupe</h3>
+                <p class="vcard__meta mt-1 flex items-center gap-4"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>SUV</span><span>AWD · #10229</span></p>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                  <span class="vcard__price text-xl">$39,900</span>
+                  <span class="link-arrow text-xs">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                </div>
+              </div>
+            </a>
+          </article>
+          <article class="vcard" data-body="Sedan" data-reveal>
+            <a href="vdp.html?stock=10231" class="block">
+              <div class="vcard__media"><img src="../assets/img/mercedes-s560.jpg" alt="2019 Mercedes-Benz S 560 4MATIC" loading="lazy" width="767" height="575" /></div>
+              <div class="p-5">
+                <h3 class="text-lg font-medium">2019 Mercedes-Benz S 560 4MATIC</h3>
+                <p class="vcard__meta mt-1 flex items-center gap-4"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Sedan</span><span>AWD · #10231</span></p>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                  <span class="vcard__price text-xl">$38,995</span>
+                  <span class="link-arrow text-xs">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                </div>
+              </div>
+            </a>
+          </article>
+        </div>
+
+        <!-- Empty state (shown by inventory.js when filters match nothing) -->
+        <div id="inventoryEmpty" class="empty-state is-hidden">
+          <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <p class="empty-state__title">No vehicles match those filters</p>
+          <p class="empty-state__text">Try widening your price or year range — or reset to see the full collection.</p>
+          <button type="button" id="inventoryReset" class="btn btn-secondary">Reset filters</button>
+        </div>
+
+        <div class="text-center mt-12" data-reveal>
+          <span class="stub-note"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-spark"/></svg>Design phase — live inventory feed connects here</span>
+          <div class="mt-6">
+            <button type="button" id="loadMore" class="btn btn-secondary">Load more vehicles</button>
+            <p id="loadMoreNote" class="text-muted text-sm mt-4 is-hidden">That's the full demo set — a live feed will page in the rest here.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="../js/partials.js" defer></script>
+  <script src="../js/main.js" defer></script>
+  <script src="../js/filters.js" defer></script>
+  <script src="../js/inventory.js" defer></script>
+  <script src="../js/animations.js" defer></script>
+</body>
+</html>

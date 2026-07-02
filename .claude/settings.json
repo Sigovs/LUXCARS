@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -o hero.jpg \"https://v3b.fal.media/files/b/0aa0a9bd/Br1is88M3Y41DV_eHmivs_vUhXl5Da.jpg\")",
+      "Bash(curl -s -o showroom.jpg \"https://v3b.fal.media/files/b/0aa0a9c0/b9n1hG6dJXztGNjM984Hc_7IzilHe9.jpg\")",
+      "mcp__playwright__browser_wait_for",
+      "Bash(sips -g pixelWidth -g pixelHeight -g hasAlpha /tmp/brandlogo.png)",
+      "Read(//private/tmp/**)",
+      "Bash(sips -Z 700 brandlogo.png --out brandlogo_small.png)",
+      "Bash(echo done *)",
+      "Bash(cd \"/Users/alex/Desktop/WORK/LUX CARS\"; echo \"===find SKILL.md / brand override===\"; grep -rl \"PROJECT BRAND OVERRIDE\\\\|D01414\" --include=\"*.md\" . 2>/dev/null; find . -iname \"SKILL.md\" 2>/dev/null; find /Users/alex/.claude -iname \"SKILL.md\" 2>/dev/null | head; echo; echo \"===old red hexes in project===\"; grep -rin \"D01414\\\\|A50F0F\" --include=\"*.html\" --include=\"*.css\" --include=\"*.js\" . 2>/dev/null; echo; echo \"===blue-ish hexes in project===\"; grep -rinE \"#1F63E0|#7A2AA6|#2A5BD7|#1E63D6|blue\" --include=\"*.html\" --include=\"*.css\" --include=\"*.js\" . 2>/dev/null)",
+      "Read(//Users/alex/.claude/**)",
+      "Read(//Users/alex/.claude/skills/**)",
+      "Bash(grep -rinE \"#1F63E0|#7A2AA6|#2A5BD7|#1E63D6|#[0-9A-Fa-f]{0,2}\\(4[0-9A-Fa-f]|[5-9A-Fa-f][0-9A-Fa-f]\\)[0-9A-Fa-f]{0,1}\\(E0|D7|F7\\)|\\\\bblue\\\\b\" --include=\"*.html\" --include=\"*.css\" --include=\"*.js\" .)",
+      "Bash(grep -n \"hero__dot.is-active span\\\\|logo__img\\\\|background: linear-gradient\\(95deg, var\\(--red\\\\|\\\\.font-display {\\\\|\\\\.section-title {\\\\|will-change: opacity\\\\|--tracking-wider\" css/styles.css)",
+      "Bash(grep -rin \"gold\\\\|champagne\" . --include=\"*.css\" --include=\"*.html\" --include=\"*.js\" --include=\"*.md\")",
+      "Bash(ls SKILL.md)",
+      "Bash(awk '{print $9}')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://localhost:8112/assets/img/Value%20your%20trade%20in%20minutes.jpg\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"http://localhost:8112/assets/img/Get%20pre-approved%20fast%20.jpg\")"
+    ]
+  }
+}
