@@ -297,3 +297,87 @@ body.v2 { font-family: var(--v2-ui); }
   .v2 [data-reveal].reveal-left > *,
   .v2 [data-reveal].reveal-right > * { opacity: 1; transform: none; transition: none; }
 }
+
+/* ============================================================
+   Google-style reviews — restrained, elegant, dark-native
+   ============================================================ */
+.v2 #reviews { background: var(--color-bg, #0B0B0D); }
+
+/* Rating summary card */
+.v2 .gr-summary {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 22px;
+  padding: clamp(20px, 3vw, 30px);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background:
+    radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--color-surface) 90%, #fff 4%), transparent 60%),
+    var(--color-surface);
+  margin-bottom: 26px;
+}
+.v2 .gr-summary__left { display: flex; align-items: center; gap: 18px; }
+.v2 .gr-google-g { flex: 0 0 auto; }
+.v2 .gr-brand {
+  margin: 0 0 4px; font-family: var(--v2-ui);
+  font-size: 12px; letter-spacing: 1.4px; text-transform: uppercase;
+  color: var(--color-muted);
+}
+.v2 .gr-score-row { display: flex; align-items: center; gap: 12px; }
+.v2 .gr-score {
+  font-family: var(--v2-display); font-weight: 700; line-height: 1;
+  font-size: clamp(30px, 4.4vw, 40px); color: var(--color-text);
+}
+.v2 .gr-stars { display: inline-flex; gap: 2px; color: #FBBC04; }
+.v2 .gr-stars .icon { width: 17px; height: 17px; }
+.v2 .gr-meta { margin: 7px 0 0; font-size: 13px; color: var(--color-muted); }
+.v2 .gr-meta strong { color: var(--color-text); font-weight: 600; }
+.v2 .gr-cta { align-self: center; }
+
+/* Cards grid */
+.v2 .gr-grid {
+  display: grid; gap: 16px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px)  { .v2 .gr-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .v2 .gr-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.v2 .gr-card {
+  position: relative;
+  display: flex; flex-direction: column; gap: 13px;
+  padding: 22px;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: var(--color-surface);
+  transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+}
+.v2 .gr-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--platinum-400) 34%, var(--color-border));
+  box-shadow: 0 12px 30px -18px rgba(0,0,0,.8);
+}
+.v2 .gr-g { position: absolute; top: 20px; right: 20px; opacity: .85; }
+.v2 .gr-card__head { display: flex; align-items: center; gap: 12px; }
+.v2 .gr-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  display: grid; place-items: center; flex: 0 0 auto;
+  font-family: var(--v2-ui); font-weight: 600; font-size: 16px; color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+}
+.v2 .gr-name { margin: 0; font-weight: 600; font-size: 14.5px; color: var(--color-text); line-height: 1.2; }
+.v2 .gr-time { margin: 2px 0 0; font-size: 12px; color: var(--color-muted); }
+.v2 .gr-quote {
+  margin: 0; font-size: 14.5px; line-height: 1.62;
+  color: color-mix(in srgb, var(--color-text) 76%, transparent);
+}
+
+/* Footer attribution */
+.v2 .gr-powered {
+  margin: 24px 0 0; text-align: center;
+  font-size: 12.5px; color: var(--color-muted);
+}
+.v2 .gr-powered span { color: color-mix(in srgb, var(--color-text) 60%, transparent); font-weight: 500; }
+
+@media (max-width: 560px) {
+  .v2 .gr-summary { flex-direction: column; align-items: flex-start; }
+  .v2 .gr-cta { align-self: stretch; justify-content: center; }
+}
