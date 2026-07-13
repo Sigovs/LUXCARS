@@ -170,6 +170,24 @@ html:not(.js) [data-reveal] > * {
 .v2 .btn-secondary:active { background: var(--blue-700); border-color: var(--blue-700); }
 .v2 .btn-secondary .icon { color: #ffffff; }
 
+/* Outlined action — one weight below the filled secondary. Use it when a
+   third action would otherwise stack a third solid block of colour.
+   The border IS what identifies the control, so it has to clear 3:1 against
+   the surface behind it (WCAG 1.4.11): --blue-border (#34506E) is only 2.15:1
+   and fails, so the outline uses its own lighter token at 4.2:1. */
+.v2 { --blue-outline: #5C7CA6; }
+.v2 .btn-outline {
+  background: transparent;
+  border-color: var(--blue-outline);
+  color: var(--color-text);
+}
+.v2 .btn-outline:hover {
+  background: color-mix(in srgb, var(--blue-500) 55%, transparent);
+  border-color: var(--blue-icon);
+}
+.v2 .btn-outline:active { background: color-mix(in srgb, var(--blue-700) 70%, transparent); }
+.v2 .btn-outline .icon { color: var(--blue-icon); }
+
 /* ---- Quiet badges (luxury hygiene: no sticker-style badges) ---- */
 .v2 .vcard__badge {
   background: color-mix(in srgb, var(--color-bg) 58%, transparent);

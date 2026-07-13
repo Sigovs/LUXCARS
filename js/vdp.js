@@ -51,6 +51,23 @@
     if (e.key === 'ArrowLeft')  { show(current - 1); e.preventDefault(); }
     if (e.key === 'ArrowRight') { show(current + 1); e.preventDefault(); }
   });
+
+  /* Full screen — the browser's own Fullscreen API rather than a lightbox
+     library, so it costs nothing: Esc exits, the arrows above still step
+     through the photos, and the CSS drops the 4:3 crop while we're in it. */
+  var full = document.getElementById('vdpFull');
+  if (full && stage.requestFullscreen) {
+    full.addEventListener('click', function () {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else stage.requestFullscreen().catch(function () {});
+    });
+    document.addEventListener('fullscreenchange', function () {
+      var on = document.fullscreenElement === stage;
+      full.setAttribute('aria-label', on ? 'Exit full screen' : 'View photo full screen');
+    });
+  } else if (full) {
+    full.hidden = true;   // no API (older iOS Safari) — don't offer a dead control
+  }
 })();
 
 /* =====================================================================
