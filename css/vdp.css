@@ -254,17 +254,26 @@
 }
 
 /* ---------------------------------------------- Description
-   Free prose the dealer writes per car. The only job here is readability:
-   a measure around 65ch (past that the eye loses the line), generous leading,
-   and full-strength text — this is the copy that has to do the selling, not
-   supporting detail, so it isn't muted. */
-.v2 .vdp-desc { max-width: 68ch; }
+   Free prose the dealer writes per car. It runs the full width of the section
+   like Equipment does, but as two columns rather than one — a single column
+   across 1400px would put ~130 characters on a line and the eye loses its
+   place returning. Two columns keep the measure readable while the block still
+   fills the grid. Full-strength text: this is the copy doing the selling. */
+.v2 .vdp-desc {
+  column-count: 2;
+  column-gap: clamp(var(--space-6), 4vw, var(--space-8));
+}
 .v2 .vdp-desc p {
   font-size: clamp(1rem, 0.97rem + 0.15vw, 1.075rem);
   line-height: 1.75;
   color: color-mix(in srgb, var(--color-text) 88%, transparent);
+  break-inside: avoid;              /* don't split a paragraph across columns */
 }
 .v2 .vdp-desc p + p { margin-top: var(--space-5); }
+
+@media (max-width: 860px) {
+  .v2 .vdp-desc { column-count: 1; max-width: 68ch; }
+}
 
 /* ---------------------------------------------- Equipment (Options & packages)
    The dealer's own listing keeps this behind a tab. Kept in the open here:
