@@ -143,13 +143,10 @@
     toggle.focus();
   }
 
+  // Mobile-only control: it opens/closes the filter sheet. On desktop the rail
+  // is always visible (CSS hides this button), so there is nothing to toggle.
   toggle.addEventListener('click', function () {
-    if (isMobile()) {
-      rail.classList.contains('is-open') ? closeSheet() : openSheet();
-    } else {
-      var collapsed = layout.classList.toggle('is-collapsed');
-      toggle.setAttribute('aria-expanded', String(!collapsed));
-    }
+    rail.classList.contains('is-open') ? closeSheet() : openSheet();
   });
 
   if (sheetX)   sheetX.addEventListener('click', closeSheet);
@@ -175,8 +172,9 @@
   var emptyReset = document.querySelector('.srp-empty__reset');
   if (emptyReset) emptyReset.addEventListener('click', clearAll);
 
-  // The sheet is closed on mobile at load; the rail is open on desktop.
-  toggle.setAttribute('aria-expanded', isMobile() ? 'false' : 'true');
+  // The sheet starts closed; if the viewport grows past mobile while it is
+  // open, close it so the rail returns to its normal in-page position.
+  toggle.setAttribute('aria-expanded', 'false');
   window.addEventListener('resize', function () {
     if (!isMobile() && rail.classList.contains('is-open')) closeSheet();
   });

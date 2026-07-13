@@ -32,7 +32,11 @@
   gap: var(--space-3) var(--space-4);
   padding-block: var(--space-3);
 }
-.v2 .srp-toggle { flex: 0 0 auto; }
+/* The Filters button is a MOBILE control only: it opens the bottom sheet.
+   On desktop the rail is always visible, so there is nothing to toggle —
+   hiding filters is not a job users come to an SRP to do, and collapsing
+   would reflow the whole grid for no benefit. */
+.v2 .srp-toggle { display: none; }
 .v2 .srp-count { color: var(--color-muted); font-size: 0.9rem; white-space: nowrap; }
 .v2 .srp-count strong { color: var(--color-text); font-weight: 600; }
 
@@ -69,9 +73,6 @@
   gap: clamp(var(--space-5), 3vw, var(--space-6));
   align-items: start;
 }
-/* Collapsed: the rail is hidden and the grid takes the full frame */
-.v2 .srp-layout.is-collapsed { grid-template-columns: 1fr; }
-.v2 .srp-layout.is-collapsed .srp-filters { display: none; }
 
 /* ---------------------------------------------- Filter rail (quiet)
    No grey utility panel: hairlines, platinum labels, air. */
@@ -79,14 +80,15 @@
 .v2 .srp-filters {
   position: sticky; top: calc(var(--header-total) + 93px);
   max-height: calc(100vh - var(--header-total) - 120px);
+  /* Still scrollable (a sticky rail taller than the viewport would otherwise
+     hide its bottom filters), but the scrollbar chrome is hidden — it read as
+     visual noise against the quiet rail. */
   overflow-y: auto;
   padding-right: var(--space-2);
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border) transparent;
+  scrollbar-width: none;              /* Firefox */
+  -ms-overflow-style: none;           /* legacy Edge */
 }
-.v2 .srp-filters::-webkit-scrollbar { width: 6px; }
-.v2 .srp-filters::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 999px; }
-.v2 .srp-filters::-webkit-scrollbar-track { background: transparent; }
+.v2 .srp-filters::-webkit-scrollbar { width: 0; height: 0; }
 .v2 .srp-filters__head {
   display: flex; align-items: center; gap: var(--space-3);
   padding-bottom: var(--space-3);
@@ -179,12 +181,10 @@
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-5);
 }
-.v2 .srp-layout.is-collapsed .srp-grid { grid-template-columns: repeat(4, 1fr); }
 .v2 .srp-card[hidden] { display: none; }
 
 @media (max-width: 1200px) {
   .v2 .srp-grid { grid-template-columns: repeat(2, 1fr); }
-  .v2 .srp-layout.is-collapsed .srp-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 /* Empty state (brief: inventory grid needs a real no-results state) */
@@ -211,10 +211,11 @@
 }
 
 @media (max-width: 900px) {
-  .v2 .srp-layout,
-  .v2 .srp-layout.is-collapsed { grid-template-columns: 1fr; }
-  .v2 .srp-grid,
-  .v2 .srp-layout.is-collapsed .srp-grid { grid-template-columns: repeat(2, 1fr); }
+  /* The Filters button only exists here — it opens the sheet. */
+  .v2 .srp-toggle { display: inline-flex; flex: 0 0 auto; }
+
+  .v2 .srp-layout { grid-template-columns: 1fr; }
+  .v2 .srp-grid { grid-template-columns: repeat(2, 1fr); }
 
   /* The rail turns into a sheet; it is only shown when opened. */
   .v2 .srp-filters {
@@ -231,7 +232,6 @@
     transition: transform 0.28s var(--ease);
   }
   .v2 .srp-filters.is-open { transform: translateY(0); }
-  .v2 .srp-layout.is-collapsed .srp-filters { display: block; }  /* sheet state is JS-driven, not the desktop collapse */
   .v2 .srp-sheet-close {
     display: inline-flex; align-items: center; justify-content: center;
     width: 32px; height: 32px; margin-left: var(--space-2);
@@ -243,8 +243,7 @@
 }
 
 @media (max-width: 560px) {
-  .v2 .srp-grid,
-  .v2 .srp-layout.is-collapsed .srp-grid { grid-template-columns: 1fr; }
+  .v2 .srp-grid { grid-template-columns: 1fr; }
 }
 
 /* No JS: the sheet must never hide the filters — show the rail inline. */
