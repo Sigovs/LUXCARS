@@ -175,6 +175,12 @@
 
 /* Similar */
 .v2 .vdp-similar { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
+/* One CTA per section: it sits below the cards, where someone who has just
+   scanned them is actually looking (the duplicate header link is gone). */
+.v2 .vdp-similar__cta {
+  display: flex; justify-content: center;
+  margin-top: clamp(var(--space-6), 3vw, var(--space-7));
+}
 
 /* ---------------------------------------------- Mobile sticky action bar */
 .v2 .vdp-bar { display: none; }
