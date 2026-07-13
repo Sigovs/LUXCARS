@@ -24,10 +24,22 @@
   --v2-ui: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
+/* Header metrics live on the ROOT, not on .v2 — `html` needs them for
+   scroll-padding, and any page can then stick a sub-bar under the header.
+   The utility strip (phone / hours) only shows from md up, so the total
+   sticky height changes at that breakpoint. */
+html:has(body.v2) {
+  --header-h: 68px;        /* main nav row */
+  --header-util-h: 38px;   /* utility strip, desktop only */
+  --header-total: var(--header-h);
+}
+@media (min-width: 768px) {
+  html:has(body.v2) { --header-total: calc(var(--header-h) + var(--header-util-h)); }
+}
+
 .v2 {
   /* ---- Layout ---- */
   --maxw: 1400px;          /* content frame (base styles.css ships 1240) */
-  --header-h: 68px;
 
   /* ---- Spacing scale (SKILL.md) — use these instead of ad-hoc px ---- */
   --space-1: 4px;
@@ -101,9 +113,9 @@ html:has(body.v2), body.v2 { overflow-x: clip; }
 
 /* 2.4.11 Focus Not Obscured (new in WCAG 2.2) — the sticky header must not
    cover the element that just received focus, and in-page anchors must not
-   land under it. */
-html:has(body.v2) { scroll-padding-top: calc(var(--header-h) + 24px); }
-.v2 [id] { scroll-margin-top: calc(var(--header-h) + 24px); }
+   land under it. Measured against the FULL sticky header, not just the nav row. */
+html:has(body.v2) { scroll-padding-top: calc(var(--header-total) + 24px); }
+.v2 [id] { scroll-margin-top: calc(var(--header-total) + 24px); }
 
 /* 1.4.3 / 1.4.11 Contrast — red as TEXT or ICON on the dark base.
    red-500 is 2.28:1 (fails). red-400 is 3.39:1 (passes for large text). */
