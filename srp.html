@@ -93,7 +93,6 @@
   </svg>
 
   <!-- Skip link for accessibility -->
-  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:z-[100] focus:top-3 focus:left-3 focus:bg-accent focus:text-white focus:px-4 focus:py-2 focus:rounded">Skip to content</a>
 
   <!-- ============================ SECTION 1: PROMO BANNER ============================ -->
   <div class="promo" role="region" aria-label="Announcements">
@@ -207,6 +206,8 @@
               <div class="srp-group__body">
             <label class="srp-check"><input type="checkbox" name="body" value="Sedan" /><span class="srp-check__box" aria-hidden="true"></span><span class="srp-check__label">Sedan</span></label>
             <label class="srp-check"><input type="checkbox" name="body" value="SUV" /><span class="srp-check__box" aria-hidden="true"></span><span class="srp-check__label">SUV</span></label>
+            <label class="srp-check"><input type="checkbox" name="body" value="Crossover" /><span class="srp-check__box" aria-hidden="true"></span><span class="srp-check__label">Crossover</span></label>
+            <label class="srp-check"><input type="checkbox" name="body" value="Truck" /><span class="srp-check__box" aria-hidden="true"></span><span class="srp-check__label">Truck</span></label>
             <label class="srp-check"><input type="checkbox" name="body" value="Coupe" /><span class="srp-check__box" aria-hidden="true"></span><span class="srp-check__label">Coupe</span></label>
             <label class="srp-check"><input type="checkbox" name="body" value="Convertible" /><span class="srp-check__box" aria-hidden="true"></span><span class="srp-check__label">Convertible</span></label>
               </div>
@@ -215,11 +216,21 @@
             <details class="srp-group" open>
               <summary class="srp-group__sum">Price<svg class="icon icon-sm srp-group__chev" aria-hidden="true"><use href="#i-chevron"/></svg></summary>
               <div class="srp-group__body">
-                <div class="srp-range">
-                  <label class="sr-only" for="priceMax">Maximum price</label>
-                  <input type="range" id="priceMax" min="35000" max="175000" step="5000" value="175000" />
-                  <p class="srp-range__out">Up to <strong id="priceMaxOut">$175,000</strong></p>
-                </div>
+            <label class="srp-check"><input type="radio" name="price" value="" checked /><span class="srp-check__box srp-check__box--radio" aria-hidden="true"></span><span class="srp-check__label">Any price</span></label>
+            <label class="srp-check"><input type="radio" name="price" value="0-25000" /><span class="srp-check__box srp-check__box--radio" aria-hidden="true"></span><span class="srp-check__label">Under $25,000</span></label>
+            <label class="srp-check"><input type="radio" name="price" value="25000-45000" /><span class="srp-check__box srp-check__box--radio" aria-hidden="true"></span><span class="srp-check__label">$25,000 - $45,000</span></label>
+            <label class="srp-check"><input type="radio" name="price" value="45000-70000" /><span class="srp-check__box srp-check__box--radio" aria-hidden="true"></span><span class="srp-check__label">$45,000 - $70,000</span></label>
+            <label class="srp-check"><input type="radio" name="price" value="70000-" /><span class="srp-check__box srp-check__box--radio" aria-hidden="true"></span><span class="srp-check__label">$70,000+</span></label>
+              </div>
+            </details>
+
+            <details class="srp-group" open>
+              <summary class="srp-group__sum">Year<svg class="icon icon-sm srp-group__chev" aria-hidden="true"><use href="#i-chevron"/></svg></summary>
+              <div class="srp-group__body">
+            <label class="srp-check"><input type="checkbox" name="year" value="2022" /><span class="srp-check__box" aria-hidden="true"></span><span class="srp-check__label">2022</span></label>
+            <label class="srp-check"><input type="checkbox" name="year" value="2021" /><span class="srp-check__box" aria-hidden="true"></span><span class="srp-check__label">2021</span></label>
+            <label class="srp-check"><input type="checkbox" name="year" value="2020" /><span class="srp-check__box" aria-hidden="true"></span><span class="srp-check__label">2020</span></label>
+            <label class="srp-check"><input type="checkbox" name="year" value="2019" /><span class="srp-check__box" aria-hidden="true"></span><span class="srp-check__label">2019</span></label>
               </div>
             </details>
 
@@ -228,8 +239,8 @@
               <div class="srp-group__body">
                 <div class="srp-range">
                   <label class="sr-only" for="milesMax">Maximum mileage</label>
-                  <input type="range" id="milesMax" min="5000" max="40000" step="2500" value="40000" />
-                  <p class="srp-range__out">Under <strong id="milesMaxOut">40,000 mi</strong></p>
+                  <input type="range" id="milesMax" min="5000" max="45000" step="2500" value="45000" />
+                  <p class="srp-range__out">Under <strong id="milesMaxOut">45,000 mi</strong></p>
                 </div>
               </div>
             </details>
@@ -339,12 +350,12 @@
           </article>
           <article class="vcard srp-card"
                    data-make="Porsche" data-body="SUV" data-drive="AWD"
-                   data-price="39900" data-year="2021" data-miles="28600">
+                   data-price="39900" data-year="2020" data-miles="29600">
             <a href="#" class="block">
-              <div class="vcard__media"><img src="assets/img/porsche-cayenne.jpg" alt="2021 Porsche Cayenne" loading="lazy" width="767" height="575" /></div>
+              <div class="vcard__media"><img src="assets/img/porsche-cayenne.jpg" alt="2020 Porsche Cayenne Coupe" loading="lazy" width="767" height="575" /></div>
               <div class="p-5">
-                <h3 class="text-lg font-medium">2021 Porsche Cayenne</h3>
-                <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>SUV</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>28,600 mi</span><span>AWD</span></p>
+                <h3 class="text-lg font-medium">2020 Porsche Cayenne Coupe</h3>
+                <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>SUV</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>29,600 mi</span><span>AWD</span></p>
                 <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
                   <span class="vcard__price text-xl">$39,900</span>
                   <span class="btn btn-secondary">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
@@ -354,12 +365,12 @@
           </article>
           <article class="vcard srp-card"
                    data-make="Mercedes-Benz" data-body="Sedan" data-drive="AWD"
-                   data-price="38995" data-year="2020" data-miles="30100">
+                   data-price="38995" data-year="2019" data-miles="41300">
             <a href="#" class="block">
-              <div class="vcard__media"><img src="assets/img/mercedes-s560.jpg" alt="2020 Mercedes-Benz S560 4MATIC" loading="lazy" width="767" height="575" /></div>
+              <div class="vcard__media"><img src="assets/img/mercedes-s560.jpg" alt="2019 Mercedes-Benz S 560 4MATIC" loading="lazy" width="767" height="575" /></div>
               <div class="p-5">
-                <h3 class="text-lg font-medium">2020 Mercedes-Benz S560 4MATIC</h3>
-                <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Sedan</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>30,100 mi</span><span>AWD</span></p>
+                <h3 class="text-lg font-medium">2019 Mercedes-Benz S 560 4MATIC</h3>
+                <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Sedan</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>41,300 mi</span><span>AWD</span></p>
                 <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
                   <span class="vcard__price text-xl">$38,995</span>
                   <span class="btn btn-secondary">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
@@ -392,7 +403,7 @@
         </div>
         <div>
           <p class="footer-col-title">Shop</p>
-          <a href="#" class="footer-link">Inventory</a>
+          <a href="srp.html" class="footer-link">Inventory</a>
           <a href="#" class="footer-link">Sell / Trade</a>
           <a href="#" class="footer-link">Financing</a>
           <a href="#" class="footer-link">Warranty</a>
@@ -406,7 +417,7 @@
         </div>
         <div>
           <p class="footer-col-title">Stay connected</p>
-          <p class="text-muted text-sm mb-4">Family-run since 1995. We speak English, Ukrainian, Russian &amp; Polish.</p>
+          <p class="text-muted text-sm mb-4">Family-run since 2005. We speak English, Ukrainian, Russian &amp; Polish.</p>
           <div class="flex gap-3">
             <a href="https://www.facebook.com/LuxCarsChicago" target="_blank" rel="noopener" class="social-btn" aria-label="Facebook @LuxCarsChicago"><svg class="icon" aria-hidden="true"><use href="#i-facebook"/></svg></a>
             <a href="https://www.instagram.com/luxcarschicago" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram @luxcarschicago"><svg class="icon" aria-hidden="true"><use href="#i-instagram"/></svg></a>

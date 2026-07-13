@@ -146,6 +146,15 @@
   transform: rotate(45deg);
 }
 .v2 .srp-check input:checked ~ .srp-check__label { color: var(--color-text); }
+
+/* Radio variant (price bands) — round box, dot instead of a tick */
+.v2 .srp-check__box--radio { border-radius: 999px; }
+.v2 .srp-check input:checked + .srp-check__box--radio::after {
+  left: 50%; top: 50%;
+  width: 7px; height: 7px;
+  border: 0; border-radius: 999px; background: #fff;
+  transform: translate(-50%, -50%);
+}
 /* keyboard focus lands on the hidden input: ring the visible box instead */
 .v2 .srp-check input:focus-visible + .srp-check__box {
   outline: 2px solid var(--platinum-300); outline-offset: 2px;
