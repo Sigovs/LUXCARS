@@ -140,6 +140,16 @@ html:not(.js) [data-reveal] > * {
   transform: none !important;
 }
 
+/* A reveal must never displace a block out of its column. styles.css ships
+   `[data-reveal].reveal-left { transform: translateX(-44px) }`, which parks the
+   whole heading 44px left of the container until the reveal fires — it reads as
+   the title bleeding past the grid. The homepage happened to cancel this in its
+   own stylesheet (it animates the CHILDREN instead, as a staircase), so the bug
+   only showed up once other pages started using the class. Cancelled here for
+   every page: a page that wants a directional reveal animates its children. */
+.v2 [data-reveal].reveal-left,
+.v2 [data-reveal].reveal-right { opacity: 1; transform: none; }
+
 /* =====================================================================
    5. SHARED COMPONENTS
    ===================================================================== */

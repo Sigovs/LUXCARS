@@ -95,10 +95,9 @@
 .v2 .v2-break:hover::before { opacity: 1; }
 
 /* ---------------------------------------------- Staircase reveal (ступенька)
-   The group itself stays put; its children step in from the side one by one,
-   like the hero. reveal-left steps in from the left, reveal-right from the right. */
-.v2 [data-reveal].reveal-left,
-.v2 [data-reveal].reveal-right { opacity: 1; transform: none; }
+   The group itself stays put (v2-core cancels the displacement); its children
+   step in from the side one by one, like the hero. This staircase is a homepage
+   flourish — the SRP and VDP keep their headings static. */
 .v2 [data-reveal].reveal-left > *,
 .v2 [data-reveal].reveal-right > * {
   opacity: 0;
