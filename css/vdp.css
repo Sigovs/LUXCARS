@@ -253,6 +253,19 @@
   word-break: break-word; line-height: 1.35;
 }
 
+/* ---------------------------------------------- Description
+   Free prose the dealer writes per car. The only job here is readability:
+   a measure around 65ch (past that the eye loses the line), generous leading,
+   and full-strength text — this is the copy that has to do the selling, not
+   supporting detail, so it isn't muted. */
+.v2 .vdp-desc { max-width: 68ch; }
+.v2 .vdp-desc p {
+  font-size: clamp(1rem, 0.97rem + 0.15vw, 1.075rem);
+  line-height: 1.75;
+  color: color-mix(in srgb, var(--color-text) 88%, transparent);
+}
+.v2 .vdp-desc p + p { margin-top: var(--space-5); }
+
 /* ---------------------------------------------- Equipment (Options & packages)
    The dealer's own listing keeps this behind a tab. Kept in the open here:
    it's the content that actually convinces a buyer, and the brief asks for
