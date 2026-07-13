@@ -24,8 +24,18 @@
 .v2 .vdp-crumbs a:hover { color: var(--platinum-300); }
 .v2 .vdp-crumbs [aria-current="page"] { color: var(--color-text); }
 
-/* ---------------------------------------------- Gallery + buy box */
-.v2 .vdp-top { padding-block: var(--space-6) var(--space-8); }
+/* ---------------------------------------------- Gallery + buy box
+   The top of the page was a flat black field with two cards floating on it.
+   A double radial gives it depth and quietly carries both brand colours:
+   oxblood behind the gallery, the deep secondary blue under the buy box.
+   Kept low — the car is the subject, not the background. */
+.v2 .vdp-top {
+  padding-block: var(--space-6) var(--space-8);
+  background:
+    radial-gradient(72% 95% at 6% 2%,   color-mix(in srgb, var(--red-800) 70%, transparent), transparent 58%),
+    radial-gradient(66% 95% at 98% 98%, color-mix(in srgb, var(--blue-700) 85%, transparent), transparent 62%),
+    var(--color-bg);
+}
 .v2 .vdp-top__grid {
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
