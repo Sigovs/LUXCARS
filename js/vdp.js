@@ -71,6 +71,89 @@
 })();
 
 /* =====================================================================
+   Equipment: the OEM standard list runs long, so show a first block and
+   open the rest on demand. A real <button> with aria-expanded, not a
+   click-handler on a div.
+   ===================================================================== */
+(function () {
+  'use strict';
+  var btn = document.getElementById('vdpEquipMore');
+  var list = document.getElementById('vdpStdList');
+  if (!btn || !list) return;
+
+  var more = Array.prototype.slice.call(list.querySelectorAll('.vdp-equip__more'));
+  if (!more.length) { btn.hidden = true; return; }
+
+  var total = list.querySelectorAll('li').length;
+  btn.addEventListener('click', function () {
+    var open = btn.getAttribute('aria-expanded') === 'true';
+    more.forEach(function (li) { li.hidden = open; });
+    btn.setAttribute('aria-expanded', String(!open));
+    btn.textContent = open ? 'Show all ' + total + ' features' : 'Show fewer features';
+  });
+})();
+
+/* =====================================================================
+   Save / Share / Text to phone.
+
+   Share uses the browser's own share sheet where there is one and falls back
+   to the clipboard, so it works on desktop too. "Text to phone" is a plain
+   sms: link — it opens the messaging app with the listing already in it.
+   ===================================================================== */
+(function () {
+  'use strict';
+
+  var save  = document.getElementById('vdpSave');
+  var label = document.getElementById('vdpSaveLabel');
+  var share = document.getElementById('vdpShare');
+  var text  = document.getElementById('vdpText');
+  var live  = document.getElementById('vdpUtilLive');
+  var title = (document.querySelector('.vdp-title') || {}).textContent || document.title;
+
+  var say = function (msg) { if (live) live.textContent = msg; };
+
+  // ---- Save (persists, so it survives a reload like a real shortlist) ----
+  if (save) {
+    var key = 'lux:saved:' + (location.pathname || 'vdp');
+    var setSaved = function (on) {
+      save.setAttribute('aria-pressed', String(on));
+      if (label) label.textContent = on ? 'Saved' : 'Save';
+    };
+    try { setSaved(localStorage.getItem(key) === '1'); } catch (e) {}
+
+    save.addEventListener('click', function () {
+      var on = save.getAttribute('aria-pressed') !== 'true';
+      setSaved(on);
+      try { on ? localStorage.setItem(key, '1') : localStorage.removeItem(key); } catch (e) {}
+      say(on ? 'Saved to your list' : 'Removed from your list');
+    });
+  }
+
+  // ---- Share ----
+  if (share) {
+    share.addEventListener('click', function () {
+      var data = { title: title, text: title + ' at Lux Cars Chicago', url: location.href };
+      if (navigator.share) {
+        navigator.share(data).catch(function () {});   // user dismissed — not an error
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(location.href).then(function () {
+          say('Link copied to clipboard');
+          var span = share.querySelector('span');
+          var was = span.textContent;
+          span.textContent = 'Link copied';
+          setTimeout(function () { span.textContent = was; }, 1800);
+        });
+      }
+    });
+  }
+
+  // ---- Text to phone ----
+  if (text) {
+    text.href = 'sms:?&body=' + encodeURIComponent(title + ' — ' + location.href);
+  }
+})();
+
+/* =====================================================================
    Request-information form.
 
    Validation is ours, not the browser's default bubbles: an error must be

@@ -148,6 +148,46 @@
 .v2 .vdp-finance-line { margin-top: var(--space-2); font-size: 12.5px; color: var(--color-muted); }
 .v2 .vdp-finance-line strong { color: var(--color-text); font-weight: 600; }
 
+/* Carfax + window sticker. Both live on every listing the dealer publishes —
+   the sticker is the factory build sheet, which is the only authoritative
+   source for what equipment a specific VIN actually left the factory with. */
+.v2 .vdp-reports {
+  margin-top: var(--space-5);
+  display: flex; flex-direction: column; gap: var(--space-2);
+}
+.v2 .vdp-report {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  transition: border-color 0.18s var(--ease), background 0.18s var(--ease);
+}
+.v2 .vdp-report:hover { border-color: var(--blue-outline); background: color-mix(in srgb, var(--blue-500) 22%, var(--color-surface-2)); }
+.v2 .vdp-report > .icon:first-child { flex: 0 0 auto; color: var(--blue-icon); }
+.v2 .vdp-report span { display: flex; flex-direction: column; line-height: 1.3; }
+.v2 .vdp-report strong { font-size: 13px; font-weight: 600; color: var(--color-text); }
+.v2 .vdp-report small { font-size: 11.5px; color: var(--color-muted); }
+.v2 .vdp-report__go { margin-left: auto; color: var(--color-muted); flex: 0 0 auto; }
+
+/* Save / Share / Text — quiet utilities, not CTAs. */
+.v2 .vdp-utils {
+  display: flex; flex-wrap: wrap; gap: var(--space-4);
+  margin-top: var(--space-5); padding-top: var(--space-4);
+  border-top: 1px solid var(--divider-platinum);
+}
+.v2 .vdp-util {
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 24px; padding: 0;
+  background: none; border: 0; cursor: pointer;
+  font-family: var(--v2-ui); font-size: 12.5px; color: var(--color-muted);
+}
+.v2 .vdp-util:hover { color: var(--color-text); }
+.v2 .vdp-util .icon { color: var(--platinum-400); }
+.v2 .vdp-util:hover .icon { color: var(--platinum-300); }
+.v2 .vdp-util[aria-pressed="true"] { color: var(--color-text); }
+.v2 .vdp-util[aria-pressed="true"] .icon { color: var(--red-400); }
+
 .v2 .vdp-trust {
   list-style: none; margin: var(--space-5) 0 0; padding: var(--space-4) 0 0;
   border-top: 1px solid var(--divider-platinum);
@@ -190,6 +230,26 @@
    The dealer's own listing keeps this behind a tab. Kept in the open here:
    it's the content that actually convinces a buyer, and the brief asks for
    simplicity and mobile-first, where tabs only add taps. */
+/* Two groups, mirroring the dealer's own feed: what's fitted to this car, and
+   the OEM standard list. The standard list can run to dozens of items, so it
+   opens on demand rather than burying the page. */
+.v2 .vdp-equip-group + .vdp-equip-group { margin-top: clamp(var(--space-6), 3vw, var(--space-7)); }
+.v2 .vdp-equip__h {
+  font-family: var(--v2-ui);
+  font-size: 11px; letter-spacing: 1.6px; text-transform: uppercase;
+  color: var(--platinum-400);
+  margin-bottom: var(--space-3);
+}
+.v2 .vdp-equip__toggle {
+  margin-top: var(--space-4);
+  min-height: 24px; padding: 0;
+  background: none; border: 0; cursor: pointer;
+  font-family: var(--v2-ui); font-size: 13px; color: var(--platinum-300);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.v2 .vdp-equip__toggle:hover { color: var(--color-text); }
+.v2 .vdp-equip__more[hidden] { display: none; }   /* the list sets display:flex — see below */
+
 .v2 .vdp-equip {
   list-style: none; margin: 0; padding: 0;
   display: grid; grid-template-columns: repeat(2, 1fr);

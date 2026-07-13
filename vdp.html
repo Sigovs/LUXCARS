@@ -69,6 +69,7 @@
         <symbol id="i-trade" viewBox="0 0 24 24"><path d="M4 8h13l-2.5-2.5M20 16H7l2.5 2.5"/></symbol>
         <symbol id="i-reserve" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4M16 3v4M9.5 14l1.8 1.8 3.2-3.4"/></symbol>
         <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+        <symbol id="i-share" viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7M12 15V3m0 0L8 7m4-4 4 4"/></symbol>
         <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9 3H3v6M15 3h6v6M15 21h6v-6M9 21H3v-6"/></symbol>
         <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
         <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21c4-4.5 6.5-7.6 6.5-11a6.5 6.5 0 0 0-13 0c0 3.4 2.5 6.5 6.5 11z"/><circle cx="12" cy="10" r="2.4"/></symbol>
@@ -208,6 +209,19 @@
           <p class="vdp-finance-line">From <strong>$2,149/mo</strong> &middot; pre-qualify with no impact to your credit score</p>
           <p class="vdp-fineprint">Plus tax, title, license, prep fee and $367.70 doc fee.</p>
 
+          <div class="vdp-reports">
+            <a href="#" class="vdp-report" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg>
+              <span><strong>Free CARFAX report</strong><small>Full vehicle history</small></span>
+              <svg class="icon icon-sm vdp-report__go" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+            </a>
+            <a href="#" class="vdp-report" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true"><use href="#i-tag"/></svg>
+              <span><strong>Window sticker</strong><small>Original factory build sheet</small></span>
+              <svg class="icon icon-sm vdp-report__go" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+            </a>
+          </div>
+
           <ul class="vdp-trust">
             <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Multi-point inspected before delivery</li>
             <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-shield"/></svg>3-month / 3,000-mile limited warranty included</li>
@@ -222,6 +236,19 @@
               <a href="#" class="btn btn-secondary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-mail"/></svg>Message us</a>
             </div>
           </div>
+
+          <div class="vdp-utils">
+            <button type="button" class="vdp-util" id="vdpSave" aria-pressed="false">
+              <svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><span id="vdpSaveLabel">Save</span>
+            </button>
+            <button type="button" class="vdp-util" id="vdpShare">
+              <svg class="icon icon-sm" aria-hidden="true"><use href="#i-share"/></svg><span>Share</span>
+            </button>
+            <a class="vdp-util" id="vdpText" href="#">
+              <svg class="icon icon-sm" aria-hidden="true"><use href="#i-mail"/></svg><span>Text to phone</span>
+            </a>
+          </div>
+          <p class="sr-only" id="vdpUtilLive" aria-live="polite"></p>
         </aside>
       </div>
     </section>
@@ -295,12 +322,42 @@
           <p class="eyebrow mb-3">Equipment</p>
           <h2 class="section-title text-fluid-4xl">Options &amp; packages</h2>
         </div>
-        <ul class="vdp-equip">
-          <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Blue brake calipers</li>
-          <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Colored floor mats with embroidered logo</li>
-          <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Passenger display</li>
-          <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Sport exhaust pipes</li>
-        </ul>
+
+        <div class="vdp-equip-group">
+          <h3 class="vdp-equip__h">Fitted to this car</h3>
+          <ul class="vdp-equip">
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Blue brake calipers</li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Colored floor mats with embroidered logo</li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Passenger display</li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Sport exhaust pipes</li>
+          </ul>
+        </div>
+
+        <div class="vdp-equip-group">
+          <h3 class="vdp-equip__h">Standard equipment</h3>
+          <ul class="vdp-equip" id="vdpStdList">
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>3.9L twin-turbo V8, 591 hp</li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>7-speed dual-clutch (F1 DCT)</li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Retractable hardtop</li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Carbon-ceramic brakes</li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Magnetorheological damping (SCM-E)</li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>E-Diff3 electronic differential</li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Electric power steering</li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Manettino driving modes</li>
+            <li class="vdp-equip__more" hidden><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>10.2-inch capacitive touchscreen</li>
+            <li class="vdp-equip__more" hidden><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Dual-zone climate control</li>
+            <li class="vdp-equip__more" hidden><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Wind deflector</li>
+            <li class="vdp-equip__more" hidden><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Front and rear parking sensors</li>
+            <li class="vdp-equip__more" hidden><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Tyre pressure monitoring</li>
+            <li class="vdp-equip__more" hidden><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Full-LED headlights</li>
+            <li class="vdp-equip__more" hidden><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>20-inch forged alloy wheels</li>
+            <li class="vdp-equip__more" hidden><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Leather upholstery</li>
+          </ul>
+          <button type="button" class="vdp-equip__toggle" id="vdpEquipMore"
+                  aria-expanded="false" aria-controls="vdpStdList">
+            Show all 16 features
+          </button>
+        </div>
       </div>
     </section>
 
