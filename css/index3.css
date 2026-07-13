@@ -378,6 +378,63 @@ body.v2 { font-family: var(--v2-ui); }
   border-radius: 0;
 }
 
+/* ---------------------------------------------- Reviews — cinematic testimonial band
+   Client: the Google-widget look didn't fit. Reframed as one row of frosted-
+   glass quote cards over the showroom photo. On-palette: platinum stars (no
+   gold), no rainbow Google marks; Google credited in text only. */
+.v2 .v2-reviews {
+  position: relative; overflow: clip; isolation: isolate;
+  border-block: 1px solid var(--divider-platinum);
+  padding-block: clamp(64px, 9vw, 120px);
+}
+.v2 .v2-reviews__media { position: absolute; inset: 0; z-index: 0; }
+.v2 .v2-reviews__media img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.72) saturate(0.95); }
+.v2 .v2-reviews__scrim {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--color-bg) 90%, transparent), color-mix(in srgb, var(--color-bg) 55%, transparent) 42%, color-mix(in srgb, var(--color-bg) 88%, transparent)),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-bg) 72%, transparent), transparent 62%);
+}
+.v2 .v2-reviews__inner { position: relative; z-index: 2; }
+.v2 .v2-reviews__head { margin-bottom: clamp(30px, 4.5vw, 48px); }
+
+.v2 .v2-reviews__trust { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; margin-top: 18px; }
+.v2 .v2-rev-score { font-family: var(--v2-display); font-size: 1.55rem; line-height: 1; color: var(--color-text); }
+.v2 .v2-rev-stars { display: inline-flex; gap: 3px; }
+.v2 .v2-reviews__trust .v2-rev-stars .icon { width: 18px; height: 18px; color: var(--platinum-300); }
+.v2 .v2-rev-count { color: var(--color-muted); font-size: 0.9rem; }
+.v2 .v2-reviews__all { margin-left: auto; }
+
+.v2 .v2-reviews__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.v2 .v2-rev-card {
+  display: flex; flex-direction: column; gap: 16px;
+  padding: 26px;
+  background: color-mix(in srgb, var(--color-bg) 52%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+          backdrop-filter: blur(14px) saturate(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 24px 48px -24px rgba(0, 0, 0, 0.7);
+}
+.v2 .v2-rev-card .v2-rev-stars .icon { width: 16px; height: 16px; color: var(--platinum-300); }
+.v2 .v2-rev-quote { flex: 1; font-size: 1rem; line-height: 1.6; color: var(--color-text); }
+.v2 .v2-rev-by { display: flex; align-items: center; gap: 12px; margin-top: 2px; }
+.v2 .v2-rev-avatar {
+  width: 40px; height: 40px; flex: 0 0 auto; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: color-mix(in srgb, var(--color-surface-2) 85%, transparent);
+  border: 1px solid var(--divider-platinum);
+  color: var(--platinum-300); font-weight: 600; font-size: 0.95rem;
+}
+.v2 .v2-rev-id { display: flex; flex-direction: column; }
+.v2 .v2-rev-name { color: var(--color-text); font-weight: 600; font-size: 0.9rem; }
+.v2 .v2-rev-time { color: var(--color-muted); font-size: 0.78rem; }
+
+@media (max-width: 900px) {
+  .v2 .v2-reviews__grid { grid-template-columns: 1fr; max-width: 560px; }
+  .v2 .v2-reviews__all { margin-left: 0; }
+}
+
 /* ---------------------------------------------- Footer map (Leaflet + OSM, grayscale) */
 .v2 .v2-map-band { position: relative; border-top: 1px solid var(--color-border); }
 .v2 .v2-map-cta {
