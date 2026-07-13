@@ -202,6 +202,7 @@
 
           <p class="vdp-price">$169,995</p>
           <p class="vdp-finance-line">From <strong>$2,149/mo</strong> &middot; pre-qualify with no impact to your credit score</p>
+          <p class="vdp-fineprint">Plus tax, title, license, prep fee and $367.70 doc fee.</p>
 
           <ul class="vdp-trust">
             <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Multi-point inspected before delivery</li>
@@ -283,6 +284,22 @@
       </div>
     </section>
 
+    <!-- ============================ EQUIPMENT ============================ -->
+    <section class="vdp-section">
+      <div class="container max-w-site">
+        <div class="mb-8 reveal-left" data-reveal>
+          <p class="eyebrow mb-3">Equipment</p>
+          <h2 class="section-title text-fluid-4xl">Options &amp; packages</h2>
+        </div>
+        <ul class="vdp-equip">
+          <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Blue brake calipers</li>
+          <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Colored floor mats with embroidered logo</li>
+          <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Passenger display</li>
+          <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-check"/></svg>Sport exhaust pipes</li>
+        </ul>
+      </div>
+    </section>
+
     <!-- ============================ WARRANTY + FINANCING ============================ -->
     <section class="vdp-section vdp-split-sec">
       <div class="container max-w-site vdp-split">
@@ -303,6 +320,47 @@
             <a href="#" class="btn btn-secondary">Payment calculator</a>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ============================ REQUEST INFORMATION ============================ -->
+    <section class="vdp-section vdp-form-sec">
+      <div class="container max-w-site vdp-form-grid">
+        <div class="reveal-left" data-reveal>
+          <p class="eyebrow mb-3">Questions?</p>
+          <h2 class="section-title text-fluid-4xl">Request information</h2>
+          <p class="text-muted mt-3 max-w-md">Ask us anything about this 2019 Ferrari Portofino &mdash; availability, condition, financing or shipping. We reply the same day.</p>
+          <ul class="vdp-contact">
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-phone"/></svg><a href="tel:+18479472900">847-947-2900</a></li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-clock"/></svg>Mon&ndash;Fri 9&ndash;7 &middot; Sat 9&ndash;5 &middot; Sun closed</li>
+            <li><svg class="icon icon-sm" aria-hidden="true"><use href="#i-pin"/></svg>88 E Dundee Rd, Buffalo Grove, IL</li>
+          </ul>
+        </div>
+
+        <form class="vdp-form" id="vdpForm" novalidate>
+          <div class="vdp-field">
+            <label for="rfName">Full name <span class="vdp-req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+            <input type="text" id="rfName" name="name" autocomplete="name" required aria-describedby="rfNameErr" />
+            <p class="vdp-err" id="rfNameErr" hidden><svg class="icon icon-sm" aria-hidden="true"><use href="#i-close"/></svg>Please enter your name.</p>
+          </div>
+          <div class="vdp-field">
+            <label for="rfEmail">Email <span class="vdp-req" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+            <input type="email" id="rfEmail" name="email" autocomplete="email" required aria-describedby="rfEmailErr" />
+            <p class="vdp-err" id="rfEmailErr" hidden><svg class="icon icon-sm" aria-hidden="true"><use href="#i-close"/></svg>Please enter a valid email address.</p>
+          </div>
+          <div class="vdp-field">
+            <label for="rfPhone">Phone <span class="vdp-opt">(optional)</span></label>
+            <input type="tel" id="rfPhone" name="phone" autocomplete="tel" />
+          </div>
+          <div class="vdp-field vdp-field--full">
+            <label for="rfMsg">Message</label>
+            <textarea id="rfMsg" name="message" rows="4">I&rsquo;m interested in the 2019 Ferrari Portofino (Stock C005). Is it still available?</textarea>
+          </div>
+          <div class="vdp-field vdp-field--full">
+            <button type="submit" class="btn btn-primary btn-block">Send message</button>
+            <p class="vdp-form__ok" id="vdpFormOk" role="status" hidden>Thanks &mdash; we have your message and will reply the same day.</p>
+          </div>
+        </form>
       </div>
     </section>
 
@@ -357,6 +415,12 @@
         <div class="vdp-similar__cta">
           <a href="srp.html" class="btn btn-secondary">See all 200+ vehicles <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
         </div>
+      </div>
+    </section>
+    <!-- ============================ LEGAL ============================ -->
+    <section class="vdp-legal">
+      <div class="container max-w-site">
+        <p>All pricing and details are believed to be accurate, but we do not warrant or guarantee such accuracy. The prices shown above may vary from region to region, as will incentives, and are subject to change. Vehicle information is based off standard equipment and may vary from vehicle to vehicle. Call or email for complete vehicle specific information. All prices plus tax, title, license, prep fee and $367.70 doc fee.</p>
       </div>
     </section>
   </main>

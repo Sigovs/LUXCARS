@@ -52,3 +52,60 @@
     if (e.key === 'ArrowRight') { show(current + 1); e.preventDefault(); }
   });
 })();
+
+/* =====================================================================
+   Request-information form.
+
+   Validation is ours, not the browser's default bubbles: an error must be
+   text + icon next to the field (never colour alone), tied to the input via
+   aria-describedby, with aria-invalid set and focus moved to the first
+   problem. `novalidate` on the form turns the native bubbles off so this
+   runs instead.
+   ===================================================================== */
+(function () {
+  'use strict';
+
+  var form = document.getElementById('vdpForm');
+  if (!form) return;
+
+  var ok = document.getElementById('vdpFormOk');
+  var fields = [
+    { input: document.getElementById('rfName'),  err: document.getElementById('rfNameErr'),
+      valid: function (v) { return v.trim().length > 0; } },
+    { input: document.getElementById('rfEmail'), err: document.getElementById('rfEmailErr'),
+      valid: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()); } }
+  ];
+
+  function setError(f, bad) {
+    f.err.hidden = !bad;
+    f.input.setAttribute('aria-invalid', bad ? 'true' : 'false');
+  }
+
+  // Clear an error as soon as the field becomes valid — don't nag while typing.
+  fields.forEach(function (f) {
+    f.input.addEventListener('input', function () {
+      if (f.input.getAttribute('aria-invalid') === 'true' && f.valid(f.input.value)) setError(f, false);
+    });
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var firstBad = null;
+
+    fields.forEach(function (f) {
+      var bad = !f.valid(f.input.value);
+      setError(f, bad);
+      if (bad && !firstBad) firstBad = f.input;
+    });
+
+    if (firstBad) {
+      if (ok) ok.hidden = true;
+      firstBad.focus();
+      return;
+    }
+
+    // No backend on the prototype — show the state the real submit would.
+    if (ok) ok.hidden = false;
+    form.reset();
+  });
+})();

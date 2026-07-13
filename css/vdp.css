@@ -165,6 +165,98 @@
   word-break: break-word; line-height: 1.35;
 }
 
+/* ---------------------------------------------- Equipment (Options & packages)
+   The dealer's own listing keeps this behind a tab. Kept in the open here:
+   it's the content that actually convinces a buyer, and the brief asks for
+   simplicity and mobile-first, where tabs only add taps. */
+.v2 .vdp-equip {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3) var(--space-6);
+}
+.v2 .vdp-equip li {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--divider-platinum);
+  color: var(--color-text); font-size: 14.5px;
+}
+.v2 .vdp-equip .icon { flex: 0 0 auto; margin-top: 2px; color: var(--blue-icon); }
+
+/* ---------------------------------------------- Request information
+   Label above the field, error as text + icon (never colour alone), and
+   autocomplete on every field — the a11y form pattern from SKILL.md. */
+.v2 .vdp-form-sec { background: var(--color-surface); }
+.v2 .vdp-form-grid {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: clamp(var(--space-6), 4vw, var(--space-8));
+  align-items: start;
+}
+.v2 .vdp-contact {
+  list-style: none; margin: var(--space-6) 0 0; padding: 0;
+  display: flex; flex-direction: column; gap: var(--space-3);
+}
+.v2 .vdp-contact li { display: flex; align-items: center; gap: 10px; color: var(--color-muted); font-size: 13.5px; }
+.v2 .vdp-contact .icon { color: var(--platinum-400); flex: 0 0 auto; }
+.v2 .vdp-contact a { color: var(--color-text); }
+.v2 .vdp-contact a:hover { color: var(--platinum-300); }
+
+.v2 .vdp-form {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+.v2 .vdp-field { display: flex; flex-direction: column; gap: var(--space-2); }
+.v2 .vdp-field--full { grid-column: 1 / -1; }
+.v2 .vdp-field label {
+  font-size: 12px; letter-spacing: 0.6px; text-transform: uppercase;
+  color: var(--color-muted); font-weight: 600;
+}
+.v2 .vdp-req { color: var(--red-300); }         /* red-300 passes AA on this surface */
+.v2 .vdp-opt { text-transform: none; letter-spacing: 0; font-weight: 400; opacity: 0.75; }
+.v2 .vdp-field input,
+.v2 .vdp-field textarea {
+  width: 100%; min-height: 50px;
+  padding: 14px 16px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  color: var(--color-text); font-family: var(--v2-ui); font-size: 14px;
+}
+.v2 .vdp-field textarea { min-height: 110px; resize: vertical; }
+.v2 .vdp-field input::placeholder,
+.v2 .vdp-field textarea::placeholder { color: var(--color-muted); }
+.v2 .vdp-field input[aria-invalid="true"],
+.v2 .vdp-field textarea[aria-invalid="true"] { border-color: var(--red-400); }
+.v2 .vdp-err {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12.5px; color: var(--red-300);
+}
+/* `display: flex` outranks the UA's [hidden] { display: none }, so without
+   this the error text is on screen from page load. Same trap as .vdp-photo. */
+.v2 .vdp-err[hidden] { display: none; }
+.v2 .vdp-err .icon { flex: 0 0 auto; }
+.v2 .vdp-form__ok {
+  margin-top: var(--space-3);
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--blue-500) 30%, transparent);
+  border: 1px solid var(--blue-border);
+  color: var(--color-text); font-size: 13.5px;
+}
+
+/* Fine print sits with the price, where it legally belongs */
+.v2 .vdp-fineprint { margin-top: 6px; font-size: 11.5px; color: var(--color-muted); }
+
+/* ---------------------------------------------- Legal
+   The dealer's own disclaimer, verbatim. Not optional: a dealer without it
+   is exposed. Quiet, but present. */
+.v2 .vdp-legal {
+  padding-block: var(--space-7);
+  border-top: 1px solid var(--divider-platinum);
+}
+.v2 .vdp-legal p {
+  font-size: 11.5px; line-height: 1.65; color: var(--color-muted);
+  max-width: 95ch;
+}
+
 /* Warranty + financing */
 .v2 .vdp-split-sec {
   background:
@@ -187,6 +279,7 @@
 
 @media (max-width: 1024px) {
   .v2 .vdp-top__grid { grid-template-columns: minmax(0, 1fr); }   /* minmax(0,…), not 1fr — see above */
+  .v2 .vdp-form-grid { grid-template-columns: minmax(0, 1fr); }
   .v2 .vdp-buy { position: static; }
   .v2 .vdp-specs { grid-template-columns: repeat(3, 1fr); }
   .v2 .vdp-split { grid-template-columns: 1fr; }
@@ -197,6 +290,8 @@
   .v2 .vdp-specs { grid-template-columns: repeat(2, 1fr); }
   .v2 .vdp-similar { grid-template-columns: 1fr; }
   .v2 .vdp-ctas__row { grid-template-columns: 1fr; }
+  .v2 .vdp-equip { grid-template-columns: 1fr; }
+  .v2 .vdp-form { grid-template-columns: 1fr; }
 
   /* Price and the primary action stay within thumb reach */
   .v2 .vdp-bar {
