@@ -31,13 +31,23 @@
       },
     };
   </script>
+  <!-- Scroll reveals are progressive enhancement: this marks JS as available so
+       CSS can keep [data-reveal] content visible when JS never runs (a11y). -->
+  <script>document.documentElement.classList.add('js');</script>
+
   <link rel="stylesheet" href="css/styles.css" />
-  <!-- Leaflet (footer map) — loaded before index3.css so we can restyle it -->
+  <!-- Leaflet (footer map) — loaded before the page layer so we can restyle it -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
-  <!-- V3 prototype layer (full-width pass) — scoped to this page only, loaded AFTER styles.css -->
+  <!-- Shared V2 foundation: tokens, type system, a11y (WCAG 2.2 AA), components.
+       SRP / VDP load this same file so they inherit the system. -->
+  <link rel="stylesheet" href="css/v2-core.css" />
+  <!-- Homepage-specific layer, loaded last -->
   <link rel="stylesheet" href="css/index3.css" />
 </head>
 <body class="bg-bg text-text antialiased v2">
+
+  <!-- WCAG 2.4.1 Bypass Blocks -->
+  <a class="skip-link" href="#main">Skip to main content</a>
 
   <!-- ===================================================================
        INLINE SVG ICON SPRITE — thin, single-weight (1.5) uniform set.

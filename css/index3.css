@@ -12,42 +12,11 @@
    live site. No new brand colors: red = the only action, platinum = detail.
    ===================================================================== */
 
-:root {
-  --v2-display: "Special Gothic Expanded One", "Arial Narrow", system-ui, sans-serif;
-  --v2-ui: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
-}
 
-/* ---------------------------------------------- Secondary action = deep steel-blue (V3, client direction)
-   Client asked for blue as the secondary colour (the original brand "X" was blue).
-   Red stays the ONLY primary action; blue is subordinate and filled so secondary
-   buttons read clearly on the dark base instead of "black on black". */
-.v2 {
-  --blue-500: #223B58;   /* secondary base — deep muted steel-navy */
-  --blue-600: #2C4A6C;   /* hover */
-  --blue-700: #1A2E44;   /* pressed */
-  --blue-border: #34506E;
-}
-.v2 .btn-secondary {
-  background: var(--blue-500);
-  border-color: var(--blue-border);
-  color: #ffffff;
-}
-.v2 .btn-secondary:hover { background: var(--blue-600); border-color: var(--blue-600); }
-.v2 .btn-secondary:active { background: var(--blue-700); border-color: var(--blue-700); }
-.v2 .btn-secondary .icon { color: #ffffff; }
 
-/* ---------------------------------------------- Full-width pass — step 1 (V3)
-   Client: "nothing looks full width". Widen the content frame 1240 -> 1400 so
-   large screens fill out; text columns (max-w-xl/2xl inside) stay readable.
-   Overrides both the --maxw token (styles.css .container) and the Tailwind
-   max-w-site utility, scoped to this page only. */
-.v2 { --maxw: 1400px; }
-.v2 .max-w-site { max-width: 1400px; }
-/* Page-level guard: full-bleed sections (and any residual mobile bleed) can
-   never produce horizontal scroll. `clip` (not `hidden`) keeps the sticky
-   header working. The root is the scroller, so clip it too (scoped via :has
-   so only this page — which loads index3.css — is affected). */
-html:has(body.v2), body.v2 { overflow-x: clip; }
+
+
+
 
 /* ---------------------------------------------- Full-width pass — step 2 (V3)
    Fresh arrivals inventory grid breaks out of the 1400 frame to the viewport
@@ -64,32 +33,11 @@ html:has(body.v2), body.v2 { overflow-x: clip; }
   .v2 .v2-fresh .carousel__slide:nth-child(n+7) { display: block; }  /* re-show cards 7 & 8 */
 }
 
-/* ---------------------------------------------- Compact primary nav (V2) */
-/* No hamburger, no repeated phone CTA — logo left, nav right, tighter row. */
-.v2 { --header-h: 68px; }
-/* The off-canvas mobile menu is unreachable in V3 (hamburger removed); drop it
-   so its off-screen panel can't create horizontal scroll. */
-.v2 .mobile-menu { display: none; }
-.v2 .site-header nav.v2-nav { display: none; gap: clamp(1.1rem, 2vw, 1.9rem); }
-@media (min-width: 1024px) { .v2 .site-header nav.v2-nav { display: flex; } }
-.v2 .site-header nav.v2-nav .nav-link { font-size: 13px; letter-spacing: 0.2px; }
 
-/* ---------------------------------------------- Type system (new scheme) */
-body.v2 { font-family: var(--v2-ui); }
-/* Display face is single-weight (400) and already wide: keep tracking restrained */
-.v2 .font-display { font-family: var(--v2-display); font-weight: 400; letter-spacing: 0; }
-.v2 .section-title { font-family: var(--v2-display); font-weight: 400; letter-spacing: 0.012em; }
-/* Eyebrows stay in Manrope uppercase for legibility at small sizes */
 
-/* ---------------------------------------------- Quiet badges (hygiene) */
-.v2 .vcard__badge {
-  background: color-mix(in srgb, var(--color-bg) 58%, transparent);
-  border: 1px solid var(--divider-platinum);
-  color: var(--platinum-300);
-  -webkit-backdrop-filter: blur(6px);
-          backdrop-filter: blur(6px);
-  font-weight: 600;
-}
+
+
+
 
 /* ---------------------------------------------- Featured: carousel -> curated grid
    Convert the existing carousel markup into a 3 / 2 / 1 grid without touching HTML. */
@@ -107,41 +55,7 @@ body.v2 { font-family: var(--v2-ui); }
 @media (max-width: 900px) { .v2 .carousel__track { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 620px) { .v2 .carousel__track { grid-template-columns: 1fr; gap: 16px; } }
 
-/* ---------------------------------------------- Browse: body-style image tiles (#8)
-   Text chips -> premium tiles with transparent silver car renders on dark
-   surface cards. Hover lifts with a red-tinted border (matches vehicle cards). */
-.v2 .v2-cat-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 16px;
-}
-.v2 .v2-cat-tile {
-  display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 12px;
-  padding: 24px 16px 18px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
-  transition: transform 0.22s var(--ease), border-color 0.22s var(--ease), background 0.22s var(--ease);
-}
-.v2 .v2-cat-tile:hover {
-  transform: translateY(-6px);
-  border-color: color-mix(in srgb, var(--red-500) 55%, var(--color-border));
-  background: var(--color-surface-2);
-}
-.v2 .v2-cat-img {
-  width: 100%; max-width: 190px; aspect-ratio: 16 / 9; object-fit: contain;
-  filter: none;   /* no shadow at rest */
-  transition: filter 0.22s var(--ease), transform 0.22s var(--ease);
-}
-/* Shadow appears only on hover, sitting under the car */
-.v2 .v2-cat-tile:hover .v2-cat-img { filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.55)) brightness(1.06); }
-.v2 .v2-cat-label {
-  font-family: var(--v2-ui);
-  font-size: 11.5px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
-  color: var(--color-text);
-}
-@media (max-width: 900px) { .v2 .v2-cat-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 560px) { .v2 .v2-cat-grid { grid-template-columns: repeat(2, 1fr); } }
+
 
 /* ---------------------------------------------- Cinematic visual breaks */
 .v2-break {
@@ -273,18 +187,7 @@ body.v2 { font-family: var(--v2-ui); }
   .v2 .v2-rail li:nth-child(-n+2) { border-top: 0; }
 }
 
-/* Service tiles share the 6-box rail's blue-tinted gradient + steel-blue icons. */
-.v2 .service-tile {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--blue-500) 12%, var(--color-surface)), var(--color-surface));
-  border: 1px solid color-mix(in srgb, var(--blue-500) 28%, var(--color-border));
-  border-radius: 14px;
-}
-.v2 .service-tile .icon { color: #7E97BC; }
-.v2 .service-tile:hover {
-  border-color: color-mix(in srgb, var(--blue-500) 55%, var(--color-border));
-  transform: translateY(-4px);
-}
-.v2 .service-tile:hover .icon { color: #9BB2D2; }
+
 
 /* ---------------------------------------------- Split CTA: subtle double radial glow
    Two deep-red ambients (one behind each tile) over the warm surface. Restrained. */
@@ -471,86 +374,3 @@ body.v2 { font-family: var(--v2-ui); }
   .v2 [data-reveal].reveal-right > * { opacity: 1; transform: none; transition: none; }
 }
 
-/* ============================================================
-   Google-style reviews — restrained, elegant, dark-native
-   ============================================================ */
-.v2 #reviews { background: var(--color-bg, #0B0B0D); }
-
-/* Rating summary card */
-.v2 .gr-summary {
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 22px;
-  padding: clamp(20px, 3vw, 30px);
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
-  background:
-    radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--color-surface) 90%, #fff 4%), transparent 60%),
-    var(--color-surface);
-  margin-bottom: 26px;
-}
-.v2 .gr-summary__left { display: flex; align-items: center; gap: 18px; }
-.v2 .gr-google-g { flex: 0 0 auto; }
-.v2 .gr-brand {
-  margin: 0 0 4px; font-family: var(--v2-ui);
-  font-size: 12px; letter-spacing: 1.4px; text-transform: uppercase;
-  color: var(--color-muted);
-}
-.v2 .gr-score-row { display: flex; align-items: center; gap: 12px; }
-.v2 .gr-score {
-  font-family: var(--v2-display); font-weight: 700; line-height: 1;
-  font-size: clamp(30px, 4.4vw, 40px); color: var(--color-text);
-}
-.v2 .gr-stars { display: inline-flex; gap: 2px; color: #FBBC04; }
-.v2 .gr-stars .icon { width: 17px; height: 17px; }
-.v2 .gr-meta { margin: 7px 0 0; font-size: 13px; color: var(--color-muted); }
-.v2 .gr-meta strong { color: var(--color-text); font-weight: 600; }
-.v2 .gr-cta { align-self: center; }
-
-/* Cards grid */
-.v2 .gr-grid {
-  display: grid; gap: 16px;
-  grid-template-columns: 1fr;
-}
-@media (min-width: 640px)  { .v2 .gr-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1024px) { .v2 .gr-grid { grid-template-columns: repeat(3, 1fr); } }
-
-.v2 .gr-card {
-  position: relative;
-  display: flex; flex-direction: column; gap: 13px;
-  padding: 22px;
-  border: 1px solid var(--color-border);
-  border-radius: 14px;
-  background: var(--color-surface);
-  transition: border-color .25s ease, transform .25s ease, box-shadow .25s ease;
-}
-.v2 .gr-card:hover {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--platinum-400) 34%, var(--color-border));
-  box-shadow: 0 12px 30px -18px rgba(0,0,0,.8);
-}
-.v2 .gr-g { position: absolute; top: 20px; right: 20px; opacity: .85; }
-.v2 .gr-card__head { display: flex; align-items: center; gap: 12px; }
-.v2 .gr-avatar {
-  width: 42px; height: 42px; border-radius: 50%;
-  display: grid; place-items: center; flex: 0 0 auto;
-  font-family: var(--v2-ui); font-weight: 600; font-size: 16px; color: #fff;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
-}
-.v2 .gr-name { margin: 0; font-weight: 600; font-size: 14.5px; color: var(--color-text); line-height: 1.2; }
-.v2 .gr-time { margin: 2px 0 0; font-size: 12px; color: var(--color-muted); }
-.v2 .gr-quote {
-  margin: 0; font-size: 14.5px; line-height: 1.62;
-  color: color-mix(in srgb, var(--color-text) 76%, transparent);
-}
-
-/* Footer attribution */
-.v2 .gr-powered {
-  margin: 24px 0 0; text-align: center;
-  font-size: 12.5px; color: var(--color-muted);
-}
-.v2 .gr-powered span { color: color-mix(in srgb, var(--color-text) 60%, transparent); font-weight: 500; }
-
-@media (max-width: 560px) {
-  .v2 .gr-summary { flex-direction: column; align-items: flex-start; }
-  .v2 .gr-cta { align-self: stretch; justify-content: center; }
-}
