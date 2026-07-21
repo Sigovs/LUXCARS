@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lux Cars Chicago — Hand-Picked Luxury Vehicles · Buffalo Grove, IL</title>
+  <meta name="description" content="Lux Cars Chicago — 200+ hand-picked, inspected luxury vehicles in Buffalo Grove, IL. BMW, Mercedes, Porsche, Land Rover and more. Honest pricing, financing, and a 3-month warranty." />
+  <meta name="theme-color" content="#0B0B0D" />
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
+
+  <!-- V2 prototype fonts: Manrope (UI/body) + Special Gothic Expanded One (display) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind via CDN (design phase). Config is inline so we can move to a
+       build step later without changing markup. Brand tokens mirror css vars. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#0B0B0D', surface: '#16171A', 'surface-2': '#1D1E22',
+            text: '#F5F5F5', muted: '#9A9CA3',
+            accent: '#8B2828', 'accent-hover': '#742020', border: '#26272B',
+          },
+          fontFamily: { sans: ['Manrope', 'sans-serif'] },
+          maxWidth: { site: '1240px' },
+        },
+      },
+    };
+  </script>
+  <!-- Scroll reveals are progressive enhancement: this marks JS as available so
+       CSS can keep [data-reveal] content visible when JS never runs (a11y). -->
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="stylesheet" href="css/styles.css" />
+  <!-- Leaflet (footer map) — loaded before the page layer so we can restyle it -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <!-- Shared V2 foundation: tokens, type system, a11y (WCAG 2.2 AA), components.
+       SRP / VDP load this same file so they inherit the system. -->
+  <link rel="stylesheet" href="css/v4-core.css" />
+  <!-- Homepage-specific layer, loaded last -->
+  <link rel="stylesheet" href="css/index4.css" />
+</head>
+<body class="bg-bg text-text antialiased v2">
+
+  <!-- WCAG 2.4.1 Bypass Blocks -->
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ===================================================================
+       INLINE SVG ICON SPRITE — thin, single-weight (1.5) uniform set.
+       Referenced everywhere via <svg class="icon"><use href="#i-name"/></svg>
+       =================================================================== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
+        <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.5 3.5h3l1.5 4-2 1.4a12 12 0 0 0 5.6 5.6l1.4-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5z"/></symbol>
+        <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></symbol>
+        <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+        <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
+        <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+        <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3.5 11.5V4.5A1 1 0 0 1 4.5 3.5h7l9 9a1.4 1.4 0 0 1 0 2l-7 7a1.4 1.4 0 0 1-2 0l-9-9z"/><circle cx="7.5" cy="7.5" r="1.2"/></symbol>
+        <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.3 5.9.85-4.25 4.15 1 5.85L12 17.9l-5.25 2.6 1-5.85L3.5 9.65l5.9-.85z"/></symbol>
+        <symbol id="i-truck" viewBox="0 0 24 24"><path d="M2.5 5.5h11v10H2.5z"/><path d="M13.5 8.5h4l3 3v4h-7z"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="16.5" cy="17.5" r="1.8"/></symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 2.5v5c0 4.4-3 8-7 10-4-2-7-5.6-7-10v-5z"/><path d="M9 12l2 2 4-4"/></symbol>
+        <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M15.5 6.5a4 4 0 0 0-5 5L4 18l2 2 6.5-6.5a4 4 0 0 0 5-5l-2.4 2.4-2.1-.5-.5-2.1z"/></symbol>
+        <symbol id="i-financing" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 14.5h3"/></symbol>
+        <symbol id="i-trade" viewBox="0 0 24 24"><path d="M4 8h13l-2.5-2.5M20 16H7l2.5 2.5"/></symbol>
+        <symbol id="i-reserve" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4M16 3v4M9.5 14l1.8 1.8 3.2-3.4"/></symbol>
+        <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+        <symbol id="i-share" viewBox="0 0 24 24"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7M12 15V3m0 0L8 7m4-4 4 4"/></symbol>
+        <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9 3H3v6M15 3h6v6M15 21h6v-6M9 21H3v-6"/></symbol>
+        <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+        <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21c4-4.5 6.5-7.6 6.5-11a6.5 6.5 0 0 0-13 0c0 3.4 2.5 6.5 6.5 11z"/><circle cx="12" cy="10" r="2.4"/></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7.5V12l3 2"/></symbol>
+        <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+        <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4.5 15a7.5 7.5 0 1 1 15 0"/><path d="M12 15l4-3.5"/><circle cx="12" cy="15" r="1"/></symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="M4 7l8 6 8-6"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+        <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M18 6l-2.5 2.5M8.5 15.5L6 18"/></symbol>
+        <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M14 8.5h2.5V5.5H14c-2 0-3.5 1.5-3.5 3.5v2H8v3h2.5V21H14v-7h2.3l.7-3H14v-1.5c0-.6.4-1 1-1z"/></symbol>
+        <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4.5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.6" cy="7.4" r="0.9" fill="currentColor" stroke="none"/></symbol>
+        <symbol id="i-google" viewBox="0 0 24 24"><path d="M20 12.2c0-.6-.05-1.2-.15-1.7H12v3.4h4.5a3.9 3.9 0 0 1-1.7 2.5v2.1h2.7A8 8 0 0 0 20 12.2z"/><path d="M12 20.5a8 8 0 0 0 5.5-2l-2.7-2.1a4.9 4.9 0 0 1-7.3-2.6H4.7v2.2A8.5 8.5 0 0 0 12 20.5z"/><path d="M7.5 13.8a5 5 0 0 1 0-3.2V8.4H4.7a8.5 8.5 0 0 0 0 7.6z"/><path d="M12 7.3a4.6 4.6 0 0 1 3.2 1.3l2.4-2.4A8.2 8.2 0 0 0 12 3.5 8.5 8.5 0 0 0 4.7 8.4l2.8 2.2A5 5 0 0 1 12 7.3z"/></symbol>
+      </g>
+      <!-- Full-colour marks (outside the mono group) — Google reviews -->
+      <symbol id="i-star-solid" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 3.5l2.6 5.3 5.9.85-4.25 4.15 1 5.85L12 17.9l-5.25 2.6 1-5.85L3.5 9.65l5.9-.85z"/></symbol>
+      <symbol id="i-google-color" viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M23.5 12.27c0-.79-.07-1.54-.2-2.27H12v4.51h6.47a5.53 5.53 0 0 1-2.4 3.58v3h3.88c2.27-2.09 3.55-5.17 3.55-8.82z"/>
+        <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.76-2.11-6.7-4.94H1.29v3.1A11.99 11.99 0 0 0 12 24z"/>
+        <path fill="#FBBC05" d="M5.3 14.31a7.2 7.2 0 0 1 0-4.62v-3.1H1.29a12 12 0 0 0 0 10.82l4.01-3.1z"/>
+        <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42A11.9 11.9 0 0 0 12 0 11.99 11.99 0 0 0 1.29 6.59l4.01 3.1C6.24 6.86 8.88 4.75 12 4.75z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- Skip link for accessibility -->
+
+  <!-- ============================ SECTION 1: PROMO BANNER ============================ -->
+  <div class="promo" role="region" aria-label="Announcements">
+    <div class="container promo__track" id="promoTrack">
+      <div class="promo__item is-active"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-shield"/></svg><span>Every vehicle backed by a 3-month / 3,000-mile limited warranty</span></div>
+      <div class="promo__item"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-truck"/></svg><span>Nationwide shipping available — we deliver to your driveway</span></div>
+      <div class="promo__item"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><span>Hand-picked and fully inspected before every listing</span></div>
+    </div>
+  </div>
+
+  <!-- ============================ HEADER ============================ -->
+  <header class="site-header" id="siteHeader">
+    <!-- Utility row: hours, languages, phone (desktop) -->
+    <div class="header-util hidden md:block">
+      <div class="container max-w-site flex items-center justify-between h-9">
+        <div class="flex items-center gap-6">
+          <a href="tel:+18479472900" class="inline-flex items-center gap-2 hover:text-text transition-colors"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-phone"/></svg>847-947-2900</a>
+          <span class="inline-flex items-center gap-2"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-clock"/></svg>Mon–Fri 9–7 · Sat 9–5 · Sun closed</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="tracking-wide">We speak English · Ukrainian · Russian · Polish</span>
+          <span class="inline-flex items-center gap-2 text-accent"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><span class="text-muted">4.8 · 180+ Google reviews</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main nav row -->
+    <div class="container max-w-site flex items-center justify-between" style="height:var(--header-h)">
+      <a href="index4.html" class="logo" aria-label="Lux Cars Chicago — home">
+        <img src="assets/img/red_logo.svg" alt="Lux Cars Chicago" class="logo__img" width="184" height="34" />
+      </a>
+
+      <nav class="v2-nav flex items-center" aria-label="Primary">
+        <a href="srp4.html" class="nav-link">Inventory</a>
+        <a href="#" class="nav-link">Sell / Trade</a>
+        <a href="#" class="nav-link">Financing</a>
+        <a href="#" class="nav-link">Warranty</a>
+        <a href="#" class="nav-link">Service</a>
+        <a href="#" class="nav-link">About</a>
+        <a href="#" class="nav-link">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============================ MOBILE MENU ============================ -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="container flex items-center justify-between" style="height:var(--header-h)">
+      <span class="logo"><img src="assets/img/red_logo.svg" alt="Lux Cars Chicago" class="logo__img" width="184" height="34" /></span>
+      <button id="menuClose" class="btn btn-secondary !px-3" aria-label="Close menu"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <nav class="container flex-1 flex flex-col" aria-label="Mobile">
+      <a href="#" class="mobile-nav-link">Inventory <svg class="icon text-muted" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+      <a href="#" class="mobile-nav-link">Sell / Trade <svg class="icon text-muted" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+      <a href="#" class="mobile-nav-link">Financing <svg class="icon text-muted" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+      <a href="#" class="mobile-nav-link">Warranty <svg class="icon text-muted" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+      <a href="#" class="mobile-nav-link">Service <svg class="icon text-muted" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+      <a href="#" class="mobile-nav-link">About <svg class="icon text-muted" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+      <a href="#" class="mobile-nav-link">Contact <svg class="icon text-muted" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+    </nav>
+    <!-- Phone repeated at bottom of mobile menu (client requirement) -->
+    <div class="container py-8 border-t hairline">
+      <p class="overline mb-3">Call us directly</p>
+      <a href="tel:+18479472900" class="btn btn-primary btn-block text-base"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>847-947-2900</a>
+      <p class="text-muted text-sm mt-4 flex items-center gap-2"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-pin"/></svg>88 E Dundee Rd, Buffalo Grove, IL 60089</p>
+      <p class="text-muted text-sm mt-1 flex items-center gap-2"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-clock"/></svg>Mon–Fri 9–7 · Sat 9–5 · Sun closed</p>
+    </div>
+  </div>
+
+  <main id="main">
+
+    <!-- ============================ SECTION 2: HERO SLIDER ============================ -->
+    <section class="hero" id="hero" aria-roledescription="carousel" aria-label="Featured highlights">
+      <div class="hero__viewport">
+
+        <!-- Slide 1 — Inventory -->
+        <article class="hero__slide is-active" data-hero-slide aria-roledescription="slide" aria-label="1 of 3">
+          <div class="hero__media"><video id="heroIntroVideo" data-hero-video muted autoplay playsinline preload="auto" poster="assets/img/hero.jpg" width="1920" height="1072"><source src="video/herovideo1.mp4" type="video/mp4" /></video></div>
+          <div class="hero__scrim"></div>
+          <div class="container max-w-site hero__content">
+            <div class="max-w-2xl">
+              <p class="eyebrow mb-5 flex items-center gap-2 hero__anim"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-shield"/></svg>Trusted since 2005</p>
+              <h1 class="font-display mb-6 hero__anim">
+                Unique luxury cars,<br /><span class="text-accent">hand-picked.</span>
+              </h1>
+              <p class="text-muted text-lg md:text-xl max-w-xl mb-9 hero__anim">
+                200+ inspected vehicles from BMW, Mercedes, Porsche, Land Rover and more —
+                every one backed by our 3-month / 3,000-mile limited warranty.
+              </p>
+              <div class="flex flex-wrap gap-3 mb-8 hero__anim">
+                <a href="srp4.html" class="btn btn-primary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-search"/></svg>Search inventory</a>
+                <a href="#" class="btn btn-secondary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-financing"/></svg>Get pre-approved</a>
+              </div>
+              <div class="flex items-center gap-3 text-sm text-muted hero__anim">
+                <span class="stars" aria-label="4.8 out of 5 stars">
+                  <svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg>
+                </span>
+                <span><strong class="text-text">4.8</strong> average from 180+ Google reviews</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 2 — Collection -->
+        <article class="hero__slide" data-hero-slide aria-roledescription="slide" aria-label="2 of 3" aria-hidden="true">
+          <div class="hero__media"><img src="assets/img/1111.jpg" alt="" width="1920" height="1072" loading="lazy" /></div>
+          <div class="hero__scrim"></div>
+          <div class="container max-w-site hero__content">
+            <div class="max-w-2xl">
+              <p class="eyebrow mb-5 flex items-center gap-2 hero__anim"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-spark"/></svg>The Collection</p>
+              <h1 class="font-display mb-6 hero__anim">
+                Drive home<br /><span class="text-accent">the exceptional.</span>
+              </h1>
+              <p class="text-muted text-lg md:text-xl max-w-xl mb-9 hero__anim">
+                Over 200 curated European luxury vehicles — BMW, Mercedes-Benz, Porsche
+                and Land Rover — inspected, detailed, and ready to drive.
+              </p>
+              <div class="flex flex-wrap gap-3 mb-8 hero__anim">
+                <a href="srp4.html" class="btn btn-primary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-search"/></svg>Browse collection</a>
+                <a href="#" class="btn btn-secondary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-trade"/></svg>Value your trade</a>
+              </div>
+              <div class="flex items-center gap-3 text-sm text-muted hero__anim">
+                <span class="stars" aria-label="4.8 out of 5 stars">
+                  <svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg>
+                </span>
+                <span><strong class="text-text">4.8</strong> average from 180+ Google reviews</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Slide 3 — Financing -->
+        <article class="hero__slide" data-hero-slide aria-roledescription="slide" aria-label="3 of 3" aria-hidden="true">
+          <div class="hero__media"><img src="assets/img/2222.jpg" alt="" width="1920" height="1072" loading="lazy" /></div>
+          <div class="hero__scrim"></div>
+          <div class="container max-w-site hero__content">
+            <div class="max-w-2xl">
+              <p class="eyebrow mb-5 flex items-center gap-2 hero__anim"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-financing"/></svg>Financing</p>
+              <h1 class="font-display mb-6 hero__anim">
+                Financing that<br /><span class="text-accent">fits your life.</span>
+              </h1>
+              <p class="text-muted text-lg md:text-xl max-w-xl mb-9 hero__anim">
+                Pre-qualify in minutes with no impact to your credit score. Flexible terms
+                for every credit situation — tailored to you.
+              </p>
+              <div class="flex flex-wrap gap-3 mb-8 hero__anim">
+                <a href="#" class="btn btn-primary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-financing"/></svg>Get pre-approved</a>
+                <a href="#" class="btn btn-secondary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Payment calculator</a>
+              </div>
+              <div class="flex items-center gap-3 text-sm text-muted hero__anim">
+                <span class="stars" aria-label="4.8 out of 5 stars">
+                  <svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg><svg class="icon icon-sm" aria-hidden="true"><use href="#i-star"/></svg>
+                </span>
+                <span><strong class="text-text">4.8</strong> average from 180+ Google reviews</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Pagination — right-side numbered index (V2 prototype) -->
+        <div class="hero__dots v2-hero-nav" role="tablist" aria-label="Choose slide">
+          <button type="button" class="hero__dot is-active" data-hero-dot role="tab" aria-selected="true" aria-label="Slide 1: Hand-picked"><span class="num">1</span><span class="lbl">Hand-picked</span></button>
+          <button type="button" class="hero__dot" data-hero-dot role="tab" aria-selected="false" aria-label="Slide 2: Drive home"><span class="num">2</span><span class="lbl">Drive home</span></button>
+          <button type="button" class="hero__dot" data-hero-dot role="tab" aria-selected="false" aria-label="Slide 3: Financing"><span class="num">3</span><span class="lbl">Financing</span></button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================ SECTION 5: FEATURED INVENTORY ============================ -->
+    <section class="py-16 md:py-24 v2-fresh">
+      <div class="container max-w-site">
+        <div class="flex items-end justify-between mb-10">
+          <div data-reveal class="reveal-left">
+            <p class="eyebrow mb-3">Featured this week</p>
+            <h2 class="section-title text-fluid-4xl"><span class="v2-hl">Fresh arrivals</span></h2>
+          </div>
+          <div class="hidden sm:flex items-center gap-3">
+            <a href="srp4.html" class="link-arrow mr-2">View all 200+ <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+            <button class="carousel__btn" id="featPrev" aria-label="Previous vehicles"><svg class="icon" aria-hidden="true"><use href="#i-chevron-left"/></svg></button>
+            <button class="carousel__btn" id="featNext" aria-label="Next vehicles"><svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+          </div>
+        </div>
+
+        <!-- Search filters — directly under the Fresh arrivals heading -->
+        <div class="v2-fresh-search surface p-4 md:p-5 mb-10" data-reveal>
+          <form class="filter-bar" id="heroFilter" action="srp4.html" method="get">
+            <div class="filter-field">
+              <select name="make" aria-label="Make">
+                <option value="">Make — Any</option>
+                <option>BMW</option><option>Mercedes-Benz</option><option>Porsche</option>
+                <option>Land Rover</option><option>Audi</option><option>Lexus</option>
+              </select>
+              <svg class="icon icon-sm chevron" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </div>
+            <div class="filter-field">
+              <select name="body" aria-label="Body style">
+                <option value="">Body style — Any</option>
+                <option>Sedan</option><option>SUV</option><option>Coupe</option>
+                <option>Truck</option><option>Convertible</option>
+              </select>
+              <svg class="icon icon-sm chevron" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </div>
+            <div class="filter-field">
+              <select name="price" aria-label="Price">
+                <option value="">Price — Any</option>
+                <option value="0-25000">Under $25,000</option>
+                <option value="25000-45000">$25,000 – $45,000</option>
+                <option value="45000-70000">$45,000 – $70,000</option>
+                <option value="70000-">$70,000+</option>
+              </select>
+              <svg class="icon icon-sm chevron" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </div>
+            <div class="filter-field">
+              <select name="year" aria-label="Year">
+                <option value="">Year — Any</option>
+                <option>2025</option><option>2024</option><option>2023</option>
+                <option>2022</option><option>2021</option><option>2020 &amp; older</option>
+              </select>
+              <svg class="icon icon-sm chevron" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </div>
+            <button type="submit" class="btn btn-primary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-search"/></svg><span>Search 200+ vehicles</span></button>
+          </form>
+        </div>
+
+        <!-- Carousel (carousel.js drives buttons; native scroll-snap fallback) -->
+        <div class="carousel" data-reveal>
+          <div class="carousel__track" id="featTrack">
+            <article class="carousel__slide vcard" data-reveal>
+              <a href="vdp4.html" class="block">
+                <div class="vcard__media"><span class="vcard__badge">Featured</span><img src="assets/img/ferrari-portofino.jpg" alt="2019 Ferrari Portofino" loading="lazy" width="767" height="575" /></div>
+                <div class="p-5">
+                  <h3 class="text-lg font-medium">2019 Ferrari Portofino</h3>
+                  <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Convertible</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>20,352 mi</span><span>RWD</span></p>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                    <span class="vcard__price text-xl">$169,995</span>
+                    <span class="btn btn-secondary">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                  </div>
+                </div>
+              </a>
+            </article>
+            <article class="carousel__slide vcard" data-reveal>
+              <a href="vdp4.html" class="block">
+                <div class="vcard__media"><img src="assets/img/porsche-panamera.jpg" alt="2020 Porsche Panamera 4" loading="lazy" width="767" height="575" /></div>
+                <div class="p-5">
+                  <h3 class="text-lg font-medium">2020 Porsche Panamera 4</h3>
+                  <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Sedan</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>34,200 mi</span><span>AWD</span></p>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                    <span class="vcard__price text-xl">$47,995</span>
+                    <span class="btn btn-secondary">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                  </div>
+                </div>
+              </a>
+            </article>
+            <article class="carousel__slide vcard" data-reveal>
+              <a href="vdp4.html" class="block">
+                <div class="vcard__media"><span class="vcard__badge">Electric</span><img src="assets/img/porsche-taycan.jpg" alt="2021 Porsche Taycan 4S" loading="lazy" width="767" height="575" /></div>
+                <div class="p-5">
+                  <h3 class="text-lg font-medium">2021 Porsche Taycan 4S</h3>
+                  <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Sedan</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>19,700 mi</span><span>AWD</span></p>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                    <span class="vcard__price text-xl">$61,995</span>
+                    <span class="btn btn-secondary">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                  </div>
+                </div>
+              </a>
+            </article>
+            <article class="carousel__slide vcard" data-reveal>
+              <a href="vdp4.html" class="block">
+                <div class="vcard__media"><img src="assets/img/bmw-7-series.jpg" alt="2022 BMW 750i xDrive M Sport" loading="lazy" width="767" height="575" /></div>
+                <div class="p-5">
+                  <h3 class="text-lg font-medium">2022 BMW 750i xDrive M Sport</h3>
+                  <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Sedan</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>27,500 mi</span><span>AWD</span></p>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                    <span class="vcard__price text-xl">$46,985</span>
+                    <span class="btn btn-secondary">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                  </div>
+                </div>
+              </a>
+            </article>
+            <article class="carousel__slide vcard" data-reveal>
+              <a href="vdp4.html" class="block">
+                <div class="vcard__media"><img src="assets/img/bmw-x6.jpg" alt="2021 BMW X6 xDrive40i M Sport" loading="lazy" width="767" height="575" /></div>
+                <div class="p-5">
+                  <h3 class="text-lg font-medium">2021 BMW X6 xDrive40i M Sport</h3>
+                  <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>SUV</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>31,800 mi</span><span>AWD</span></p>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                    <span class="vcard__price text-xl">$43,995</span>
+                    <span class="btn btn-secondary">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                  </div>
+                </div>
+              </a>
+            </article>
+            <article class="carousel__slide vcard" data-reveal>
+              <a href="vdp4.html" class="block">
+                <div class="vcard__media"><img src="assets/img/bmw-m2.jpg" alt="2019 BMW M2 Competition" loading="lazy" width="767" height="575" /></div>
+                <div class="p-5">
+                  <h3 class="text-lg font-medium">2019 BMW M2 Competition</h3>
+                  <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Coupe</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>22,400 mi</span><span>RWD</span></p>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                    <span class="vcard__price text-xl">$40,998</span>
+                    <span class="btn btn-secondary">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                  </div>
+                </div>
+              </a>
+            </article>
+            <article class="carousel__slide vcard" data-reveal>
+              <a href="vdp4.html" class="block">
+                <div class="vcard__media"><img src="assets/img/porsche-cayenne.jpg" alt="2020 Porsche Cayenne Coupe" loading="lazy" width="767" height="575" /></div>
+                <div class="p-5">
+                  <h3 class="text-lg font-medium">2020 Porsche Cayenne Coupe</h3>
+                  <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>SUV</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>29,600 mi</span><span>AWD</span></p>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                    <span class="vcard__price text-xl">$39,900</span>
+                    <span class="btn btn-secondary">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                  </div>
+                </div>
+              </a>
+            </article>
+            <article class="carousel__slide vcard" data-reveal>
+              <a href="vdp4.html" class="block">
+                <div class="vcard__media"><img src="assets/img/mercedes-s560.jpg" alt="2019 Mercedes-Benz S 560 4MATIC" loading="lazy" width="767" height="575" /></div>
+                <div class="p-5">
+                  <h3 class="text-lg font-medium">2019 Mercedes-Benz S 560 4MATIC</h3>
+                  <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Sedan</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>41,300 mi</span><span>AWD</span></p>
+                  <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                    <span class="vcard__price text-xl">$38,995</span>
+                    <span class="btn btn-secondary">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                  </div>
+                </div>
+              </a>
+            </article>
+          </div>
+        </div>
+        <div class="mt-8 sm:hidden">
+          <a href="srp4.html" class="btn btn-secondary btn-block">View all 200+ vehicles <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================ SECTION 3: VIEW INVENTORY BAND ============================ -->
+    <section class="border-b hairline v2-browse">
+      <div class="container max-w-site py-16 md:py-24">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div data-reveal class="reveal-left">
+            <p class="eyebrow mb-3">The Collection</p>
+            <h2 class="section-title text-fluid-4xl">Browse our full collection</h2>
+            <p class="text-muted mt-3 max-w-xl">200+ hand-picked vehicles, updated daily. Filter by make, body style, or budget.</p>
+          </div>
+          <a href="srp4.html" class="btn btn-primary md:self-center"><span>View full inventory</span><svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        </div>
+        <div class="v2-cat-grid mt-8" data-reveal data-reveal-delay="1">
+          <a href="srp4.html?body=Sedan" class="v2-cat-tile"><img class="v2-cat-img" src="assets/img/bodytype/sedan.png" alt="" loading="lazy" /><span class="v2-cat-label">Sedans</span></a>
+          <a href="srp4.html?body=SUV" class="v2-cat-tile"><img class="v2-cat-img" src="assets/img/bodytype/suv.png" alt="" loading="lazy" /><span class="v2-cat-label">SUVs</span></a>
+          <a href="srp4.html?body=Crossover" class="v2-cat-tile"><img class="v2-cat-img" src="assets/img/bodytype/crossover.png" alt="" loading="lazy" /><span class="v2-cat-label">Crossovers</span></a>
+          <a href="srp4.html?body=Truck" class="v2-cat-tile"><img class="v2-cat-img" src="assets/img/bodytype/pickup_truck.png" alt="" loading="lazy" /><span class="v2-cat-label">Trucks</span></a>
+          <a href="srp4.html?body=Coupe" class="v2-cat-tile"><img class="v2-cat-img" src="assets/img/bodytype/coupe.png" alt="" loading="lazy" /><span class="v2-cat-label">Coupes</span></a>
+          <a href="srp4.html?body=Convertible" class="v2-cat-tile"><img class="v2-cat-img" src="assets/img/bodytype/sport_convertible.png" alt="" loading="lazy" /><span class="v2-cat-label">Convertibles</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ CREDENTIAL RAIL (V2) ============================ -->
+    <section class="v2-rail-sec">
+      <div class="container max-w-site">
+        <ul class="v2-rail" data-reveal>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span>Trusted Since 2005</span></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-tag"/></svg><span>Lowest Price Guaranteed</span></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg><span>Unique Luxury Inventory</span></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-financing"/></svg><span>Financing Available</span></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-truck"/></svg><span>Nationwide Shipping</span></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg><span>Premium Customer Experience</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================ VISUAL BREAK A ============================ -->
+    <section class="v2-break" data-reveal aria-label="The Lux standard">
+      <div class="v2-break__media" data-parallax><img src="assets/img/brakes/visual1.jpg" alt="" loading="lazy" /></div>
+      <div class="v2-break__scrim"></div>
+      <div class="container max-w-site v2-break__inner">
+        <div class="max-w-xl reveal-left" data-reveal>
+          <span class="v2-break__rule"></span>
+          <p class="eyebrow mb-3">The Lux standard</p>
+          <h2 class="section-title text-fluid-4xl">Inspected, documented,<br />ready to drive.</h2>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SECTION 6: SELL / TRADE ============================ -->
+    <section class="py-16 md:py-24 border-y hairline bg-surface v2-split">
+      <div class="container max-w-site">
+        <div class="split-cta">
+          <div class="feature-tile !p-8 md:!p-10 reveal-left" data-reveal>
+            <img class="v2-tile-img" src="assets/img/Value%20your%20trade%20in%20minutes.jpg" alt="" loading="lazy" />
+            <p class="eyebrow">Sell / Trade</p>
+            <h2 class="section-title text-fluid-4xl"><span class="v2-hl">Value your trade today</span></h2>
+            <p class="text-muted max-w-lg">Get a real, competitive offer for your current vehicle — trade it toward any car in our collection, or sell it to us outright. No obligation.</p>
+            <div class="flex flex-wrap gap-3 mt-2">
+              <a href="#" class="btn btn-primary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-trade"/></svg>Value your trade</a>
+              <a href="#" class="btn btn-secondary">Sell us your car</a>
+            </div>
+          </div>
+          <div class="feature-tile !p-8 md:!p-10 reveal-right" data-reveal data-reveal-delay="1">
+            <img class="v2-tile-img" src="assets/img/Get%20pre-approved%20fast%20.jpg" alt="" loading="lazy" />
+            <p class="eyebrow">Financing</p>
+            <h2 class="section-title text-fluid-4xl"><span class="v2-hl">Get pre-approved fast</span></h2>
+            <p class="text-muted max-w-lg">Flexible financing for every credit situation. Pre-qualify through Capital One in minutes with no impact to your credit score — before you ever visit the showroom.</p>
+            <div class="flex flex-wrap gap-3 mt-2">
+              <a href="#" class="btn btn-primary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-financing"/></svg>Apply for financing</a>
+              <a href="#" class="btn btn-secondary">Payment calculator</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SECTION 8: WARRANTY ============================ -->
+    <section class="py-16 md:py-24">
+      <div class="container max-w-site">
+        <div class="grid lg:grid-cols-2 gap-10 items-center">
+          <div data-reveal class="reveal-left">
+            <p class="eyebrow mb-3">Warranty</p>
+            <h2 class="section-title text-fluid-4xl mb-5">Peace of mind, included</h2>
+            <p class="text-muted mb-6 max-w-lg">Every Lux Cars vehicle is inspected and backed by a 3-month unconditional warranty. Extend your coverage for years of worry-free driving and complete vehicle protection.</p>
+            <ul class="space-y-3 mb-8">
+              <li class="flex items-center gap-3"><svg class="icon text-accent" aria-hidden="true"><use href="#i-check"/></svg><span>3 month / 3,000 miles limited warranty on every vehicle</span></li>
+              <li class="flex items-center gap-3"><svg class="icon text-accent" aria-hidden="true"><use href="#i-check"/></svg><span>Extended protection plans available</span></li>
+              <li class="flex items-center gap-3"><svg class="icon text-accent" aria-hidden="true"><use href="#i-check"/></svg><span>Multi-point inspection before delivery</span></li>
+            </ul>
+            <a href="#" class="btn btn-primary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-shield"/></svg>Learn more</a>
+          </div>
+          <div class="surface p-8 md:p-10 grid grid-cols-2 gap-6" data-reveal data-reveal-delay="1">
+            <div class="feature-tile"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-shield"/></svg><span class="value-item__label !text-left">Vehicle<br>Protection</span></div>
+            <div class="feature-tile"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-check"/></svg><span class="value-item__label !text-left">Inspected<br>&amp; Certified</span></div>
+            <div class="feature-tile"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-clock"/></svg><span class="value-item__label !text-left">Extended<br>Coverage</span></div>
+            <div class="feature-tile"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-spark"/></svg><span class="value-item__label !text-left">Peace<br>of Mind</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ VISUAL BREAK B ============================ -->
+    <section class="v2-break" data-reveal aria-label="A personal way to buy">
+      <div class="v2-break__media" data-parallax><img src="assets/img/brakes/visual2.jpg" alt="" loading="lazy" /></div>
+      <div class="v2-break__scrim"></div>
+      <div class="container max-w-site v2-break__inner">
+        <div class="max-w-xl reveal-left" data-reveal>
+          <span class="v2-break__rule"></span>
+          <p class="eyebrow mb-3">Since 2005</p>
+          <h2 class="section-title text-fluid-4xl">A more personal<br />way to buy.</h2>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SECTION 9: SERVICE DEPARTMENT ============================ -->
+    <section class="py-16 md:py-24 border-t hairline bg-surface">
+      <div class="container max-w-site">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
+          <div data-reveal class="reveal-left">
+            <p class="eyebrow mb-3">Service Department</p>
+            <h2 class="section-title text-fluid-4xl">Expert care for every mile</h2>
+            <p class="text-muted mt-3 max-w-xl">Factory-quality maintenance and repair for every make we sell — and everything else you drive.</p>
+          </div>
+          <a href="#" class="btn btn-primary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-wrench"/></svg>Schedule service</a>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+          <div class="service-tile" data-reveal><svg class="icon icon-lg" aria-hidden="true"><use href="#i-wrench"/></svg><span>Lube, Oil &amp; Filter Change</span></div>
+          <div class="service-tile" data-reveal data-reveal-delay="1"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-gauge"/></svg><span>Front-End Alignment</span></div>
+          <div class="service-tile" data-reveal data-reveal-delay="2"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-check"/></svg><span>Routine Maintenance</span></div>
+          <div class="service-tile" data-reveal data-reveal-delay="3"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-spark"/></svg><span>Wiper Replacement</span></div>
+          <div class="service-tile" data-reveal><svg class="icon icon-lg" aria-hidden="true"><use href="#i-spark"/></svg><span>Headlight Replacement</span></div>
+          <div class="service-tile" data-reveal data-reveal-delay="1"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-shield"/></svg><span>Brake Service</span></div>
+          <div class="service-tile" data-reveal data-reveal-delay="2"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-tag"/></svg><span>Service Packages</span></div>
+          <div class="service-tile" data-reveal data-reveal-delay="3"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-wrench"/></svg><span>Muffler &amp; Exhaust Repair</span></div>
+          <div class="service-tile" data-reveal><svg class="icon icon-lg" aria-hidden="true"><use href="#i-wrench"/></svg><span>Coolant Flush</span></div>
+          <div class="service-tile" data-reveal data-reveal-delay="1"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-check"/></svg><span>Vehicle Inspection</span></div>
+          <div class="service-tile" data-reveal data-reveal-delay="2"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-financing"/></svg><span>Transmission Flush</span></div>
+          <div class="service-tile" data-reveal data-reveal-delay="3"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-spark"/></svg><span>Electrical Repairs</span></div>
+          <div class="service-tile" data-reveal><svg class="icon icon-lg" aria-hidden="true"><use href="#i-gauge"/></svg><span>Tire Balancing</span></div>
+          <div class="service-tile" data-reveal data-reveal-delay="1"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-wrench"/></svg><span>Filter Replacement</span></div>
+          <div class="service-tile" data-reveal data-reveal-delay="2"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-gauge"/></svg><span>Tire Rotation</span></div>
+          <div class="service-tile" data-reveal data-reveal-delay="3"><svg class="icon icon-lg" aria-hidden="true"><use href="#i-star"/></svg><span>And Much More</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ REVIEWS — cinematic testimonial band ============================ -->
+    <section id="reviews" class="v2-reviews" aria-label="Customer reviews">
+      <div class="v2-reviews__media"><img src="assets/img/showroom.jpg" alt="" width="1920" height="1071" loading="lazy" /></div>
+      <div class="v2-reviews__scrim"></div>
+      <div class="container max-w-site v2-reviews__inner">
+        <div class="v2-reviews__head reveal-left" data-reveal>
+          <p class="eyebrow mb-3">Reviews</p>
+          <h2 class="section-title text-fluid-4xl">Loved by Chicago drivers</h2>
+          <div class="v2-reviews__trust">
+            <span class="v2-rev-score">4.8</span>
+            <span class="v2-rev-stars" aria-label="4.8 out of 5"><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg></span>
+            <span class="v2-rev-count">180+ verified Google reviews</span>
+            <a href="#" class="link-arrow v2-reviews__all">Read all reviews <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+          </div>
+        </div>
+        <div class="v2-reviews__grid">
+          <figure class="v2-rev-card" data-reveal>
+            <span class="v2-rev-stars" aria-label="5 out of 5"><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg></span>
+            <blockquote class="v2-rev-quote">Transparent pricing and a great selection &mdash; exactly what I was hoping for. The whole process was effortless from start to finish.</blockquote>
+            <figcaption class="v2-rev-by">
+              <span class="v2-rev-avatar">C</span>
+              <span class="v2-rev-id"><span class="v2-rev-name">Charles S.</span><span class="v2-rev-time">2 weeks ago &middot; Google</span></span>
+            </figcaption>
+          </figure>
+
+          <figure class="v2-rev-card" data-reveal>
+            <span class="v2-rev-stars" aria-label="5 out of 5"><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg></span>
+            <blockquote class="v2-rev-quote">A total professional, not pushy at all. One of the best car-buying experiences I&rsquo;ve had, and I&rsquo;ve bought a lot of cars.</blockquote>
+            <figcaption class="v2-rev-by">
+              <span class="v2-rev-avatar">B</span>
+              <span class="v2-rev-id"><span class="v2-rev-name">Brian H.</span><span class="v2-rev-time">1 month ago &middot; Google</span></span>
+            </figcaption>
+          </figure>
+
+          <figure class="v2-rev-card" data-reveal>
+            <span class="v2-rev-stars" aria-label="5 out of 5"><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg><svg class="icon" aria-hidden="true"><use href="#i-star-solid"/></svg></span>
+            <blockquote class="v2-rev-quote">They helped me trade in a car with negative equity and made it completely painless. Honest, patient, and genuinely helpful.</blockquote>
+            <figcaption class="v2-rev-by">
+              <span class="v2-rev-avatar">Y</span>
+              <span class="v2-rev-id"><span class="v2-rev-name">Yana K.</span><span class="v2-rev-time">3 weeks ago &middot; Google</span></span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ TRUST / CTA STRIP ============================ -->
+    <section class="page-hero">
+      <div class="container max-w-site py-16 md:py-24 text-center">
+        <h2 class="section-title text-fluid-5xl mb-5 reveal-left" data-reveal>Ready to find your next car?</h2>
+        <p class="text-muted max-w-xl mx-auto mb-8" data-reveal data-reveal-delay="1">Browse the collection online, or call our team directly — we're happy to help you find the right vehicle.</p>
+        <div class="flex flex-wrap gap-3 justify-center" data-reveal data-reveal-delay="2">
+          <a href="#" class="btn btn-primary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-search"/></svg>Browse inventory</a>
+          <a href="tel:+18479472900" class="btn btn-secondary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-phone"/></svg>847-947-2900</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="site-footer">
+    <!-- Footer map (Leaflet + OpenStreetMap, grayscale) — V2 prototype -->
+    <div class="v2-map-band">
+      <div id="v2-map" role="img" aria-label="Map showing Lux Cars Chicago, 88 E Dundee Rd, Buffalo Grove, IL"></div>
+      <a class="v2-map-cta" href="https://www.google.com/maps/dir/?api=1&amp;destination=88+E+Dundee+Rd,+Buffalo+Grove,+IL+60089" target="_blank" rel="noopener"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-pin"/></svg>Get directions</a>
+    </div>
+    <div class="container max-w-site py-14 md:py-16">
+      <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div>
+          <a href="index4.html" class="logo mb-4" aria-label="Lux Cars Chicago — home"><img src="assets/img/red_logo.svg" alt="Lux Cars Chicago" class="logo__img" width="184" height="34" /></a>
+          <p class="text-muted text-sm mt-4 flex items-start gap-2"><svg class="icon icon-sm mt-0.5" aria-hidden="true"><use href="#i-pin"/></svg>88 E Dundee Rd<br>Buffalo Grove, IL 60089</p>
+          <p class="text-muted text-sm mt-3 flex items-center gap-2"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-clock"/></svg>Mon–Fri 9–7 · Sat 9–5 · Sun closed</p>
+          <a href="tel:+18479472900" class="text-text text-lg mt-3 inline-flex items-center gap-2 hover:text-accent transition-colors"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-phone"/></svg>847-947-2900</a>
+        </div>
+        <div>
+          <p class="footer-col-title">Shop</p>
+          <a href="srp4.html" class="footer-link">Inventory</a>
+          <a href="#" class="footer-link">Sell / Trade</a>
+          <a href="#" class="footer-link">Financing</a>
+          <a href="#" class="footer-link">Warranty</a>
+        </div>
+        <div>
+          <p class="footer-col-title">Company</p>
+          <a href="#" class="footer-link">About Us</a>
+          <a href="#" class="footer-link">Service</a>
+          <a href="#" class="footer-link">Contact</a>
+          <a href="#" class="footer-link">Reviews</a>
+        </div>
+        <div>
+          <p class="footer-col-title">Stay connected</p>
+          <p class="text-muted text-sm mb-4">Family-run since 2005. We speak English, Ukrainian, Russian &amp; Polish.</p>
+          <div class="flex gap-3">
+            <a href="https://www.facebook.com/LuxCarsChicago" target="_blank" rel="noopener" class="social-btn" aria-label="Facebook @LuxCarsChicago"><svg class="icon" aria-hidden="true"><use href="#i-facebook"/></svg></a>
+            <a href="https://www.instagram.com/luxcarschicago" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram @luxcarschicago"><svg class="icon" aria-hidden="true"><use href="#i-instagram"/></svg></a>
+            <a href="#" class="social-btn" aria-label="Google reviews"><svg class="icon" aria-hidden="true"><use href="#i-google"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="mt-12 pt-6 border-t hairline flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-muted">
+        <p>© <span id="year">2026</span> Lux Cars Chicago. All rights reserved.</p>
+        <p class="flex items-center gap-2"><svg class="icon icon-sm text-accent" aria-hidden="true"><use href="#i-spark"/></svg>Powered by All Auto Network</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts: type=module keeps globals clean; deferred for fast first paint -->
+  <script src="js/main.js" defer></script>
+  <script src="js/hero.js" defer></script>
+  <script src="js/filters.js" defer></script>
+  <script src="js/carousel.js" defer></script>
+  <script src="js/animations.js" defer></script>
+  <!-- Leaflet for the footer map (loads before index3.js so window.L is ready) -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+  <!-- V3 prototype only: parallax, footer map, hero intro video -->
+  <script src="js/index4.js" defer></script>
+</body>
+</html>

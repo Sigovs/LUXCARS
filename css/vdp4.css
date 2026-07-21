@@ -1,0 +1,445 @@
+/* =====================================================================
+   vdp.css — VEHICLE DETAIL PAGE (vdp.html)
+   Loads after styles.css + v2-core.css. Page-specific only.
+
+   The brief never specs a VDP, but it does name the actions the business
+   wants (Apply for Financing, Value Your Trade, Learn More / warranty) and
+   the constraints (speed #1, mobile-first, large photography, simplicity).
+   So: a photo-forward gallery with no lightbox library, a sticky buy box
+   carrying those CTAs, and a mobile bar that keeps price + action in reach.
+   ===================================================================== */
+
+/* ---------------------------------------------- Breadcrumb */
+.v2 .vdp-crumbs {
+  padding-block: var(--space-4);
+  border-bottom: 1px solid var(--divider-platinum);
+}
+.v2 .vdp-crumbs ol {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2);
+  list-style: none; margin: 0; padding: 0;
+  font-size: 12.5px; color: var(--color-muted);
+}
+.v2 .vdp-crumbs li + li::before { content: "/"; margin-right: var(--space-2); color: var(--color-border); }
+.v2 .vdp-crumbs a { color: var(--color-muted); }
+.v2 .vdp-crumbs a:hover { color: var(--platinum-300); }
+.v2 .vdp-crumbs [aria-current="page"] { color: var(--color-text); }
+
+/* ---------------------------------------------- Gallery + buy box
+   The top of the page was a flat black field with two cards floating on it.
+   A double radial gives it depth and quietly carries both brand colours:
+   oxblood behind the gallery, the deep secondary blue under the buy box.
+   Kept low — the car is the subject, not the background. */
+.v2 .vdp-top {
+  padding-block: var(--space-6) var(--space-8);
+  background:
+    radial-gradient(72% 95% at 6% 2%,   color-mix(in srgb, var(--red-800) 70%, transparent), transparent 58%),
+    radial-gradient(66% 95% at 98% 98%, color-mix(in srgb, var(--blue-700) 85%, transparent), transparent 62%),
+    var(--color-bg);
+}
+.v2 .vdp-top__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: clamp(var(--space-5), 3vw, var(--space-7));
+  align-items: start;
+}
+
+/* ---- Gallery ----
+   min-width: 0 is load-bearing: a grid item defaults to min-width:auto, so the
+   12-thumbnail strip (wider than the viewport) would otherwise force the whole
+   column open instead of scrolling inside itself. */
+.v2 .vdp-gallery,
+.v2 .vdp-buy { min-width: 0; }
+
+.v2 .vdp-stage {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+.v2 .vdp-photo {
+  display: block; width: 100%;
+  aspect-ratio: 4 / 3; object-fit: cover;   /* photos ship 4:3 and 3:2 — normalise */
+}
+.v2 .vdp-photo[hidden] { display: none; }
+
+/* Prev / next — 44px targets, well past the 24px minimum (WCAG 2.5.8) */
+.v2 .vdp-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 2;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border-radius: 999px;
+  background: color-mix(in srgb, var(--color-bg) 62%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--color-text); cursor: pointer;
+  transition: background 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+.v2 .vdp-nav:hover { background: color-mix(in srgb, var(--color-bg) 82%, transparent); border-color: var(--platinum-400); }
+.v2 .vdp-nav--prev { left: var(--space-3); }
+.v2 .vdp-nav--next { right: var(--space-3); }
+
+/* Full-screen toggle — native Fullscreen API, still no library. */
+.v2 .vdp-full {
+  position: absolute; top: var(--space-3); right: var(--space-3); z-index: 2;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-bg) 62%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--color-text); cursor: pointer;
+  transition: background 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+.v2 .vdp-full:hover { background: color-mix(in srgb, var(--color-bg) 82%, transparent); border-color: var(--platinum-400); }
+
+/* In full screen the point is to see the WHOLE photo, so drop the 4:3 crop. */
+.v2 .vdp-stage:fullscreen { background: #000; border: 0; border-radius: 0; display: grid; place-items: center; }
+.v2 .vdp-stage:fullscreen .vdp-photo {
+  aspect-ratio: auto; object-fit: contain;
+  max-width: 100vw; max-height: 100vh; width: auto; height: auto;
+}
+
+.v2 .vdp-counter {
+  position: absolute; right: var(--space-3); bottom: var(--space-3); z-index: 2;
+  padding: 5px 11px; border-radius: 999px;
+  background: color-mix(in srgb, var(--color-bg) 70%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  font-size: 12px; letter-spacing: 0.6px; color: var(--color-text);
+}
+
+/* ---- Thumbnails ---- */
+.v2 .vdp-thumbs {
+  display: flex; gap: var(--space-2);
+  margin-top: var(--space-3);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.v2 .vdp-thumbs::-webkit-scrollbar { height: 0; }
+.v2 .vdp-thumb {
+  flex: 0 0 auto; padding: 0; cursor: pointer;
+  width: 104px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden; background: var(--color-surface);
+  opacity: 0.55;
+  transition: opacity 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+.v2 .vdp-thumb img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.v2 .vdp-thumb:hover { opacity: 0.85; }
+.v2 .vdp-thumb[aria-current="true"] {
+  opacity: 1;
+  border-color: var(--red-500);
+}
+
+/* ---- Buy box ---- */
+.v2 .vdp-buy {
+  position: sticky; top: calc(var(--header-total) + var(--space-5));
+  padding: clamp(var(--space-5), 2.4vw, var(--space-6));
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+.v2 .vdp-title {
+  font-family: var(--v2-display); font-weight: 400;
+  font-size: clamp(1.5rem, 1.15rem + 1.1vw, 2rem);
+  line-height: 1.15; color: var(--color-text);
+}
+.v2 .vdp-sub { margin-top: var(--space-2); color: var(--color-muted); font-size: 13.5px; }
+.v2 .vdp-price {
+  margin-top: var(--space-5);
+  font-family: var(--v2-display); font-weight: 400;
+  font-size: clamp(2rem, 1.5rem + 1.8vw, 2.6rem);
+  line-height: 1; color: var(--color-text);
+}
+.v2 .vdp-finance-line { margin-top: var(--space-2); font-size: 12.5px; color: var(--color-muted); }
+.v2 .vdp-finance-line strong { color: var(--color-text); font-weight: 600; }
+
+/* Carfax + window sticker. Both live on every listing the dealer publishes —
+   the sticker is the factory build sheet, which is the only authoritative
+   source for what equipment a specific VIN actually left the factory with. */
+.v2 .vdp-reports {
+  margin-top: var(--space-5);
+  display: flex; flex-direction: column; gap: var(--space-2);
+}
+.v2 .vdp-report {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  transition: border-color 0.18s var(--ease), background 0.18s var(--ease);
+}
+.v2 .vdp-report:hover { border-color: var(--blue-outline); background: color-mix(in srgb, var(--blue-500) 22%, var(--color-surface-2)); }
+.v2 .vdp-report > .icon:first-child { flex: 0 0 auto; color: var(--blue-icon); }
+.v2 .vdp-report span { display: flex; flex-direction: column; line-height: 1.3; }
+.v2 .vdp-report strong { font-size: 13px; font-weight: 600; color: var(--color-text); }
+.v2 .vdp-report small { font-size: 11.5px; color: var(--color-muted); }
+.v2 .vdp-report__go { margin-left: auto; color: var(--color-muted); flex: 0 0 auto; }
+
+/* Save / Share / Text — a segmented bar. Visible enough to be found, but it
+   stays below the CTAs and carries no fill, so it can't compete with the red
+   primary action. */
+.v2 .vdp-utils {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  margin-top: var(--space-5);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.v2 .vdp-util {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 48px; padding: 10px 6px;
+  background: none; border: 0;
+  border-left: 1px solid var(--color-border);
+  cursor: pointer;
+  font-family: var(--v2-ui); font-size: 13px; font-weight: 600;
+  letter-spacing: 0.2px; color: var(--color-text);
+  transition: background 0.18s var(--ease);
+}
+.v2 .vdp-util:first-child { border-left: 0; }
+.v2 .vdp-util:hover { background: color-mix(in srgb, var(--blue-500) 34%, transparent); }
+.v2 .vdp-util .icon { flex: 0 0 auto; color: var(--blue-icon); }
+/* Saved reads as an active state — the one place red is right here */
+.v2 .vdp-util[aria-pressed="true"] .icon { color: var(--red-400); }
+
+.v2 .vdp-util span { white-space: nowrap; }
+/* Narrow buy box: "Text to phone" won't fit on one line, so shed the tail
+   rather than wrap it. The sms: action is unchanged. */
+@media (max-width: 480px) {
+  .v2 .vdp-util { font-size: 12px; gap: 6px; }
+  .v2 .vdp-util__long { display: none; }
+}
+
+.v2 .vdp-trust {
+  list-style: none; margin: var(--space-5) 0 0; padding: var(--space-4) 0 0;
+  border-top: 1px solid var(--divider-platinum);
+  display: flex; flex-direction: column; gap: var(--space-3);
+}
+.v2 .vdp-trust li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 13px; color: var(--color-muted); line-height: 1.45;
+}
+.v2 .vdp-trust .icon { flex: 0 0 auto; margin-top: 1px; color: var(--platinum-400); }
+
+.v2 .vdp-ctas { margin-top: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); }
+.v2 .vdp-ctas__row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+.v2 .vdp-ctas__row .btn { width: 100%; }
+
+/* ---------------------------------------------- Sections */
+.v2 .vdp-section { padding-block: clamp(var(--space-8), 7vw, var(--space-10)); border-top: 1px solid var(--divider-platinum); }
+
+/* Specs — reuse the shared spec/service tile from v2-core */
+.v2 .vdp-specs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-4);
+}
+.v2 .vdp-spec {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 6px; text-align: center;
+  padding: var(--space-5) var(--space-3);
+  min-height: 132px;
+}
+.v2 .vdp-spec__k {
+  font-size: 10.5px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--color-muted);
+}
+.v2 .vdp-spec__v {
+  font-size: 13.5px; font-weight: 600; color: var(--color-text);
+  word-break: break-word; line-height: 1.35;
+}
+
+/* ---------------------------------------------- Description
+   Free prose the dealer writes per car. It runs the full width of the section
+   like Equipment does, but as two columns rather than one — a single column
+   across 1400px would put ~130 characters on a line and the eye loses its
+   place returning. Two columns keep the measure readable while the block still
+   fills the grid. Full-strength text: this is the copy doing the selling. */
+.v2 .vdp-desc {
+  column-count: 2;
+  column-gap: clamp(var(--space-6), 4vw, var(--space-8));
+}
+.v2 .vdp-desc p {
+  font-size: clamp(1rem, 0.97rem + 0.15vw, 1.075rem);
+  line-height: 1.75;
+  color: color-mix(in srgb, var(--color-text) 88%, transparent);
+  break-inside: avoid;              /* don't split a paragraph across columns */
+}
+.v2 .vdp-desc p + p { margin-top: var(--space-5); }
+
+@media (max-width: 860px) {
+  .v2 .vdp-desc { column-count: 1; max-width: 68ch; }
+}
+
+/* ---------------------------------------------- Equipment (Options & packages)
+   The dealer's own listing keeps this behind a tab. Kept in the open here:
+   it's the content that actually convinces a buyer, and the brief asks for
+   simplicity and mobile-first, where tabs only add taps. */
+/* Two groups, mirroring the dealer's own feed: what's fitted to this car, and
+   the OEM standard list. The standard list can run to dozens of items, so it
+   opens on demand rather than burying the page. */
+.v2 .vdp-equip-group + .vdp-equip-group { margin-top: clamp(var(--space-6), 3vw, var(--space-7)); }
+.v2 .vdp-equip__h {
+  font-family: var(--v2-ui);
+  font-size: 11px; letter-spacing: 1.6px; text-transform: uppercase;
+  color: var(--platinum-400);
+  margin-bottom: var(--space-3);
+}
+.v2 .vdp-equip__toggle {
+  margin-top: var(--space-4);
+  min-height: 24px; padding: 0;
+  background: none; border: 0; cursor: pointer;
+  font-family: var(--v2-ui); font-size: 13px; color: var(--platinum-300);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.v2 .vdp-equip__toggle:hover { color: var(--color-text); }
+.v2 .vdp-equip__more[hidden] { display: none; }   /* the list sets display:flex — see below */
+
+.v2 .vdp-equip {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3) var(--space-6);
+}
+.v2 .vdp-equip li {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--divider-platinum);
+  color: var(--color-text); font-size: 14.5px;
+}
+.v2 .vdp-equip .icon { flex: 0 0 auto; margin-top: 2px; color: var(--blue-icon); }
+
+/* ---------------------------------------------- Request information
+   Label above the field, error as text + icon (never colour alone), and
+   autocomplete on every field — the a11y form pattern from SKILL.md. */
+.v2 .vdp-form-sec { background: var(--color-surface); }
+.v2 .vdp-form-grid {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: clamp(var(--space-6), 4vw, var(--space-8));
+  align-items: start;
+}
+.v2 .vdp-contact {
+  list-style: none; margin: var(--space-6) 0 0; padding: 0;
+  display: flex; flex-direction: column; gap: var(--space-3);
+}
+.v2 .vdp-contact li { display: flex; align-items: center; gap: 10px; color: var(--color-muted); font-size: 13.5px; }
+.v2 .vdp-contact .icon { color: var(--platinum-400); flex: 0 0 auto; }
+.v2 .vdp-contact a { color: var(--color-text); }
+.v2 .vdp-contact a:hover { color: var(--platinum-300); }
+
+.v2 .vdp-form {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-4);
+}
+.v2 .vdp-field { display: flex; flex-direction: column; gap: var(--space-2); }
+.v2 .vdp-field--full { grid-column: 1 / -1; }
+.v2 .vdp-field label {
+  font-size: 12px; letter-spacing: 0.6px; text-transform: uppercase;
+  color: var(--color-muted); font-weight: 600;
+}
+.v2 .vdp-req { color: var(--red-300); }         /* red-300 passes AA on this surface */
+.v2 .vdp-opt { text-transform: none; letter-spacing: 0; font-weight: 400; opacity: 0.75; }
+.v2 .vdp-field input,
+.v2 .vdp-field textarea {
+  width: 100%; min-height: 50px;
+  padding: 14px 16px;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  color: var(--color-text); font-family: var(--v2-ui); font-size: 14px;
+}
+.v2 .vdp-field textarea { min-height: 110px; resize: vertical; }
+.v2 .vdp-field input::placeholder,
+.v2 .vdp-field textarea::placeholder { color: var(--color-muted); }
+.v2 .vdp-field input[aria-invalid="true"],
+.v2 .vdp-field textarea[aria-invalid="true"] { border-color: var(--red-400); }
+.v2 .vdp-err {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12.5px; color: var(--red-300);
+}
+/* `display: flex` outranks the UA's [hidden] { display: none }, so without
+   this the error text is on screen from page load. Same trap as .vdp-photo. */
+.v2 .vdp-err[hidden] { display: none; }
+.v2 .vdp-err .icon { flex: 0 0 auto; }
+.v2 .vdp-form__ok {
+  margin-top: var(--space-3);
+  padding: 12px 14px; border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--blue-500) 30%, transparent);
+  border: 1px solid var(--blue-border);
+  color: var(--color-text); font-size: 13.5px;
+}
+
+/* Fine print sits with the price, where it legally belongs */
+.v2 .vdp-fineprint { margin-top: 6px; font-size: 11.5px; color: var(--color-muted); }
+
+/* ---------------------------------------------- Legal
+   The dealer's own disclaimer, verbatim. Not optional: a dealer without it
+   is exposed. Quiet, but present. */
+.v2 .vdp-legal {
+  padding-block: var(--space-7);
+  border-top: 1px solid var(--divider-platinum);
+}
+.v2 .vdp-legal p {
+  font-size: 11.5px; line-height: 1.65; color: var(--color-muted);
+  max-width: 95ch;
+}
+
+/* Warranty + financing */
+.v2 .vdp-split-sec {
+  background:
+    radial-gradient(58% 92% at 16% 24%, color-mix(in srgb, var(--red-800) 45%, transparent), transparent 68%),
+    var(--color-bg);
+}
+.v2 .vdp-split { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-5); }
+
+/* Similar */
+.v2 .vdp-similar { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-5); }
+/* One CTA per section: it sits below the cards, where someone who has just
+   scanned them is actually looking (the duplicate header link is gone). */
+.v2 .vdp-similar__cta {
+  display: flex; justify-content: center;
+  margin-top: clamp(var(--space-6), 3vw, var(--space-7));
+}
+
+/* ---------------------------------------------- Mobile sticky action bar */
+.v2 .vdp-bar { display: none; }
+
+@media (max-width: 1024px) {
+  .v2 .vdp-top__grid { grid-template-columns: minmax(0, 1fr); }   /* minmax(0,…), not 1fr — see above */
+  .v2 .vdp-form-grid { grid-template-columns: minmax(0, 1fr); }
+  .v2 .vdp-buy { position: static; }
+  .v2 .vdp-specs { grid-template-columns: repeat(3, 1fr); }
+  .v2 .vdp-split { grid-template-columns: 1fr; }
+  .v2 .vdp-similar { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 720px) {
+  .v2 .vdp-specs { grid-template-columns: repeat(2, 1fr); }
+  .v2 .vdp-similar { grid-template-columns: 1fr; }
+  .v2 .vdp-ctas__row { grid-template-columns: 1fr; }
+  .v2 .vdp-equip { grid-template-columns: 1fr; }
+  .v2 .vdp-form { grid-template-columns: 1fr; }
+
+  /* Price and the primary action stay within thumb reach */
+  .v2 .vdp-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 80;
+    display: flex; align-items: center; gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+    background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+    border-top: 1px solid var(--color-border);
+  }
+  .v2 .vdp-bar__price { display: flex; flex-direction: column; line-height: 1.15; }
+  .v2 .vdp-bar__amount { font-family: var(--v2-display); font-size: 1.1rem; color: var(--color-text); }
+  .v2 .vdp-bar__meta { font-size: 11px; color: var(--color-muted); }
+  .v2 .vdp-bar__call { flex: 0 0 auto; padding-inline: var(--space-3); }
+  .v2 .vdp-bar__cta { flex: 1; justify-content: center; }
+
+  /* The bar must never cover the last of the page */
+  .v2 .site-footer { padding-bottom: 84px; }
+}

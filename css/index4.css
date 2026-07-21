@@ -1,0 +1,375 @@
+/* =====================================================================
+   index3.css — HOMEPAGE V3 PROTOTYPE (full-width pass).
+   Copy of index2.css. Full-width edits (edge-to-edge hero, full-bleed
+   section bands, wider content frame, larger imagery) live here.
+   Scope class stays `v2` because v2- names double as component names.
+   ---------------------------------------------------------------------
+   index2.css — HOMEPAGE V2 PROTOTYPE (scoped to body.v2 / index2.html only)
+   Applies the approved Lux Cars design system on top of styles.css:
+   Special Gothic Expanded One (display) + Manrope (UI), refined rhythm,
+   quiet badges, a curated inventory grid, cinematic visual breaks, and
+   restrained scroll motion. Loaded AFTER styles.css. Does NOT touch the
+   live site. No new brand colors: red = the only action, platinum = detail.
+   ===================================================================== */
+
+
+
+
+
+
+
+/* ---------------------------------------------- Full-width pass — step 2 (V3)
+   Fresh arrivals inventory grid breaks out of the 1400 frame to the viewport
+   edges (the section header stays aligned in the frame). On wide screens it
+   becomes a 4-across "wall" showing all 8 cards; narrower widths fall back. */
+.v2 .v2-fresh { overflow-x: clip; }                     /* guard: 100vw can't cause h-scroll */
+.v2 .v2-fresh .carousel {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);                      /* full-bleed to viewport edges */
+  padding-inline: clamp(20px, 4vw, 64px);               /* comfortable edge gutters */
+}
+@media (min-width: 1200px) {
+  .v2 .v2-fresh .carousel__track { grid-template-columns: repeat(4, 1fr); }
+  .v2 .v2-fresh .carousel__slide:nth-child(n+7) { display: block; }  /* re-show cards 7 & 8 */
+}
+
+
+
+
+
+
+
+/* ---------------------------------------------- Featured: carousel -> curated grid
+   Convert the existing carousel markup into a 3 / 2 / 1 grid without touching HTML. */
+.v2 .carousel__track {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  overflow: visible;
+  scroll-snap-type: none;
+  padding-bottom: 0;
+}
+.v2 .carousel__slide { flex: none; width: auto; scroll-snap-align: none; }
+.v2 .carousel__slide:nth-child(n+7) { display: none; }   /* clean 2 x 3 on desktop */
+.v2 .carousel__btn { display: none; }
+@media (max-width: 900px) { .v2 .carousel__track { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 620px) { .v2 .carousel__track { grid-template-columns: 1fr; gap: 16px; } }
+
+
+
+/* ---------------------------------------------- Cinematic visual breaks */
+.v2-break {
+  position: relative;
+  overflow: clip;
+  min-height: clamp(320px, 46vh, 520px);
+  display: flex;
+  align-items: center;
+  border-block: 1px solid var(--divider-platinum);
+  isolation: isolate;
+}
+.v2-break__media { position: absolute; inset: -34% 0; z-index: 0; will-change: transform; }
+.v2-break__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.v2-break__scrim {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(90deg, var(--color-bg) 3%, color-mix(in srgb, var(--color-bg) 56%, transparent) 46%, transparent 100%),
+    linear-gradient(0deg, var(--color-bg) 2%, transparent 44%);
+}
+.v2-break__inner { position: relative; z-index: 2; width: 100%; padding-block: 3.2rem; }
+.v2-break__rule { display: block; width: 46px; height: 1px; background: var(--platinum-400); margin-bottom: 1.1rem; }
+
+/* ---------------------------------------------- Visual breaks: light on scroll + hover
+   The scene is dimmed until the break scrolls into view, then the light comes on;
+   hover lifts it further. Parallax transform stays instant (only filter transitions). */
+.v2 .v2-break[data-reveal] { opacity: 1; transform: none; }
+.v2 .v2-break__media { filter: brightness(0.7) saturate(0.96); transition: filter 0.9s var(--ease); }
+.v2 .v2-break.is-visible .v2-break__media { filter: brightness(1) saturate(1); }
+.v2 .v2-break:hover .v2-break__media { filter: brightness(1.14) saturate(1.06); }
+.v2 .v2-break__inner { z-index: 3; }
+.v2 .v2-break::before {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: radial-gradient(92% 72% at 64% 15%, color-mix(in srgb, #ffffff 16%, transparent), transparent 58%);
+  opacity: 0; transition: opacity 0.9s var(--ease);
+}
+.v2 .v2-break.is-visible::before { opacity: 0.55; }
+.v2 .v2-break:hover::before { opacity: 1; }
+
+/* ---------------------------------------------- Staircase reveal (ступенька)
+   The group itself stays put (v2-core cancels the displacement); its children
+   step in from the side one by one, like the hero. This staircase is a homepage
+   flourish — the SRP and VDP keep their headings static. */
+.v2 [data-reveal].reveal-left > *,
+.v2 [data-reveal].reveal-right > * {
+  opacity: 0;
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+.v2 [data-reveal].reveal-left  > * { transform: translateX(-48px); }
+.v2 [data-reveal].reveal-right > * { transform: translateX(48px); }
+.v2 [data-reveal].reveal-left.is-visible  > *,
+.v2 [data-reveal].reveal-right.is-visible > * { opacity: 1; transform: none; }
+/* staircase timing */
+.v2 [data-reveal].reveal-left.is-visible  > *:nth-child(1),
+.v2 [data-reveal].reveal-right.is-visible > *:nth-child(1) { transition-delay: 0.05s; }
+.v2 [data-reveal].reveal-left.is-visible  > *:nth-child(2),
+.v2 [data-reveal].reveal-right.is-visible > *:nth-child(2) { transition-delay: 0.16s; }
+.v2 [data-reveal].reveal-left.is-visible  > *:nth-child(3),
+.v2 [data-reveal].reveal-right.is-visible > *:nth-child(3) { transition-delay: 0.27s; }
+.v2 [data-reveal].reveal-left.is-visible  > *:nth-child(4),
+.v2 [data-reveal].reveal-right.is-visible > *:nth-child(4) { transition-delay: 0.38s; }
+.v2 [data-reveal].reveal-left.is-visible  > *:nth-child(5),
+.v2 [data-reveal].reveal-right.is-visible > *:nth-child(5) { transition-delay: 0.49s; }
+
+/* ---------------------------------------------- Hero: nudge the info block up slightly */
+.v2 .hero__content { transform: translateY(-1.5vh); }
+
+/* ---------------------------------------------- Search / filter bar: raised, with air below */
+.v2 .hero__filter-band { padding-block: 0.75rem clamp(3rem, 8vh, 5.5rem); }
+
+/* Search filters now live INSIDE the Fresh arrivals section, right under the
+   heading (#7 refinement): quiet surface card, tight to the grid below. */
+.v2 .v2-fresh-search { margin-top: 4px; }
+
+/* ---------------------------------------------- Hero rating line hidden for now (per request) */
+.v2 .hero__slide .max-w-2xl > .hero__anim:last-child { display: none; }
+
+/* ---------------------------------------------- Footer logo: smaller and quieter */
+.v2 .site-footer .logo__img { height: 30px; opacity: 0.62; }
+
+/* ---------------------------------------------- Credential rail (replaces boxed value strip)
+   Quiet horizontal row: small platinum icons, calm uppercase Manrope labels,
+   thin low-opacity platinum separators, no cards, integrated with the dark base. */
+.v2 .v2-browse { border-bottom: 0; }
+.v2 .v2-browse > .container { padding-bottom: 30px; }
+.v2 .v2-fresh { padding-top: clamp(56px, 7.5vw, 84px); }
+
+/* Rail now sits directly above visual break A — give it air below so the
+   6 boxes don't touch "The Lux standard". */
+.v2 .v2-rail-sec { padding-block: 0 clamp(56px, 8vw, 96px); }
+/* One hub box — refined "quiet luxury" with a restrained blue accent (#9).
+   Subtly blue-tinted dark surface, soft steel-blue icons, hairline blue
+   dividers, a thin blue top accent line, and more air. */
+.v2 .v2-rail {
+  list-style: none; margin: 0; padding: 0;
+  position: relative;
+  display: flex; align-items: stretch;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--blue-500) 12%, var(--color-surface)), var(--color-surface));
+  border: 1px solid color-mix(in srgb, var(--blue-500) 28%, var(--color-border));
+  border-radius: 16px;
+  overflow: hidden;
+}
+.v2 .v2-rail::before {
+  content: ""; position: absolute; top: 0; left: 8%; right: 8%; height: 1px; z-index: 1;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--blue-500) 75%, transparent), transparent);
+}
+.v2 .v2-rail li {
+  flex: 1; min-width: 0;
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  padding: 28px clamp(6px, 1vw, 16px);
+  text-align: center; white-space: normal; text-wrap: balance;
+  color: color-mix(in srgb, var(--color-text) 76%, transparent);
+  font-family: var(--v2-ui);
+  font-size: 11px; letter-spacing: 1.6px; line-height: 1.4; text-transform: uppercase;
+  border-left: 1px solid color-mix(in srgb, var(--blue-500) 20%, transparent);
+}
+.v2 .v2-rail li:first-child { border-left: 0; }
+.v2 .v2-rail .icon { width: 22px; height: 22px; flex: 0 0 auto; color: #7E97BC; }
+
+@media (max-width: 760px) {
+  .v2 .v2-rail { flex-wrap: wrap; }
+  .v2 .v2-rail li {
+    flex: 1 1 50%; flex-direction: row;
+    justify-content: flex-start; align-items: center; text-align: left; white-space: normal;
+    padding: 16px 14px;
+    border-top: 1px solid color-mix(in srgb, var(--blue-500) 20%, transparent);
+  }
+  .v2 .v2-rail li:nth-child(odd) { border-left: 0; }
+  .v2 .v2-rail li:nth-child(-n+2) { border-top: 0; }
+}
+
+
+
+/* ---------------------------------------------- Split CTA: subtle double radial glow
+   Two deep-red ambients (one behind each tile) over the warm surface. Restrained. */
+.v2 .v2-split {
+  background:
+    radial-gradient(58% 92% at 16% 24%, color-mix(in srgb, var(--red-800) 60%, transparent), transparent 68%),
+    radial-gradient(56% 90% at 86% 82%, color-mix(in srgb, var(--red-900) 72%, transparent), transparent 70%),
+    var(--color-surface);
+}
+
+/* ---------------------------------------------- Taller, airier visual breaks */
+.v2-break { min-height: clamp(420px, 62vh, 680px); }
+.v2-break__inner { padding-block: clamp(3.5rem, 8vh, 6rem); }
+
+/* ---------------------------------------------- Hero pagination -> right-side numbered index */
+.v2 .hero__dots.v2-hero-nav {
+  grid-area: 1 / 1;
+  z-index: 5;
+  align-self: center;
+  justify-self: end;
+  flex-direction: column;
+  align-items: flex-end;
+  width: auto;
+  max-width: none;
+  margin: 0;
+  gap: 16px;
+  padding: 0 clamp(20px, 3vw, 46px) 0 0;
+}
+.v2 .v2-hero-nav .hero__dot {
+  width: auto;
+  height: auto;
+  padding: 4px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  transition: color var(--dur-fast) var(--ease);
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.7);
+}
+/* neutralise the default bar-span styling */
+.v2 .v2-hero-nav .hero__dot span {
+  width: auto; height: auto; background: none; border-radius: 0; box-shadow: none; transform: none;
+}
+.v2 .v2-hero-nav .num {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12px; letter-spacing: 0.05em;
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+}
+/* Numbers only on the hero index — labels hidden per request */
+.v2 .v2-hero-nav .lbl { display: none; }
+.v2 .v2-hero-nav .hero__dot.is-active .num { color: var(--red-500); }
+.v2 .v2-hero-nav .hero__dot.is-active .lbl { color: var(--color-text); }
+
+@media (max-width: 767px) {
+  /* On phones, drop back to a compact bottom-left row of numbers */
+  .v2 .hero__dots.v2-hero-nav {
+    flex-direction: row;
+    align-self: end;
+    justify-self: start;
+    align-items: center;
+    gap: 16px;
+    padding: 0 20px 1.4rem;
+  }
+  .v2 .v2-hero-nav .lbl { display: none; }
+  .v2 .hero__content { transform: translateY(-0.5vh); }
+}
+
+/* ---------------------------------------------- Hero intro video (slide 1) */
+.v2 .hero__media video { width: 100%; height: 100%; object-fit: cover; object-position: center 68%; display: block; }
+
+/* ---------------------------------------------- Split CTA card banner images
+   Full-bleed to the card edges (cancel the tile padding), space below to text. */
+.v2 .v2-split .v2-tile-img {
+  display: block;
+  align-self: flex-start;          /* anchor to the card's left edge */
+  width: calc(100% + 80px);        /* content width + both p-10 paddings = full card width */
+  max-width: none;                 /* override the global img max-width:100% */
+  margin: -40px 0 24px -40px;      /* pull up + left to the edges; width covers the right */
+  aspect-ratio: 16 / 7;
+  object-fit: cover;
+  border-radius: 14px 14px 0 0;    /* match the card top corners */
+}
+@media (max-width: 767px) {
+  .v2 .v2-split .v2-tile-img { width: calc(100% + 64px); margin: -32px 0 20px -32px; }  /* p-8 */
+}
+
+/* Red marker-highlight removed (#10) — titles render as plain display text. */
+.v2 .v2-hl {
+  background: none;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* ---------------------------------------------- Reviews — cinematic testimonial band
+   Client: the Google-widget look didn't fit. Reframed as one row of frosted-
+   glass quote cards over the showroom photo. On-palette: platinum stars (no
+   gold), no rainbow Google marks; Google credited in text only. */
+.v2 .v2-reviews {
+  position: relative; overflow: clip; isolation: isolate;
+  border-block: 1px solid var(--divider-platinum);
+  padding-block: clamp(64px, 9vw, 120px);
+}
+.v2 .v2-reviews__media { position: absolute; inset: 0; z-index: 0; }
+.v2 .v2-reviews__media img { width: 100%; height: 100%; object-fit: cover; display: block; filter: brightness(0.72) saturate(0.95); }
+.v2 .v2-reviews__scrim {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--color-bg) 90%, transparent), color-mix(in srgb, var(--color-bg) 55%, transparent) 42%, color-mix(in srgb, var(--color-bg) 88%, transparent)),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-bg) 72%, transparent), transparent 62%);
+}
+.v2 .v2-reviews__inner { position: relative; z-index: 2; }
+.v2 .v2-reviews__head { margin-bottom: clamp(30px, 4.5vw, 48px); }
+
+.v2 .v2-reviews__trust { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; margin-top: 18px; }
+.v2 .v2-rev-score { font-family: var(--v2-display); font-size: 1.55rem; line-height: 1; color: var(--color-text); }
+.v2 .v2-rev-stars { display: inline-flex; gap: 3px; }
+.v2 .v2-reviews__trust .v2-rev-stars .icon { width: 18px; height: 18px; color: var(--platinum-300); }
+.v2 .v2-rev-count { color: var(--color-muted); font-size: 0.9rem; }
+.v2 .v2-reviews__all { margin-left: auto; }
+
+.v2 .v2-reviews__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.v2 .v2-rev-card {
+  display: flex; flex-direction: column; gap: 16px;
+  padding: 26px;
+  background: color-mix(in srgb, var(--color-bg) 52%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+          backdrop-filter: blur(14px) saturate(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 24px 48px -24px rgba(0, 0, 0, 0.7);
+}
+.v2 .v2-rev-card .v2-rev-stars .icon { width: 16px; height: 16px; color: var(--platinum-300); }
+.v2 .v2-rev-quote { flex: 1; font-size: 1rem; line-height: 1.6; color: var(--color-text); }
+.v2 .v2-rev-by { display: flex; align-items: center; gap: 12px; margin-top: 2px; }
+.v2 .v2-rev-avatar {
+  width: 40px; height: 40px; flex: 0 0 auto; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: color-mix(in srgb, var(--color-surface-2) 85%, transparent);
+  border: 1px solid var(--divider-platinum);
+  color: var(--platinum-300); font-weight: 600; font-size: 0.95rem;
+}
+.v2 .v2-rev-id { display: flex; flex-direction: column; }
+.v2 .v2-rev-name { color: var(--color-text); font-weight: 600; font-size: 0.9rem; }
+.v2 .v2-rev-time { color: var(--color-muted); font-size: 0.78rem; }
+
+@media (max-width: 900px) {
+  .v2 .v2-reviews__grid { grid-template-columns: 1fr; max-width: 560px; }
+  .v2 .v2-reviews__all { margin-left: 0; }
+}
+
+/* ---------------------------------------------- Footer map (Leaflet + OSM, grayscale) */
+.v2 .v2-map-band { position: relative; border-top: 1px solid var(--color-border); }
+.v2 .v2-map-cta {
+  position: absolute; top: 16px; right: 16px; z-index: 5;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 11px 16px; border-radius: 8px;
+  background: var(--red-500); color: #fff;
+  font-family: var(--v2-ui); font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  transition: background var(--dur-fast) var(--ease);
+}
+.v2 .v2-map-cta:hover { background: var(--red-600); }
+.v2 .v2-map-cta .icon { width: 15px; height: 15px; }
+.v2 #v2-map { position: relative; z-index: 0; height: clamp(240px, 32vw, 320px); width: 100%; background: var(--color-surface); }
+.v2 #v2-map .leaflet-tile { filter: grayscale(1) brightness(0.86) contrast(1.05); }
+.v2 .leaflet-container { background: var(--color-surface); font-family: var(--v2-ui); }
+.v2 .v2-pin span {
+  display: block; width: 14px; height: 14px; border-radius: 999px;
+  background: var(--red-500);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--red-500) 24%, transparent), 0 1px 5px rgba(0, 0, 0, 0.55);
+}
+.v2 .leaflet-control-attribution {
+  background: color-mix(in srgb, var(--color-bg) 78%, transparent);
+  color: var(--color-muted); font-size: 10px;
+}
+.v2 .leaflet-control-attribution a { color: var(--platinum-300); }
+.v2 .leaflet-bar a { background: var(--color-surface); color: var(--color-text); border-bottom-color: var(--color-border); }
+.v2 .leaflet-bar a:hover { background: var(--color-surface-2); }
+
+/* Respect reduced motion: no parallax offset, no staircase transforms */
+@media (prefers-reduced-motion: reduce) {
+  .v2-break__media { transform: none !important; }
+  .v2 [data-reveal].reveal-left > *,
+  .v2 [data-reveal].reveal-right > * { opacity: 1; transform: none; transition: none; }
+}
+

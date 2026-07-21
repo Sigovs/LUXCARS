@@ -1,0 +1,246 @@
+/* =====================================================================
+   v2-core.css — SHARED FOUNDATION for every V2/V3 page
+   (homepage index3, and the upcoming SRP / VDP).
+
+   Load order on a page:  styles.css  ->  v2-core.css  ->  <page>.css
+   Every page using it must carry  <body class="... v2">  and load the
+   Manrope + Special Gothic webfonts.
+
+   What lives here (and therefore stays consistent across pages):
+     1. Tokens        — fonts, spacing scale, radius, blue secondary, layout
+     2. Type system   — binds Manrope/Special Gothic (base styles.css is Inter)
+     3. Layout        — content frame + horizontal-overflow guard
+     4. Accessibility — WCAG 2.2 AA layer (see notes in that section)
+     5. Components    — buttons, badges, body-type tiles, spec tiles, nav
+   Page-specific sections (hero, visual breaks, reviews band, …) stay in
+   the page's own stylesheet.
+   ===================================================================== */
+
+/* =====================================================================
+   1. TOKENS
+   ===================================================================== */
+:root {
+  --v2-display: "Special Gothic Expanded One", "Arial Narrow", system-ui, sans-serif;
+  --v2-ui: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* Header metrics live on the ROOT, not on .v2 — `html` needs them for
+   scroll-padding, and any page can then stick a sub-bar under the header.
+   The utility strip (phone / hours) only shows from md up, so the total
+   sticky height changes at that breakpoint. */
+html:has(body.v2) {
+  --header-h: 68px;        /* main nav row */
+  --header-util-h: 38px;   /* utility strip, desktop only */
+  --header-total: var(--header-h);
+}
+@media (min-width: 768px) {
+  html:has(body.v2) { --header-total: calc(var(--header-h) + var(--header-util-h)); }
+}
+
+.v2 {
+  /* ---- Layout ---- */
+  --maxw: 1400px;          /* content frame (base styles.css ships 1240) */
+
+  /* ---- Spacing scale (SKILL.md) — use these instead of ad-hoc px ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 80px;
+  --space-10: 96px;
+  --space-11: 120px;
+
+  /* ---- Radius (base ships --radius 14 / --radius-sm 10) ---- */
+  --radius-lg: 16px;       /* large panels: value rail, review cards */
+
+  /* ---- Secondary action = deep steel-blue (client direction).
+          Red stays the ONLY primary action; blue is subordinate. ---- */
+  --blue-500: #223B58;     /* base */
+  --blue-600: #2C4A6C;     /* hover */
+  --blue-700: #1A2E44;     /* pressed */
+  --blue-border: #34506E;
+  --blue-icon: #7E97BC;    /* steel-blue icon accent */
+  --blue-icon-hover: #9BB2D2;
+
+  /* ---- Accessible accent text ----
+     --red-500 (#8B2828) is only 2.28:1 on the dark base: fine as a FILL
+     behind white text (8.6:1), but it FAILS as text/icon colour. Red text
+     on dark uses --red-400 (3.39:1 — passes AA for large text). */
+  --accent-text: var(--red-400);
+}
+
+/* =====================================================================
+   2. TYPE SYSTEM  (base styles.css sets Inter — override it here so every
+      V2 page gets Manrope + Special Gothic, not just the homepage)
+   ===================================================================== */
+body.v2 { font-family: var(--v2-ui); }
+/* Display face is single-weight (400) and already wide: keep tracking restrained */
+.v2 .font-display { font-family: var(--v2-display); font-weight: 400; letter-spacing: 0; }
+.v2 .section-title { font-family: var(--v2-display); font-weight: 400; letter-spacing: 0.012em; }
+/* Eyebrows stay in Manrope uppercase (--red-300, 5.36:1 — AA pass) */
+
+/* =====================================================================
+   3. LAYOUT
+   ===================================================================== */
+.v2 .max-w-site { max-width: var(--maxw); }
+/* Full-bleed sections (and any residual mobile bleed) can never produce
+   horizontal scroll. `clip` (not `hidden`) keeps the sticky header working;
+   the root is the scroller, so clip it too. */
+html:has(body.v2), body.v2 { overflow-x: clip; }
+
+/* =====================================================================
+   4. ACCESSIBILITY — WCAG 2.2 Level AA
+      Built into the code on purpose: no overlay widget (those don't give
+      legal compliance and break assistive tech).
+      Base styles.css already ships the platinum :focus-visible ring.
+   ===================================================================== */
+
+/* 2.4.1 Bypass Blocks — skip straight to the main content */
+/* `fixed`, not `absolute`: the link must land at the top-left of the VIEWPORT
+   whenever it takes focus, regardless of scroll position. */
+.v2 .skip-link {
+  position: fixed; top: 16px; left: -9999px; z-index: 9999;
+  padding: 12px 18px;
+  background: var(--color-surface); color: var(--color-text);
+  border: 1px solid var(--platinum-300); border-radius: var(--radius-sm);
+  font-family: var(--v2-ui); font-weight: 600; font-size: 14px;
+}
+.v2 .skip-link:focus { left: 16px; }
+
+/* 2.4.11 Focus Not Obscured (new in WCAG 2.2) — the sticky header must not
+   cover the element that just received focus, and in-page anchors must not
+   land under it. Measured against the FULL sticky header, not just the nav row. */
+html:has(body.v2) { scroll-padding-top: calc(var(--header-total) + 24px); }
+.v2 [id] { scroll-margin-top: calc(var(--header-total) + 24px); }
+
+/* 1.4.3 / 1.4.11 Contrast — red as TEXT or ICON on the dark base.
+   red-500 is 2.28:1 (fails). red-400 is 3.39:1 (passes for large text). */
+.v2 .text-accent { color: var(--accent-text); }
+/* Text-link hover goes platinum (design-system rule) instead of low-contrast red */
+.v2 a:hover .text-accent,
+.v2 a.hover\:text-accent:hover { color: var(--platinum-300); }
+
+/* 2.5.8 Target Size Minimum (new in WCAG 2.2) — 24x24 CSS px */
+.v2 .hero__dot,
+.v2 .carousel__btn,
+.v2 .link-arrow,
+.v2 .nav-link { min-height: 24px; }
+.v2 .hero__dot { min-width: 24px; }
+
+/* Scroll reveals are progressive enhancement: without JS the content must
+   still be visible. An inline script in <head> adds `js` to <html>; if it
+   never runs, everything stays at full opacity. */
+html:not(.js) [data-reveal],
+html:not(.js) [data-reveal] > * {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* A reveal must never displace a block out of its column. styles.css ships
+   `[data-reveal].reveal-left { transform: translateX(-44px) }`, which parks the
+   whole heading 44px left of the container until the reveal fires — it reads as
+   the title bleeding past the grid. The homepage happened to cancel this in its
+   own stylesheet (it animates the CHILDREN instead, as a staircase), so the bug
+   only showed up once other pages started using the class. Cancelled here for
+   every page: a page that wants a directional reveal animates its children. */
+.v2 [data-reveal].reveal-left,
+.v2 [data-reveal].reveal-right { opacity: 1; transform: none; }
+
+/* =====================================================================
+   5. SHARED COMPONENTS
+   ===================================================================== */
+
+/* ---- Header / primary nav (no hamburger, no duplicated phone CTA) ---- */
+.v2 .mobile-menu { display: none; }   /* off-canvas panel is unused; also stops h-scroll */
+.v2 .site-header nav.v2-nav { display: none; gap: clamp(1.1rem, 2vw, 1.9rem); }
+@media (min-width: 1024px) { .v2 .site-header nav.v2-nav { display: flex; } }
+.v2 .site-header nav.v2-nav .nav-link { font-size: 13px; letter-spacing: 0.2px; }
+
+/* ---- Buttons: secondary = blue (primary stays red, from styles.css) ---- */
+.v2 .btn-secondary {
+  background: var(--blue-500);
+  border-color: var(--blue-border);
+  color: #ffffff;
+}
+.v2 .btn-secondary:hover { background: var(--blue-600); border-color: var(--blue-600); }
+.v2 .btn-secondary:active { background: var(--blue-700); border-color: var(--blue-700); }
+.v2 .btn-secondary .icon { color: #ffffff; }
+
+/* Outlined action — one weight below the filled secondary. Use it when a
+   third action would otherwise stack a third solid block of colour.
+   The border IS what identifies the control, so it has to clear 3:1 against
+   the surface behind it (WCAG 1.4.11): --blue-border (#34506E) is only 2.15:1
+   and fails, so the outline uses its own lighter token at 4.2:1. */
+.v2 { --blue-outline: #5C7CA6; }
+.v2 .btn-outline {
+  background: transparent;
+  border-color: var(--blue-outline);
+  color: var(--color-text);
+}
+.v2 .btn-outline:hover {
+  background: color-mix(in srgb, var(--blue-500) 55%, transparent);
+  border-color: var(--blue-icon);
+}
+.v2 .btn-outline:active { background: color-mix(in srgb, var(--blue-700) 70%, transparent); }
+.v2 .btn-outline .icon { color: var(--blue-icon); }
+
+/* ---- Quiet badges (luxury hygiene: no sticker-style badges) ---- */
+.v2 .vcard__badge {
+  background: color-mix(in srgb, var(--color-bg) 58%, transparent);
+  border: 1px solid var(--divider-platinum);
+  color: var(--platinum-300);
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+  font-weight: 600;
+}
+
+/* ---- Body-style tiles (Browse on the homepage; body-type filter on SRP) ---- */
+.v2 .v2-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-4);
+}
+.v2 .v2-cat-tile {
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-4) 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  transition: transform 0.22s var(--ease), border-color 0.22s var(--ease), background 0.22s var(--ease);
+}
+.v2 .v2-cat-tile:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--red-500) 55%, var(--color-border));
+  background: var(--color-surface-2);
+}
+.v2 .v2-cat-img {
+  width: 100%; max-width: 190px; aspect-ratio: 16 / 9; object-fit: contain;
+  filter: none;   /* shadow only on hover, sitting under the car */
+  transition: filter 0.22s var(--ease), transform 0.22s var(--ease);
+}
+.v2 .v2-cat-tile:hover .v2-cat-img { filter: drop-shadow(0 12px 14px rgba(0, 0, 0, 0.55)) brightness(1.06); }
+.v2 .v2-cat-label {
+  font-family: var(--v2-ui);
+  font-size: 11.5px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--color-text);
+}
+@media (max-width: 900px) { .v2 .v2-cat-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 560px) { .v2 .v2-cat-grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* ---- Spec / service tiles (Service on the homepage; spec grid on VDP) ---- */
+.v2 .service-tile {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--blue-500) 12%, var(--color-surface)), var(--color-surface));
+  border: 1px solid color-mix(in srgb, var(--blue-500) 28%, var(--color-border));
+  border-radius: var(--radius);
+}
+.v2 .service-tile .icon { color: var(--blue-icon); }
+.v2 .service-tile:hover {
+  border-color: color-mix(in srgb, var(--blue-500) 55%, var(--color-border));
+  transform: translateY(-4px);
+}
+.v2 .service-tile:hover .icon { color: var(--blue-icon-hover); }

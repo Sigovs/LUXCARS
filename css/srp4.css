@@ -1,0 +1,261 @@
+/* =====================================================================
+   srp.css — INVENTORY / SEARCH RESULTS PAGE (srp.html)
+   Loads after styles.css + v2-core.css. Page-specific only; tokens,
+   type, a11y and shared components come from v2-core.css.
+
+   Layout follows the client brief + his reference (chicagoas.com):
+   a collapsible left filter rail (open by default = fewest clicks to a
+   result) over a photo-forward grid. Collapse it and the grid goes
+   4-across for the "large vehicle photos" the brief asks for.
+   ===================================================================== */
+
+/* ---------------------------------------------- Page header */
+.v2 .srp-head {
+  padding-block: clamp(var(--space-7), 6vw, var(--space-9)) var(--space-6);
+  border-bottom: 1px solid var(--divider-platinum);
+}
+
+/* ---------------------------------------------- Sticky toolbar
+   Sits directly under the sticky site header: count, sort, active chips
+   and the filter toggle stay reachable while scrolling the grid. */
+.v2 .srp-toolbar {
+  position: sticky;
+  top: var(--header-total);   /* full sticky header, incl. the utility strip */
+  z-index: 20;
+  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--color-border);
+}
+.v2 .srp-toolbar__inner {
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: var(--space-3) var(--space-4);
+  padding-block: var(--space-3);
+}
+/* The Filters button is a MOBILE control only: it opens the bottom sheet.
+   On desktop the rail is always visible, so there is nothing to toggle —
+   hiding filters is not a job users come to an SRP to do, and collapsing
+   would reflow the whole grid for no benefit. */
+.v2 .srp-toggle { display: none; }
+.v2 .srp-count { color: var(--color-muted); font-size: 0.9rem; white-space: nowrap; }
+.v2 .srp-count strong { color: var(--color-text); font-weight: 600; }
+
+/* Active filter chips */
+.v2 .srp-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
+.v2 .srp-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 28px; padding: 4px 6px 4px 12px;
+  border: 1px solid color-mix(in srgb, var(--red-500) 45%, var(--color-border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--red-900) 55%, transparent);
+  color: var(--color-text); font-size: 12px; letter-spacing: 0.2px;
+}
+.v2 .srp-chip__x {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; border-radius: 999px;
+  color: var(--color-muted); background: none; border: 0; cursor: pointer;
+  font-size: 15px; line-height: 1;
+}
+.v2 .srp-chip__x:hover { color: var(--color-text); background: color-mix(in srgb, #ffffff 10%, transparent); }
+
+/* Sort */
+.v2 .srp-sort { display: flex; align-items: center; gap: var(--space-2); margin-left: auto; }
+.v2 .srp-sort__label {
+  font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--color-muted);
+}
+.v2 .srp-sort .filter-field { min-width: 190px; }
+
+/* ---------------------------------------------- Layout: rail + results */
+.v2 .srp-body { padding-block: var(--space-6) clamp(var(--space-8), 8vw, var(--space-10)); }
+.v2 .srp-layout {
+  display: grid;
+  grid-template-columns: 268px 1fr;
+  gap: clamp(var(--space-5), 3vw, var(--space-6));
+  align-items: start;
+}
+
+/* ---------------------------------------------- Filter rail (quiet)
+   No grey utility panel: hairlines, platinum labels, air. */
+/* Sticks below the header + the toolbar (~77px), so it never hides under them. */
+.v2 .srp-filters {
+  position: sticky; top: calc(var(--header-total) + 93px);
+  max-height: calc(100vh - var(--header-total) - 120px);
+  /* Still scrollable (a sticky rail taller than the viewport would otherwise
+     hide its bottom filters), but the scrollbar chrome is hidden — it read as
+     visual noise against the quiet rail. */
+  overflow-y: auto;
+  padding-right: var(--space-2);
+  scrollbar-width: none;              /* Firefox */
+  -ms-overflow-style: none;           /* legacy Edge */
+}
+.v2 .srp-filters::-webkit-scrollbar { width: 0; height: 0; }
+.v2 .srp-filters__head {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--divider-platinum);
+}
+.v2 .srp-filters__title {
+  font-family: var(--v2-ui);
+  font-size: 11px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--platinum-400);
+}
+.v2 .srp-clear {
+  margin-left: auto; background: none; border: 0; cursor: pointer;
+  font-size: 12px; color: var(--color-muted); text-decoration: underline;
+  text-underline-offset: 3px; min-height: 24px;
+}
+.v2 .srp-clear:hover { color: var(--platinum-300); }
+.v2 .srp-sheet-close { display: none; }   /* mobile sheet only */
+
+/* Filter group — native <details> (keyboard + no-JS friendly) */
+.v2 .srp-group { border-bottom: 1px solid var(--divider-platinum); }
+.v2 .srp-group__sum {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-block: var(--space-4);
+  cursor: pointer; list-style: none;
+  font-family: var(--v2-ui); font-size: 13px; font-weight: 600; letter-spacing: 0.3px;
+  color: var(--color-text);
+  min-height: 24px;
+}
+.v2 .srp-group__sum::-webkit-details-marker { display: none; }
+.v2 .srp-group__chev { color: var(--color-muted); transition: transform 0.22s var(--ease); }
+.v2 .srp-group[open] .srp-group__chev { transform: rotate(180deg); }
+.v2 .srp-group__body { padding-bottom: var(--space-4); display: flex; flex-direction: column; gap: 2px; }
+
+/* Checkbox row — custom box, red when checked (red = the action colour) */
+.v2 .srp-check {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 0; cursor: pointer; min-height: 24px;
+  color: var(--color-muted); font-size: 13.5px;
+}
+.v2 .srp-check:hover { color: var(--color-text); }
+.v2 .srp-check input { position: absolute; opacity: 0; width: 0; height: 0; }
+.v2 .srp-check__box {
+  flex: 0 0 auto; width: 17px; height: 17px;
+  border: 1px solid var(--color-border); border-radius: 4px;
+  background: var(--color-surface);
+  transition: background 0.15s var(--ease), border-color 0.15s var(--ease);
+  position: relative;
+}
+.v2 .srp-check input:checked + .srp-check__box {
+  background: var(--red-500); border-color: var(--red-500);
+}
+.v2 .srp-check input:checked + .srp-check__box::after {
+  content: ""; position: absolute; left: 5px; top: 1px;
+  width: 4px; height: 9px;
+  border: solid #fff; border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.v2 .srp-check input:checked ~ .srp-check__label { color: var(--color-text); }
+
+/* Radio variant (price bands) — round box, dot instead of a tick */
+.v2 .srp-check__box--radio { border-radius: 999px; }
+.v2 .srp-check input:checked + .srp-check__box--radio::after {
+  left: 50%; top: 50%;
+  width: 7px; height: 7px;
+  border: 0; border-radius: 999px; background: #fff;
+  transform: translate(-50%, -50%);
+}
+/* keyboard focus lands on the hidden input: ring the visible box instead */
+.v2 .srp-check input:focus-visible + .srp-check__box {
+  outline: 2px solid var(--platinum-300); outline-offset: 2px;
+}
+
+/* Range filter */
+.v2 .srp-range { padding-top: var(--space-2); }
+.v2 .srp-range input[type="range"] {
+  width: 100%; height: 24px; -webkit-appearance: none; appearance: none;
+  background: none; cursor: pointer;
+}
+.v2 .srp-range input[type="range"]::-webkit-slider-runnable-track {
+  height: 3px; border-radius: 999px; background: var(--color-border);
+}
+.v2 .srp-range input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 16px; height: 16px; margin-top: -6.5px;
+  border-radius: 999px; background: var(--red-500);
+  border: 1px solid color-mix(in srgb, #ffffff 25%, transparent);
+}
+.v2 .srp-range input[type="range"]::-moz-range-track { height: 3px; border-radius: 999px; background: var(--color-border); }
+.v2 .srp-range input[type="range"]::-moz-range-thumb {
+  width: 15px; height: 15px; border-radius: 999px;
+  background: var(--red-500); border: 1px solid color-mix(in srgb, #ffffff 25%, transparent);
+}
+.v2 .srp-range__out { margin-top: 6px; font-size: 12.5px; color: var(--color-muted); }
+.v2 .srp-range__out strong { color: var(--color-text); font-weight: 600; }
+
+/* ---------------------------------------------- Results grid
+   3-across with the rail open; 4-across when it's collapsed ("large photos"). */
+.v2 .srp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+.v2 .srp-card[hidden] { display: none; }
+
+@media (max-width: 1200px) {
+  .v2 .srp-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Empty state (brief: inventory grid needs a real no-results state) */
+.v2 .srp-empty {
+  padding: var(--space-9) var(--space-5);
+  text-align: center; color: var(--color-muted);
+  border: 1px dashed var(--color-border); border-radius: var(--radius);
+}
+.v2 .srp-empty__reset {
+  display: block; margin: var(--space-4) auto 0;
+  background: none; border: 0; cursor: pointer;
+  color: var(--platinum-300); text-decoration: underline; text-underline-offset: 3px;
+  min-height: 24px;
+}
+
+/* =====================================================================
+   Mobile — filters become a bottom sheet (mobile-first is a brief priority)
+   ===================================================================== */
+.v2 .srp-sheet-backdrop {
+  position: fixed; inset: 0; z-index: 90;
+  background: color-mix(in srgb, var(--color-bg) 70%, transparent);
+  -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
+}
+
+@media (max-width: 900px) {
+  /* The Filters button only exists here — it opens the sheet. */
+  .v2 .srp-toggle { display: inline-flex; flex: 0 0 auto; }
+
+  .v2 .srp-layout { grid-template-columns: 1fr; }
+  .v2 .srp-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* The rail turns into a sheet; it is only shown when opened. */
+  .v2 .srp-filters {
+    display: block;
+    position: fixed; left: 0; right: 0; bottom: 0; top: auto;
+    z-index: 100;
+    max-height: 82vh; overflow-y: auto;
+    padding: var(--space-5) var(--space-5) var(--space-8);
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: 0 -24px 60px -20px rgba(0, 0, 0, 0.8);
+    transform: translateY(100%);
+    transition: transform 0.28s var(--ease);
+  }
+  .v2 .srp-filters.is-open { transform: translateY(0); }
+  .v2 .srp-sheet-close {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; margin-left: var(--space-2);
+    background: none; border: 0; color: var(--color-muted); cursor: pointer;
+  }
+  .v2 .srp-sheet-close:hover { color: var(--color-text); }
+  .v2 .srp-sort { margin-left: 0; }
+  .v2 .srp-sort .filter-field { min-width: 150px; }
+}
+
+@media (max-width: 560px) {
+  .v2 .srp-grid { grid-template-columns: 1fr; }
+}
+
+/* No JS: the sheet must never hide the filters — show the rail inline. */
+html:not(.js) .v2 .srp-filters {
+  position: static; transform: none; max-height: none; box-shadow: none;
+}
