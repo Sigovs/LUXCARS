@@ -149,10 +149,24 @@
   line-height: 1.15; color: var(--color-text);
 }
 .v2 .vdp-sub { margin-top: var(--space-2); color: var(--color-muted); font-size: 13.5px; }
+/* Stock number — the dealer's operational handle: it's what gets quoted on the
+   phone and typed into the CRM, so it reads as a real label, not an eyebrow.
+   Own class rather than .eyebrow, which is shared across every page. */
+.v2 .vdp-stock {
+  margin-bottom: var(--space-2);
+  font-family: var(--v2-ui);
+  font-size: 15px; font-weight: 700; letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.v2 .vdp-stock__num { color: var(--color-text); }
+
+/* Price stays the dominant number, but dialled back — on a car at this level a
+   shouted price reads cheap, and it no longer has to out-shout the stock line. */
 .v2 .vdp-price {
   margin-top: var(--space-5);
   font-family: var(--v2-display); font-weight: 400;
-  font-size: clamp(2rem, 1.5rem + 1.8vw, 2.6rem);
+  font-size: clamp(1.6rem, 1.3rem + 1vw, 2.05rem);
   line-height: 1; color: var(--color-text);
 }
 .v2 .vdp-finance-line { margin-top: var(--space-2); font-size: 12.5px; color: var(--color-muted); }
