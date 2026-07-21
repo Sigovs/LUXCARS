@@ -141,8 +141,65 @@
         <a href="#" class="nav-link">About</a>
         <a href="#" class="nav-link">Contact</a>
       </nav>
+
+      <!-- Mobile only: the primary nav above is display:none under 1024px. -->
+      <button type="button" class="menu-toggle" id="menuToggle"
+              aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+        <span class="menu-toggle__bars" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
     </div>
   </header>
+
+  <!-- ============================ MOBILE MENU ============================
+       Full-screen overlay (position:fixed + inset:0 from styles.css, so it
+       tracks the visible viewport rather than guessing at 100vh). Opened by
+       #menuToggle; open/close, Escape and scroll-lock come from main.js, the
+       focus trap and the disclosure from v4-menu.js. -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <!-- No logo or close button of its own: the real site header floats above
+         this panel, so the logo is already there and the hamburger has turned
+         into the X. Repeating either would be two of each on one screen. -->
+    <nav class="container flex-1 flex flex-col" aria-label="Mobile">
+      <!-- Inventory is the one item with somewhere else to go, so it is a
+           disclosure rather than a link. A button, not an <a>: it navigates
+           nowhere, it opens something. The chevron says so before it is
+           tapped, and rotates to say the panel is open. -->
+      <div class="mnav-row" style="--i:0">
+        <button type="button" class="mnav-link" id="mnavInvBtn"
+                aria-expanded="false" aria-controls="mnavInv">
+          Inventory
+          <svg class="icon mnav-link__chev" aria-hidden="true"><use href="#i-chevron"/></svg>
+        </button>
+        <!-- Two tiles rather than two more text links: nested links at this size
+             read as an accident of indentation, and this is the one branch in
+             the whole menu worth making a choice about. Each says where it
+             goes in a second line, so nobody has to guess what "Sold" means. -->
+        <div class="mnav-sub" id="mnavInv" hidden>
+          <a href="srp4.html" class="mnav-card" aria-current="page">
+            <span class="mnav-card__label">Available</span>
+            <span class="mnav-card__hint">On the lot right now</span>
+          </a>
+          <a href="sold4.html" class="mnav-card">
+            <span class="mnav-card__label">Sold</span>
+            <span class="mnav-card__hint">Recently left the showroom</span>
+          </a>
+        </div>
+      </div>
+      <div class="mnav-row" style="--i:1"><a href="#" class="mnav-link">Sell / Trade</a></div>
+      <div class="mnav-row" style="--i:2"><a href="#" class="mnav-link">Financing</a></div>
+      <div class="mnav-row" style="--i:3"><a href="#" class="mnav-link">Warranty</a></div>
+      <div class="mnav-row" style="--i:4"><a href="#" class="mnav-link">Service</a></div>
+      <div class="mnav-row" style="--i:5"><a href="#" class="mnav-link">About</a></div>
+      <div class="mnav-row" style="--i:6"><a href="#" class="mnav-link">Contact</a></div>
+    </nav>
+    <!-- Phone repeated at the foot of the menu (client requirement) -->
+    <div class="container py-8 border-t hairline">
+      <p class="overline mb-3">Call us directly</p>
+      <a href="tel:+18479472900" class="btn btn-primary btn-block text-base"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>847-947-2900</a>
+      <p class="text-muted text-sm mt-4 flex items-center gap-2"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-pin"/></svg>88 E Dundee Rd, Buffalo Grove, IL 60089</p>
+      <p class="text-muted text-sm mt-1 flex items-center gap-2"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-clock"/></svg>Mon–Fri 9–7 · Sat 9–5 · Sun closed</p>
+    </div>
+  </div>
 
   <main id="main">
 
@@ -475,6 +532,8 @@
 
   <!-- Scripts: type=module keeps globals clean; deferred for fast first paint -->
   <script src="js/main.js" defer></script>
+  <script src="js/v4-menu.js" defer></script>
+  <script src="js/v4-promo.js" defer></script>
   <script src="js/animations.js" defer></script>
   <script src="js/srp4.js" defer></script>
 </body>

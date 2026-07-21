@@ -171,11 +171,223 @@ html:not(.js) [data-reveal] > * {
    5. SHARED COMPONENTS
    ===================================================================== */
 
-/* ---- Header / primary nav (no hamburger, no duplicated phone CTA) ---- */
-.v2 .mobile-menu { display: none; }   /* off-canvas panel is unused; also stops h-scroll */
+/* ---- Header / primary nav ---- */
 .v2 .site-header nav.v2-nav { display: none; gap: clamp(1.1rem, 2vw, 1.9rem); }
 @media (min-width: 1024px) { .v2 .site-header nav.v2-nav { display: flex; } }
 .v2 .site-header nav.v2-nav .nav-link { font-size: 13px; letter-spacing: 0.2px; }
+
+/* =====================================================================
+   PROMO STRIP — one line, always
+   The three announcements are written for a desktop-width bar, so on a phone
+   they wrapped to two lines and pushed the strip to double height. Now the
+   line never breaks; if it cannot fit, it slides sideways to show the rest
+   instead of being silently cut off.
+   ===================================================================== */
+.v2 .promo__item { white-space: nowrap; }
+
+@media (max-width: 900px) {
+  /* Left-aligned once it is moving: a centred line that slides looks like it
+     has drifted out of position rather than like it is presenting itself. */
+  .v2 .promo__item.is-marquee {
+    justify-content: flex-start;
+    /* --over is the measured overflow, set per item in v4-promo.js. Animating
+       to a measured distance (rather than a percentage) means the text stops
+       exactly at its own end — no blank run-out, no clipped final word. */
+    animation: v4PromoSlide 7s ease-in-out infinite alternate;
+  }
+  @keyframes v4PromoSlide {
+    from { transform: translateX(0); }
+    to   { transform: translateX(calc(-1 * var(--over, 0px))); }
+  }
+}
+
+/* WCAG 2.2.2: motion that starts on its own must be escapable. With reduced
+   motion the line holds still and becomes swipeable instead, so the text is
+   still reachable in full — hiding the overflow would just lose it. */
+@media (prefers-reduced-motion: reduce) {
+  .v2 .promo__item.is-marquee {
+    animation: none;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .v2 .promo__item.is-marquee::-webkit-scrollbar { width: 0; height: 0; }
+}
+
+/* =====================================================================
+   MOBILE MENU
+   Below 1024 the primary nav is hidden, so without this the phone header
+   is a logo and nothing else — there was no way to reach any other page.
+
+   The panel itself comes from styles.css: position:fixed + inset:0, which
+   already covers the whole visible viewport (and follows it when the
+   browser chrome slides away — no 100vh/dvh guesswork needed).
+   ===================================================================== */
+
+/* ---- Hamburger ---- */
+.v2 .menu-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px;                 /* comfortably past the 24px minimum */
+  margin-right: -10px;                       /* optically flush with the container edge */
+  background: none; border: 0; cursor: pointer;
+  color: var(--color-text);
+}
+@media (min-width: 1024px) { .v2 .menu-toggle { display: none; } }
+
+.v2 .menu-toggle__bars {
+  position: relative;
+  display: block; width: 22px; height: 14px;
+}
+.v2 .menu-toggle__bars span {
+  position: absolute; left: 0;
+  display: block; width: 100%; height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition: transform 0.28s var(--ease), opacity 0.18s var(--ease), top 0.28s var(--ease);
+}
+.v2 .menu-toggle__bars span:nth-child(1) { top: 0; }
+.v2 .menu-toggle__bars span:nth-child(2) { top: 6px; }
+.v2 .menu-toggle__bars span:nth-child(3) { top: 12px; }
+/* Open: the outer bars travel to the middle and cross, the middle one fades.
+   The button becomes the close control, so it has to LOOK like one. */
+.v2 .menu-toggle[aria-expanded="true"] .menu-toggle__bars span:nth-child(1) { top: 6px; transform: rotate(45deg); }
+.v2 .menu-toggle[aria-expanded="true"] .menu-toggle__bars span:nth-child(2) { opacity: 0; }
+.v2 .menu-toggle[aria-expanded="true"] .menu-toggle__bars span:nth-child(3) { top: 6px; transform: rotate(-45deg); }
+
+/* ---- Panel ---- */
+/* The panel covers the whole viewport, but the HEADER is lifted above it
+   while open (below) rather than being covered. That is what lets the
+   hamburger morph into the X in place: one control, one position, open and
+   close. Buried under the panel the animation would never be seen, and the
+   menu would need a second close button somewhere else.
+   The header's own translucent background is dropped so the two read as one
+   surface instead of a bar sitting on a panel. */
+body.menu-open .site-header {
+  z-index: 130;
+  background: transparent;
+  -webkit-backdrop-filter: none;
+          backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+
+.v2 .mobile-menu {
+  z-index: 120;
+  /* Clears the header floating above it, so the first item is never hidden
+     under the logo. */
+  padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  /* Closed it must be unreachable, not merely off-screen: visibility takes it
+     out of the tab order, which `transform` alone does not do. */
+  visibility: hidden;
+  transition: transform var(--dur) var(--ease), visibility 0s linear var(--dur);
+}
+.v2 .mobile-menu.is-open {
+  visibility: visible;
+  transition: transform var(--dur) var(--ease), visibility 0s;
+}
+
+/* ---- Items ---- */
+/* The base sets weight 200 — thin uppercase on a dark ground is exactly the
+   combination that turns to grey mush on a phone in daylight. Heavier, larger,
+   tighter tracking. */
+.v2 .mobile-menu .mobile-nav-link,
+.v2 .mnav-link {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%;
+  gap: var(--space-4);
+  padding: 1.05rem 0;
+  min-height: 60px;
+  background: none; border: 0; border-bottom: 1px solid var(--color-border);
+  font-family: var(--v2-ui);
+  font-size: 1.28rem; font-weight: 500;
+  letter-spacing: 0.02em; text-transform: none;
+  color: var(--color-text);
+  text-align: left; cursor: pointer;
+  transition: color 0.2s var(--ease), padding-left 0.2s var(--ease);
+}
+.v2 .mobile-menu .mobile-nav-link:hover,
+.v2 .mnav-link:hover { color: var(--red-300); padding-left: 6px; }
+
+/* Staggered entrance — the list assembles instead of appearing all at once.
+   Runs on open only, so it never replays while the panel is closed. */
+.v2 .mobile-menu.is-open .mnav-row {
+  animation: v4MenuIn 0.42s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+@keyframes v4MenuIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---- Disclosure (Inventory) ---- */
+.v2 .mnav-link__chev {
+  flex: 0 0 auto;
+  color: var(--color-muted);
+  transition: transform 0.26s var(--ease), color 0.2s var(--ease);
+}
+.v2 .mnav-link[aria-expanded="true"] .mnav-link__chev { transform: rotate(180deg); color: var(--red-300); }
+/* Two tiles, side by side. As indented text links the pair read as a stray
+   pair of list items; as tiles they read as a choice, which is what they are
+   — the only fork in the whole menu. */
+.v2 .mnav-sub {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: var(--space-3) 0 var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+.v2 .mnav-sub[hidden] { display: none; }
+
+.v2 .mnav-card {
+  position: relative;
+  display: flex; flex-direction: column; gap: 5px;
+  padding: 14px;
+  min-height: 88px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: background 0.24s var(--ease), border-color 0.24s var(--ease), transform 0.24s var(--ease);
+}
+/* A red rule that draws itself along the top edge — the accent arrives rather
+   than sitting there, and the same stroke marks both "this is where you are"
+   and "this is what you are touching". */
+.v2 .mnav-card::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--red-500);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.34s var(--ease);
+}
+.v2 .mnav-card:hover { background: var(--color-surface-2); transform: translateY(-2px); }
+.v2 .mnav-card:hover::before,
+.v2 .mnav-card[aria-current="page"]::before { transform: scaleX(1); }
+.v2 .mnav-card[aria-current="page"] {
+  background: var(--color-surface-2);
+  border-color: color-mix(in srgb, var(--red-500) 45%, var(--color-border));
+}
+
+.v2 .mnav-card__label {
+  font-family: var(--v2-ui);
+  font-size: 15px; font-weight: 700; letter-spacing: 0.02em;
+  color: var(--color-text);
+}
+.v2 .mnav-card[aria-current="page"] .mnav-card__label { color: var(--red-300); }
+.v2 .mnav-card__hint {
+  font-size: 11.5px; line-height: 1.35; color: var(--color-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2 .mnav-card,
+  .v2 .mnav-card::before { transition: none; }
+  .v2 .mnav-card:hover { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2 .mobile-menu.is-open .mnav-row { animation: none; }
+  .v2 .menu-toggle__bars span,
+  .v2 .mnav-link__chev { transition: none; }
+}
 
 /* ---- Buttons: secondary = blue (primary stays red, from styles.css) ---- */
 .v2 .btn-secondary {
