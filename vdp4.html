@@ -290,7 +290,7 @@
             <a href="#" class="btn btn-outline btn-block"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-trade"/></svg>Value your trade</a>
             <div class="vdp-ctas__row">
               <a href="tel:+18479472900" class="btn btn-secondary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-phone"/></svg>847-947-2900</a>
-              <a href="#" class="btn btn-secondary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-mail"/></svg>Message us</a>
+              <a href="#request" class="btn btn-secondary"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-mail"/></svg>Message us</a>
             </div>
           </div>
 
@@ -461,7 +461,12 @@
     </section>
 
     <!-- ============================ REQUEST INFORMATION ============================ -->
-    <section class="vdp-section vdp-form-sec">
+    <!-- id: "Message us" in the buy box jumps here. Anchoring to the SECTION,
+         not to the first input, so the heading and the "we reply the same day"
+         line arrive with it — landing on a bare field leaves you looking at a
+         box with no idea what it is for. The v4-core scroll-margin keeps it
+         clear of the sticky header. -->
+    <section class="vdp-section vdp-form-sec" id="request">
       <div class="container max-w-site vdp-form-grid">
         <div class="reveal-left" data-reveal>
           <p class="eyebrow mb-3">Questions?</p>
