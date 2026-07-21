@@ -37,6 +37,38 @@
    hiding filters is not a job users come to an SRP to do, and collapsing
    would reflow the whole grid for no benefit. */
 .v2 .srp-toggle { display: none; }
+/* ---- Available / Sold scope switch ----
+   Sits at the START of the toolbar, not next to Sort: this changes WHICH
+   inventory you are looking at, while sort only rearranges what is already
+   there. Scope reads before adjustments, so it takes the left edge and Sort
+   keeps the right. A segmented pill rather than two loose links — two links
+   side by side would not say they are alternatives to each other. */
+.v2 .srp-scope {
+  display: inline-flex; flex: 0 0 auto;
+  padding: 3px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+}
+.v2 .srp-scope__tab {
+  display: inline-flex; align-items: center;
+  min-height: 30px; padding: 0 16px;
+  border-radius: 999px;
+  font-family: var(--v2-ui);
+  font-size: 12px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase;
+  color: var(--color-muted);
+  transition: color 0.18s var(--ease), background 0.18s var(--ease);
+}
+.v2 .srp-scope__tab:hover { color: var(--color-text); }
+/* The current page is marked by fill, not by red: this is navigation, and red
+   is spoken for as the action colour. A red tab would compete with every
+   "View details" on the page for the same meaning. */
+.v2 .srp-scope__tab.is-current {
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  box-shadow: inset 0 0 0 1px var(--divider-platinum);
+}
+
 .v2 .srp-count { color: var(--color-muted); font-size: 0.9rem; white-space: nowrap; }
 .v2 .srp-count strong { color: var(--color-text); font-weight: 600; }
 
@@ -434,6 +466,15 @@ html:not(.js) .v2 .srp-filters {
   transition: filter 0.3s var(--ease);
 }
 .v2 .sold-card:hover .vcard__media img { filter: grayscale(0.35) brightness(0.9); }
+
+/* …but NOT when the sold card is the result itself (sold4.html), only when
+   it is a teaser sitting near cars you can still buy. The dimming exists to
+   separate the two states; on a page where everything is sold there is
+   nothing to separate from, so it only drains the photos — and those photos
+   are the argument for coming back. The heading, the tab and the badge on
+   every card already say sold. */
+.v2 #srpGrid .sold-card .vcard__media img,
+.v2 #srpGrid .sold-card:hover .vcard__media img { filter: none; }
 
 .v2 .srp-sold__cta {
   display: flex; justify-content: center;
