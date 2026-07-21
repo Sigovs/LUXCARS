@@ -15,6 +15,32 @@
   border-bottom: 1px solid var(--divider-platinum);
 }
 
+/* On a phone this block is pure preamble — the title and the "200+ hand-picked
+   vehicles" line push the first car most of a screen down, and someone who
+   tapped INVENTORY already knows where they are. Client asked for it gone on
+   mobile only; it returns above 720px, where the height is affordable.
+
+   The heading is hidden VISUALLY, not removed. Google indexes mobile-first,
+   so a phone page with no <h1> loses its main signal of what the page is, and
+   a screen-reader user loses the landmark they use to confirm they arrived.
+   The marketing copy and the eyebrow are decoration and simply go. */
+@media (max-width: 720px) {
+  .v2 .srp-head {
+    padding-block: 0;
+    border-bottom: 0;
+  }
+  .v2 .srp-head .eyebrow,
+  .v2 .srp-head p.text-muted { display: none; }
+  .v2 .srp-head h1 {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 /* ---------------------------------------------- Sticky toolbar
    Sits directly under the sticky site header: count, sort, active chips
    and the filter toggle stay reachable while scrolling the grid. */
