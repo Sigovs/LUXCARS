@@ -60,9 +60,14 @@
 
 /* Sort */
 .v2 .srp-sort { display: flex; align-items: center; gap: var(--space-2); margin-left: auto; }
+/* Sort label in the accent (client's call). --red-300 reads 5.36:1 on the
+   toolbar, so it clears AA for small text; --red-500 would be 2.28:1. */
 .v2 .srp-sort__label {
-  font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--color-muted);
+  font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase;
+  color: var(--red-300); font-weight: 600;
 }
+/* Tie the control to it without shouting: red only on focus/hover. */
+.v2 .srp-sort .filter-field select:hover { border-color: color-mix(in srgb, var(--red-500) 55%, var(--color-border)); }
 .v2 .srp-sort .filter-field { min-width: 190px; }
 
 /* ---------------------------------------------- Layout: rail + results */

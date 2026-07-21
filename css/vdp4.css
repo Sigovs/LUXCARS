@@ -243,6 +243,33 @@
 .v2 .vdp-ctas { margin-top: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); }
 .v2 .vdp-ctas__row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
 .v2 .vdp-ctas__row .btn { width: 100%; }
+/* Contact is a utility, not a deal. Left filled, these two outweighed the
+   outlined trade button above them and the stack read upside-down; outlined
+   they sit a step below it, so the order is financing > trade > contact. */
+.v2 .vdp-ctas__row .btn-secondary {
+  background: transparent;
+  border-color: var(--blue-outline);
+  color: var(--color-text);
+}
+.v2 .vdp-ctas__row .btn-secondary .icon { color: var(--blue-icon); }
+.v2 .vdp-ctas__row .btn-secondary:hover {
+  background: color-mix(in srgb, var(--blue-500) 45%, transparent);
+  border-color: var(--blue-icon);
+}
+
+/* The buy box's two main actions are both red now (client's call): financing
+   filled, trade outlined so the pair still reads in order. --red-500 as a
+   border is only 2.08:1 on this surface and fails the 3:1 a UI boundary needs
+   (WCAG 1.4.11), so the outline uses --red-300 at 4.88:1. */
+.v2 .vdp-buy .btn-outline {
+  border-color: var(--red-300);
+  color: var(--color-text);
+}
+.v2 .vdp-buy .btn-outline .icon { color: var(--red-300); }
+.v2 .vdp-buy .btn-outline:hover {
+  background: color-mix(in srgb, var(--red-500) 30%, transparent);
+  border-color: var(--red-300);
+}
 
 /* ---------------------------------------------- Sections */
 .v2 .vdp-section { padding-block: clamp(var(--space-8), 7vw, var(--space-10)); border-top: 1px solid var(--divider-platinum); }

@@ -170,6 +170,16 @@ html:not(.js) [data-reveal] > * {
 .v2 .btn-secondary:active { background: var(--blue-700); border-color: var(--blue-700); }
 .v2 .btn-secondary .icon { color: #ffffff; }
 
+/* A vehicle card carries exactly one action, so "View details" IS the primary
+   action in that context — it should be red, not the subordinate blue. One
+   rule here covers every card on every page (home, SRP, similar-vehicles). */
+.v2 .vcard .btn-secondary {
+  background: var(--red-500);
+  border-color: var(--red-500);
+}
+.v2 .vcard .btn-secondary:hover { background: var(--red-600); border-color: var(--red-600); }
+.v2 .vcard .btn-secondary:active { background: var(--red-700); border-color: var(--red-700); }
+
 /* Outlined action — one weight below the filled secondary. Use it when a
    third action would otherwise stack a third solid block of colour.
    The border IS what identifies the control, so it has to clear 3:1 against
