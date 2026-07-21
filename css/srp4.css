@@ -60,13 +60,18 @@
   transition: color 0.18s var(--ease), background 0.18s var(--ease);
 }
 .v2 .srp-scope__tab:hover { color: var(--color-text); }
-/* The current page is marked by fill, not by red: this is navigation, and red
-   is spoken for as the action colour. A red tab would compete with every
-   "View details" on the page for the same meaning. */
+/* Current page in the accent (client's call). White on --red-500 is 8.64:1,
+   so the label is legible, not just loud — red as TEXT would have been 2.28:1
+   and unreadable at this size. */
 .v2 .srp-scope__tab.is-current {
-  background: var(--color-surface-2);
-  color: var(--color-text);
-  box-shadow: inset 0 0 0 1px var(--divider-platinum);
+  background: var(--red-500);
+  color: #ffffff;
+}
+/* The inactive half has to stay hittable as a control. Against the red
+   sibling it now reads as the "off" state, so it gets a hairline of its own
+   rather than looking like plain text someone forgot to style. */
+.v2 .srp-scope__tab:not(.is-current):hover {
+  background: color-mix(in srgb, #ffffff 6%, transparent);
 }
 
 .v2 .srp-count { color: var(--color-muted); font-size: 0.9rem; white-space: nowrap; }
