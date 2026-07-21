@@ -278,3 +278,52 @@
   applyUrlParams();
   apply();
 })();
+
+/* =====================================================================
+   Recently-sold rail — arrow paging over a native scroll container.
+   Deliberately NOT a carousel library: the track is a real overflow
+   scroller, so trackpad swipe, shift-wheel, keyboard and touch already
+   work with zero JS. The arrows are an addition, not the mechanism —
+   if this script never runs, the rail still scrolls.
+   ===================================================================== */
+(function () {
+  'use strict';
+
+  var track = document.getElementById('soldTrack');
+  var prev  = document.getElementById('soldPrev');
+  var next  = document.getElementById('soldNext');
+  if (!track || !prev || !next) return;
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  // Step = one card + one gap, measured from the DOM rather than hard-coded,
+  // so the breakpoint changes in CSS can't drift out of sync with the JS.
+  function step() {
+    var card = track.querySelector('.sold-card');
+    if (!card) return track.clientWidth;
+    var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    return card.getBoundingClientRect().width + gap;
+  }
+
+  function page(dir) {
+    track.scrollBy({
+      left: dir * step(),
+      behavior: reduced.matches ? 'auto' : 'smooth'
+    });
+  }
+
+  // Disabled at the ends: an arrow that silently does nothing reads as a
+  // broken page. 2px of slack absorbs sub-pixel scroll widths.
+  function syncArrows() {
+    var max = track.scrollWidth - track.clientWidth;
+    prev.disabled = track.scrollLeft <= 2;
+    next.disabled = track.scrollLeft >= max - 2;
+  }
+
+  prev.addEventListener('click', function () { page(-1); });
+  next.addEventListener('click', function () { page(1); });
+  track.addEventListener('scroll', syncArrows, { passive: true });
+  window.addEventListener('resize', syncArrows);
+
+  syncArrows();
+})();

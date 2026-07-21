@@ -329,3 +329,114 @@
 html:not(.js) .v2 .srp-filters {
   position: static; transform: none; max-height: none; box-shadow: none;
 }
+
+/* =====================================================================
+   RECENTLY SOLD — horizontal rail below the results
+   Sold stock is deliberately NOT in the results grid: it would compete
+   with cars a buyer can have, and it would corrupt the count and filters.
+   Three cards fit the viewport and the fourth peeks past the edge — that
+   peek IS the affordance that says "this scrolls", so the arrows are
+   never the only clue.
+   ===================================================================== */
+.v2 .srp-sold {
+  padding-block: clamp(var(--space-8), 7vw, var(--space-10));
+  border-top: 1px solid var(--divider-platinum);
+}
+.v2 .srp-sold__head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: clamp(var(--space-5), 3vw, var(--space-6));
+}
+/* The section is a dead end unless it asks for something: a sold car can
+   still produce a lead if we invite the "too late" buyer to raise a hand. */
+.v2 .srp-sold__note {
+  margin-top: var(--space-3);
+  max-width: 52ch;
+  color: var(--color-muted);
+  font-size: 0.95rem; line-height: 1.6;
+}
+
+/* ---- Arrows ----
+   40px targets (WCAG 2.5.8 asks 24; a control this small in a wide band
+   needs the extra room to be hittable on a trackpad). The border is what
+   identifies the button, so it clears 3:1 (1.4.11). */
+.v2 .srp-sold__nav { display: flex; gap: var(--space-2); flex: 0 0 auto; }
+.v2 .srp-sold__arrow {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px;
+  border: 1px solid var(--platinum-500, var(--color-border));
+  border-radius: 999px;
+  background: transparent; color: var(--color-text); cursor: pointer;
+  transition: background 0.2s var(--ease), border-color 0.2s var(--ease), opacity 0.2s var(--ease);
+}
+.v2 .srp-sold__arrow:hover:not([disabled]) {
+  background: color-mix(in srgb, var(--red-500) 22%, transparent);
+  border-color: var(--red-400);
+}
+.v2 .srp-sold__arrow[disabled] { opacity: 0.32; cursor: default; }
+.v2 #soldPrev .icon { transform: rotate(180deg); }
+
+/* ---- Track ---- */
+.v2 .srp-sold__track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 31.4%;          /* 3 across + a slice of the 4th */
+  gap: var(--space-5);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  /* Snapped cards would otherwise clip their focus ring against the
+     scroll container; the padding gives the ring somewhere to live.
+     scroll-padding has to match it: without it the snapport starts at the
+     padding EDGE, so the rail rests at scrollLeft 4 instead of 0 and the
+     "back" arrow never registers as being at the start. */
+  padding: 4px;
+  margin: -4px;
+  scroll-padding: 4px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.v2 .srp-sold__track::-webkit-scrollbar { width: 0; height: 0; }
+.v2 .srp-sold__track:focus-visible { outline: 2px solid var(--platinum-300); outline-offset: 4px; }
+.v2 .sold-card { scroll-snap-align: start; }
+
+/* ---- Sold treatment ----
+   Client's call: SOLD in red. White on --red-500 is 8.64:1, so the badge
+   is legible rather than just loud. The photo is knocked back so the card
+   reads as unavailable before anyone reaches the label. */
+.v2 .vcard__badge--sold {
+  /* Top-RIGHT, unlike "Featured": the dealer's photos carry a burnt-in
+     LUXCARS watermark in the top-left corner, and the badge landed straight
+     on top of it. The right corner is clean in every shot. */
+  left: auto;
+  right: 12.8px;
+  background: var(--red-500);
+  border-color: var(--red-500);
+  color: #ffffff;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+.v2 .sold-card .vcard__media img {
+  filter: grayscale(0.65) brightness(0.78);
+  transition: filter 0.3s var(--ease);
+}
+.v2 .sold-card:hover .vcard__media img { filter: grayscale(0.35) brightness(0.9); }
+
+.v2 .srp-sold__cta {
+  display: flex; justify-content: center;
+  margin-top: clamp(var(--space-6), 3vw, var(--space-7));
+}
+
+@media (max-width: 1024px) {
+  .v2 .srp-sold__track { grid-auto-columns: 47%; }
+}
+@media (max-width: 720px) {
+  .v2 .srp-sold__head { flex-direction: column; align-items: flex-start; }
+  .v2 .srp-sold__track { grid-auto-columns: 82%; }
+}
+
+/* Someone who asked for less motion still needs the rail to work — the
+   scroll just happens instantly (handled in JS too, for scrollBy). */
+@media (prefers-reduced-motion: reduce) {
+  .v2 .srp-sold__track { scroll-behavior: auto; }
+  .v2 .sold-card .vcard__media img { transition: none; }
+}

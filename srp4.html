@@ -403,6 +403,95 @@
         </div>
       </div>
     </section>
+
+    <!-- ============================ RECENTLY SOLD ============================
+         Sold stock lives in its own rail rather than mixed into the results
+         grid: inside the grid it competes with cars a buyer can actually have,
+         and it would throw off the result count and the filters. Down here it
+         does the job a sold list is actually good at — showing what moves
+         through the lot, and catching the buyer who arrived too late. -->
+    <section class="srp-sold">
+      <div class="container max-w-site">
+        <div class="srp-sold__head">
+          <div class="srp-sold__intro">
+            <p class="eyebrow mb-3">No longer available</p>
+            <h2 class="section-title text-fluid-4xl">Recently sold</h2>
+            <p class="srp-sold__note">These moved fast. Tell us what you are hunting for and we will call you before the next one reaches the site.</p>
+          </div>
+          <!-- Arrows sit with the heading, not floating over the photos, so they
+               never cover a car and never need a hover to be discoverable. -->
+          <div class="srp-sold__nav">
+            <button type="button" class="srp-sold__arrow" id="soldPrev" aria-label="Previous sold vehicles" aria-controls="soldTrack">
+              <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+            </button>
+            <button type="button" class="srp-sold__arrow" id="soldNext" aria-label="Next sold vehicles" aria-controls="soldTrack">
+              <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- tabindex: a scrollable region has to be reachable by keyboard too
+             (WCAG 2.1.1), not just by the arrows or a trackpad swipe. -->
+        <div class="srp-sold__track" id="soldTrack" tabindex="0" role="group" aria-label="Recently sold vehicles">
+          <article class="vcard sold-card">
+            <a href="vdp4.html" class="block">
+              <div class="vcard__media"><span class="vcard__badge vcard__badge--sold">Sold</span><img src="assets/img/porsche-cayenne.jpg" alt="2022 Porsche Cayenne S" loading="lazy" width="767" height="575" /></div>
+              <div class="p-5">
+                <h3 class="text-lg font-medium">2022 Porsche Cayenne S</h3>
+                <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>SUV</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>18,940 mi</span><span>AWD</span></p>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                  <span class="vcard__price text-xl">$72,450</span>
+                  <span class="btn btn-secondary">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                </div>
+              </div>
+            </a>
+          </article>
+          <article class="vcard sold-card">
+            <a href="vdp4.html" class="block">
+              <div class="vcard__media"><span class="vcard__badge vcard__badge--sold">Sold</span><img src="assets/img/mercedes-s560.jpg" alt="2021 Mercedes-Benz S 580 4MATIC" loading="lazy" width="767" height="575" /></div>
+              <div class="p-5">
+                <h3 class="text-lg font-medium">2021 Mercedes-Benz S 580 4MATIC</h3>
+                <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Sedan</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>26,180 mi</span><span>AWD</span></p>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                  <span class="vcard__price text-xl">$83,750</span>
+                  <span class="btn btn-secondary">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                </div>
+              </div>
+            </a>
+          </article>
+          <article class="vcard sold-card">
+            <a href="vdp4.html" class="block">
+              <div class="vcard__media"><span class="vcard__badge vcard__badge--sold">Sold</span><img src="assets/img/bmw-m2.jpg" alt="2020 BMW M2 CS" loading="lazy" width="767" height="575" /></div>
+              <div class="p-5">
+                <h3 class="text-lg font-medium">2020 BMW M2 CS</h3>
+                <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>Coupe</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>9,270 mi</span><span>RWD</span></p>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                  <span class="vcard__price text-xl">$78,600</span>
+                  <span class="btn btn-secondary">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                </div>
+              </div>
+            </a>
+          </article>
+          <article class="vcard sold-card">
+            <a href="vdp4.html" class="block">
+              <div class="vcard__media"><span class="vcard__badge vcard__badge--sold">Sold</span><img src="assets/img/bmw-x6.jpg" alt="2022 BMW X6 M50i" loading="lazy" width="767" height="575" /></div>
+              <div class="p-5">
+                <h3 class="text-lg font-medium">2022 BMW X6 M50i</h3>
+                <p class="vcard__meta mt-1 flex flex-wrap items-center gap-x-4 gap-y-1"><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-tag"/></svg>SUV</span><span class="inline-flex items-center gap-1.5"><svg class="icon icon-sm" aria-hidden="true"><use href="#i-gauge"/></svg>21,430 mi</span><span>AWD</span></p>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t hairline">
+                  <span class="vcard__price text-xl">$68,995</span>
+                  <span class="btn btn-secondary">View details <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+                </div>
+              </div>
+            </a>
+          </article>
+        </div>
+
+        <div class="srp-sold__cta">
+          <a href="sold4.html" class="btn btn-secondary">View all sold vehicles <svg class="icon icon-sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+        </div>
+      </div>
+    </section>
   </main>
 
   <div class="srp-sheet-backdrop" id="srpBackdrop" hidden></div>

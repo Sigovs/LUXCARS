@@ -206,6 +206,13 @@ html:not(.js) [data-reveal] > * {
   -webkit-backdrop-filter: blur(6px);
           backdrop-filter: blur(6px);
   font-weight: 600;
+  /* Explicit z-index, and it is NOT redundant: the moment a card puts a
+     `filter` on its <img> (the sold rail dims its photos), the image is
+     painted in the same layer as this positioned badge, and DOM order
+     decides — the image comes later, so it buries the badge completely.
+     Computed styles still report the badge as visible, so only a
+     screenshot catches it. */
+  z-index: 1;
 }
 
 /* ---- Body-style tiles (Browse on the homepage; body-type filter on SRP) ---- */
