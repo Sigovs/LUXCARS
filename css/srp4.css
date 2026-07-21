@@ -266,6 +266,36 @@
   .v2 .srp-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* ---------------------------------------------- Sold cars in the listing
+   The label has to be unmissable: a buyer who doesn't spot it calls about a
+   car that's gone, which annoys them and burns the sales team's time. So the
+   badge is solid red (white on --red-500 is 8.64:1), the price is replaced
+   rather than left standing next to it, and the photo dims so the card reads
+   as "gone" at a glance without needing to be read. */
+.v2 .vcard__badge--sold {
+  background: var(--red-500);
+  border-color: var(--red-500);
+  color: #ffffff;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+}
+.v2 .srp-card.is-sold .vcard__media img { filter: grayscale(0.7) brightness(0.72); }
+.v2 .srp-card.is-sold:hover .vcard__media img { filter: grayscale(0.45) brightness(0.82); }
+.v2 .vcard__price--sold {
+  color: var(--red-300);
+  letter-spacing: 1.4px; text-transform: uppercase;
+}
+/* It's no longer a buy action, so it shouldn't wear the buy colour. */
+.v2 .srp-card.is-sold .btn-secondary {
+  background: transparent;
+  border-color: var(--red-400);
+  color: var(--color-text);
+}
+.v2 .srp-card.is-sold .btn-secondary:hover {
+  background: color-mix(in srgb, var(--red-500) 28%, transparent);
+  border-color: var(--red-300);
+}
+
 /* Empty state (brief: inventory grid needs a real no-results state) */
 .v2 .srp-empty {
   padding: var(--space-9) var(--space-5);
