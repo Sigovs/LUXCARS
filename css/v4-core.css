@@ -177,6 +177,23 @@ html:not(.js) [data-reveal] > * {
 .v2 .site-header nav.v2-nav .nav-link { font-size: 13px; letter-spacing: 0.2px; }
 
 /* =====================================================================
+   BUTTONS ON PHONES — full width
+   A row of shrink-to-fit buttons is a desktop shape. On a phone it leaves
+   ragged right edges down the page and makes each target smaller than the
+   column it sits in for no reason. Written as opt-OUT so that any CTA added
+   later is right by default; the exceptions are the two places where a
+   button genuinely shares its row with something else.
+   ===================================================================== */
+@media (max-width: 720px) {
+  .v2 .btn { width: 100%; }
+
+  /* Sits beside the price inside a vehicle card. */
+  .v2 .vcard .btn,
+  /* The sticky bottom bar on the VDP: call icon + CTA, side by side. */
+  .v2 .vdp-bar .btn { width: auto; }
+}
+
+/* =====================================================================
    PROMO STRIP — one line, always
    The three announcements are written for a desktop-width bar, so on a phone
    they wrapped to two lines and pushed the strip to double height. Now the
