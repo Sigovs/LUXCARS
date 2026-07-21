@@ -354,6 +354,11 @@
 
         <!-- Results -->
         <div class="srp-results">
+          <!-- The results are a section of the page and every card inside is an
+               h3, so without this the outline jumps h1 -> h3. Visually hidden
+               because the toolbar above already says what this is; a screen
+               reader navigating by heading gets a stop for "the cars". -->
+          <h2 class="sr-only">Vehicles</h2>
           <div class="srp-grid" id="srpGrid">
           <article class="vcard srp-card sold-card"
                    data-make="Ferrari" data-body="Convertible" data-drive="RWD"
