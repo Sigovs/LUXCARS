@@ -39,17 +39,53 @@
       .map(function (i) { return i.value; });
   }
 
-  // Price bands mirror the homepage select exactly ("45000-70000", "70000-").
-  function priceBand() {
-    var r = form.querySelector('input[name="price"]:checked');
-    if (!r || !r.value) return null;
-    var parts = r.value.split('-');
-    return {
-      value: r.value,
-      min: Number(parts[0]) || 0,
-      max: parts[1] === '' || parts[1] === undefined ? Infinity : Number(parts[1]),
-      label: r.parentNode.querySelector('.srp-check__label').textContent
-    };
+  /* ---------------------------------------------- price min / max ----
+     A two-handle range plus typed boxes. This keeps the band semantics the
+     homepage depends on: its search bar sends price=45000-70000, which maps
+     straight onto min/max. (A single max-only slider used to turn that into
+     "up to $70,000" and quietly show $38k cars.) */
+  var priceMin = document.getElementById('priceMin');
+  var priceMax = document.getElementById('priceMax');
+  var priceMinBox = document.getElementById('priceMinBox');
+  var priceMaxBox = document.getElementById('priceMaxBox');
+  var priceFill = document.getElementById('priceFill');
+
+  var PRICE_FLOOR = priceMin ? Number(priceMin.min) : 0;
+  var PRICE_CEIL  = priceMax ? Number(priceMax.max) : Infinity;
+
+  var parseMoney = function (s) {
+    var n = parseInt(String(s).replace(/[^0-9]/g, ''), 10);
+    return isNaN(n) ? null : n;
+  };
+  var money = function (n) { return '$' + Number(n).toLocaleString('en-US'); };
+
+  // Handles can't cross; whichever one is being dragged pushes the other.
+  function clampPair(leading) {
+    var lo = Number(priceMin.value), hi = Number(priceMax.value);
+    if (lo > hi) {
+      if (leading === 'min') priceMax.value = lo;
+      else priceMin.value = hi;
+    }
+  }
+
+  function paintPrice() {
+    if (!priceMin) return;
+    var lo = Number(priceMin.value), hi = Number(priceMax.value);
+    var span = PRICE_CEIL - PRICE_FLOOR;
+    priceFill.style.left  = ((lo - PRICE_FLOOR) / span * 100) + '%';
+    priceFill.style.right = ((PRICE_CEIL - hi) / span * 100) + '%';
+    priceMinBox.value = money(lo);
+    priceMaxBox.value = money(hi);
+    // announce the real value, not the raw number
+    priceMin.setAttribute('aria-valuetext', money(lo));
+    priceMax.setAttribute('aria-valuetext', money(hi));
+  }
+
+  function priceRange() {
+    if (!priceMin) return null;
+    var lo = Number(priceMin.value), hi = Number(priceMax.value);
+    if (lo <= PRICE_FLOOR && hi >= PRICE_CEIL) return null;   // untouched
+    return { min: lo, max: hi, label: money(lo) + ' - ' + money(hi) };
   }
 
   /* ------------------------------------------------ filtering ---- */
@@ -58,7 +94,7 @@
     var bodies = checkedValues('body');
     var years  = checkedValues('year');
     var drives = checkedValues('drive');
-    var band   = priceBand();
+    var range  = priceRange();
     var mMax   = milesMax ? Number(milesMax.value) : Infinity;
     var mTouched = milesMax && Number(milesMax.value) < Number(milesMax.max);
 
@@ -70,7 +106,7 @@
         (!bodies.length || bodies.indexOf(card.dataset.body) > -1) &&
         (!years.length  || years.indexOf(card.dataset.year) > -1) &&
         (!drives.length || drives.indexOf(card.dataset.drive) > -1) &&
-        (!band || (price >= band.min && price <= band.max)) &&
+        (!range || (price >= range.min && price <= range.max)) &&
         Number(card.dataset.miles) <= mMax;
       card.hidden = !ok;
       if (ok) shown++;
@@ -80,7 +116,7 @@
     if (liveEl) liveEl.textContent = shown + (shown === 1 ? ' vehicle matches your filters' : ' vehicles match your filters');
     if (emptyEl) emptyEl.hidden = shown !== 0;
 
-    renderChips(makes, bodies, years, drives, band, mTouched ? mMax : null);
+    renderChips(makes, bodies, years, drives, range, mTouched ? mMax : null);
   }
 
   /* --------------------------------------------- active chips ---- */
@@ -98,7 +134,7 @@
     return li;
   }
 
-  function renderChips(makes, bodies, years, drives, band, mMax) {
+  function renderChips(makes, bodies, years, drives, range, mMax) {
     chipsEl.innerHTML = '';
     var addBox = function (name, value) {
       chipsEl.appendChild(chip(value, function () {
@@ -111,10 +147,10 @@
     years.forEach(function (v) { addBox('year', v); });
     drives.forEach(function (v) { addBox('drive', v); });
 
-    if (band) {
-      chipsEl.appendChild(chip(band.label, function () {
-        var any = form.querySelector('input[name="price"][value=""]');
-        if (any) { any.checked = true; apply(); }
+    if (range) {
+      chipsEl.appendChild(chip(range.label, function () {
+        priceMin.value = PRICE_FLOOR; priceMax.value = PRICE_CEIL;
+        paintPrice(); apply();
       }));
     }
     if (mMax !== null) {
@@ -157,9 +193,13 @@
     });
 
     var price = params.get('price');
-    if (price) {
-      var radio = form.querySelector('input[name="price"][value="' + price + '"]');
-      if (radio) { radio.checked = true; used = true; }
+    if (price && priceMin) {
+      var parts = price.split('-');
+      var lo = Number(parts[0]) || PRICE_FLOOR;
+      var hi = parts[1] === '' || parts[1] === undefined ? PRICE_CEIL : Number(parts[1]);
+      priceMin.value = Math.max(PRICE_FLOOR, Math.min(lo, PRICE_CEIL));
+      priceMax.value = Math.max(PRICE_FLOOR, Math.min(hi, PRICE_CEIL));
+      clampPair('min'); paintPrice(); used = true;
     }
     return used;
   }
@@ -196,12 +236,30 @@
   /* --------------------------------------------------- wiring ---- */
   form.addEventListener('change', apply);
   if (milesMax) milesMax.addEventListener('input', function () { syncRanges(); apply(); });
+
+  if (priceMin) {
+    priceMin.addEventListener('input', function () { clampPair('min'); paintPrice(); apply(); });
+    priceMax.addEventListener('input', function () { clampPair('max'); paintPrice(); apply(); });
+
+    // Typed boxes: commit on blur/Enter, not per keystroke — otherwise a
+    // half-typed "1" reads as $1 and wipes the results mid-entry.
+    var commit = function (box, slider, which) {
+      var n = parseMoney(box.value);
+      if (n === null) { paintPrice(); return; }
+      slider.value = Math.max(PRICE_FLOOR, Math.min(n, PRICE_CEIL));
+      clampPair(which); paintPrice(); apply();
+    };
+    priceMinBox.addEventListener('blur', function () { commit(priceMinBox, priceMin, 'min'); });
+    priceMaxBox.addEventListener('blur', function () { commit(priceMaxBox, priceMax, 'max'); });
+    [priceMinBox, priceMaxBox].forEach(function (b) {
+      b.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); b.blur(); } });
+    });
+  }
   sortEl.addEventListener('change', sort);
 
   function clearAll() {
     form.reset();
-    var any = form.querySelector('input[name="price"][value=""]');
-    if (any) any.checked = true;
+    if (priceMin) { priceMin.value = PRICE_FLOOR; priceMax.value = PRICE_CEIL; paintPrice(); }
     if (milesMax) milesMax.value = milesMax.max;
     syncRanges();
     apply();
@@ -216,6 +274,7 @@
   });
 
   syncRanges();
+  paintPrice();
   applyUrlParams();
   apply();
 })();

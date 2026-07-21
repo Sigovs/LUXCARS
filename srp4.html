@@ -216,11 +216,27 @@
             <details class="srp-group" open>
               <summary class="srp-group__sum">Price<svg class="icon icon-sm srp-group__chev" aria-hidden="true"><use href="#i-chevron"/></svg></summary>
               <div class="srp-group__body">
-            <label class="srp-check"><input type="radio" name="price" value="" checked /><span class="srp-check__box srp-check__box--radio" aria-hidden="true"></span><span class="srp-check__label">Any price</span></label>
-            <label class="srp-check"><input type="radio" name="price" value="0-25000" /><span class="srp-check__box srp-check__box--radio" aria-hidden="true"></span><span class="srp-check__label">Under $25,000</span></label>
-            <label class="srp-check"><input type="radio" name="price" value="25000-45000" /><span class="srp-check__box srp-check__box--radio" aria-hidden="true"></span><span class="srp-check__label">$25,000 - $45,000</span></label>
-            <label class="srp-check"><input type="radio" name="price" value="45000-70000" /><span class="srp-check__box srp-check__box--radio" aria-hidden="true"></span><span class="srp-check__label">$45,000 - $70,000</span></label>
-            <label class="srp-check"><input type="radio" name="price" value="70000-" /><span class="srp-check__box srp-check__box--radio" aria-hidden="true"></span><span class="srp-check__label">$70,000+</span></label>
+                <!-- Dual-handle range: no native element for this, so two
+                     overlapping sliders share one track. Typed boxes below
+                     stay in sync both ways. -->
+                <div class="srp-dual" id="priceDual">
+                  <span class="srp-dual__track" aria-hidden="true"><span class="srp-dual__fill" id="priceFill"></span></span>
+                  <input type="range" id="priceMin" min="0" max="175000" step="5000" value="0"
+                         aria-label="Minimum price" />
+                  <input type="range" id="priceMax" min="0" max="175000" step="5000" value="175000"
+                         aria-label="Maximum price" />
+                </div>
+                <div class="srp-minmax">
+                  <span class="srp-minmax__field">
+                    <label for="priceMinBox">Min</label>
+                    <input type="text" id="priceMinBox" inputmode="numeric" autocomplete="off" value="$0" />
+                  </span>
+                  <span class="srp-minmax__dash" aria-hidden="true">&ndash;</span>
+                  <span class="srp-minmax__field">
+                    <label for="priceMaxBox">Max</label>
+                    <input type="text" id="priceMaxBox" inputmode="numeric" autocomplete="off" value="$175,000" />
+                  </span>
+                </div>
               </div>
             </details>
 
