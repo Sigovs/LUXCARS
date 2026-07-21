@@ -37,6 +37,18 @@
    hiding filters is not a job users come to an SRP to do, and collapsing
    would reflow the whole grid for no benefit. */
 .v2 .srp-toggle { display: none; }
+/* Red (client's call), and it only ever paints on mobile. It is the one thing
+   standing between a phone visitor and narrowing 200+ cars down, so it is a
+   genuine primary action there — the blue read as secondary next to it.
+   Keeps the icon white for the 8.64:1 pairing rather than tinting it. */
+.v2 .srp-toggle {
+  background: var(--red-500);
+  border-color: var(--red-500);
+  color: #ffffff;
+}
+.v2 .srp-toggle:hover { background: var(--red-600); border-color: var(--red-600); }
+.v2 .srp-toggle:active { background: var(--red-700); border-color: var(--red-700); }
+.v2 .srp-toggle .icon { color: #ffffff; }
 /* ---- Available / Sold scope switch ----
    Sits at the START of the toolbar, not next to Sort: this changes WHICH
    inventory you are looking at, while sort only rearranges what is already
@@ -260,7 +272,7 @@
   min-height: 40px; padding: 8px 10px;
   background: var(--color-surface); border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  color: var(--color-text); font-family: var(--v2-ui); font-size: 13.5px;
+  color: var(--color-text); font-family: var(--v2-ui); font-size: var(--field-fs);
 }
 .v2 .srp-minmax__field input:focus-visible {
   outline: 2px solid var(--platinum-300); outline-offset: 2px; border-color: var(--platinum-400);
@@ -327,35 +339,64 @@
 }
 
 @media (max-width: 900px) {
-  /* The Filters button only exists here — it opens the sheet. */
-  .v2 .srp-toggle { display: inline-flex; flex: 0 0 auto; }
+  /* The Filters button only exists here — it opens the drawer. Full width and
+     centred: it is the single most useful control on a phone (200+ cars will
+     not be scrolled through), and a full-width target cannot be missed or
+     mis-tapped. */
+  .v2 .srp-toggle {
+    display: inline-flex;
+    flex: 1 0 100%;
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Sort stacks directly beneath it, also full width, so the two read as one
+     block of controls rather than as scattered chrome. */
+  .v2 .srp-sort {
+    flex: 1 0 100%;
+    width: 100%;
+    margin-left: 0;
+  }
+  .v2 .srp-sort .filter-field { flex: 1; min-width: 0; }
 
   .v2 .srp-layout { grid-template-columns: 1fr; }
   .v2 .srp-grid { grid-template-columns: repeat(2, 1fr); }
 
-  /* The rail turns into a sheet; it is only shown when opened. */
+  /* The rail turns into a drawer sliding in from the LEFT — it is the same
+     left-hand rail as on desktop, so entering from that edge keeps it the
+     same object rather than a different component that happens to hold the
+     same controls. Off-canvas to the left, not display:none, so it is only
+     ever moved, never rebuilt. */
   .v2 .srp-filters {
     display: block;
-    position: fixed; left: 0; right: 0; bottom: 0; top: auto;
+    position: fixed; top: 0; bottom: 0; left: 0; right: auto;
     z-index: 100;
-    max-height: 82vh; overflow-y: auto;
+    width: min(88vw, 380px);
+    max-height: none; overflow-y: auto;
     padding: var(--space-5) var(--space-5) var(--space-8);
     background: var(--color-surface);
-    border-top: 1px solid var(--color-border);
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    box-shadow: 0 -24px 60px -20px rgba(0, 0, 0, 0.8);
-    transform: translateY(100%);
+    border-right: 1px solid var(--color-border);
+    border-radius: 0;
+    box-shadow: 24px 0 60px -20px rgba(0, 0, 0, 0.8);
+    transform: translateX(-100%);
     transition: transform 0.28s var(--ease);
+    /* The notch and the home indicator both live inside a full-height drawer. */
+    padding-top: calc(var(--space-5) + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(var(--space-8) + env(safe-area-inset-bottom, 0px));
   }
-  .v2 .srp-filters.is-open { transform: translateY(0); }
+  .v2 .srp-filters.is-open { transform: translateX(0); }
   .v2 .srp-sheet-close {
     display: inline-flex; align-items: center; justify-content: center;
     width: 32px; height: 32px; margin-left: var(--space-2);
     background: none; border: 0; color: var(--color-muted); cursor: pointer;
   }
   .v2 .srp-sheet-close:hover { color: var(--color-text); }
-  .v2 .srp-sort { margin-left: 0; }
-  .v2 .srp-sort .filter-field { min-width: 150px; }
+
+  /* Someone who asked for less motion gets the drawer without the slide; it
+     still appears and still closes. */
+  @media (prefers-reduced-motion: reduce) {
+    .v2 .srp-filters { transition: none; }
+  }
 }
 
 @media (max-width: 560px) {

@@ -151,10 +151,6 @@
     <!-- ============================ STICKY TOOLBAR ============================ -->
     <div class="srp-toolbar">
       <div class="container max-w-site srp-toolbar__inner">
-        <button type="button" class="btn btn-secondary srp-toggle" id="filtersToggle" aria-expanded="true" aria-controls="srpFilters">
-          <svg class="icon icon-sm" aria-hidden="true"><use href="#i-filter"/></svg><span>Filters</span>
-        </button>
-
         <!-- Deliberately NOT role="tablist": ARIA tabs switch panels inside one
              document, and a screen reader announcing "tab" here would promise a
              panel that never arrives. These are links to another page, so the
@@ -168,6 +164,15 @@
         <p class="sr-only" id="srpLive" aria-live="polite" aria-atomic="true"></p>
 
         <ul class="srp-chips" id="srpChips" aria-label="Active filters"></ul>
+
+        <!-- Sits here in the DOM, not first, so that the mobile stack (scope,
+             then Filters, then Sort) is the same order the keyboard walks.
+             Reordering with flex `order` instead would send focus jumping to a
+             spot the eye is not looking at. Hidden on desktop, so this position
+             costs the wide layout nothing. -->
+        <button type="button" class="btn btn-secondary srp-toggle" id="filtersToggle" aria-expanded="true" aria-controls="srpFilters">
+          <svg class="icon icon-sm" aria-hidden="true"><use href="#i-filter"/></svg><span>Filters</span>
+        </button>
 
         <div class="srp-sort">
           <label class="srp-sort__label" for="srpSort">Sort</label>
