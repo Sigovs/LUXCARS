@@ -131,6 +131,23 @@ html:has(body.v2) { scroll-padding-top: calc(var(--header-total) + 24px); }
 .v2 .nav-link { min-height: 24px; }
 .v2 .hero__dot { min-width: 24px; }
 
+/* iOS Safari zooms the whole page in when a focused field has a font-size
+   below 16px — and it does NOT zoom back out afterwards. The visitor is left
+   on a magnified page that now scrolls sideways, usually mid-way through the
+   one form we want them to finish. 16px is the threshold, so every field
+   meets it on touch-sized screens; the desktop sizes are untouched.
+   Not an aesthetic choice — the small type is only restored above 1024px. */
+@media (max-width: 1024px) {
+  .v2 input,
+  .v2 select,
+  .v2 textarea { font-size: 16px; }
+}
+/* A page that styles a field's size explicitly wins on specificity over the
+   rule above, so the size is a token instead: any field using it follows the
+   breakpoint on its own and cannot silently reintroduce the zoom. */
+.v2 { --field-fs: 13.5px; }
+@media (max-width: 1024px) { .v2 { --field-fs: 16px; } }
+
 /* Scroll reveals are progressive enhancement: without JS the content must
    still be visible. An inline script in <head> adds `js` to <html>; if it
    never runs, everything stays at full opacity. */
