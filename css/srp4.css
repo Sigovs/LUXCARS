@@ -376,12 +376,26 @@ html:not(.js) .v2 .srp-filters {
 .v2 .srp-sold__arrow[disabled] { opacity: 0.32; cursor: default; }
 .v2 #soldPrev .icon { transform: rotate(180deg); }
 
-/* ---- Track ---- */
+/* ---- Track ----
+   A card here measures EXACTLY what a results-grid card measures, so the
+   rail reads as the same inventory in a different state rather than as a
+   different component. That means repeating the grid's arithmetic instead
+   of eyeballing a percentage: the grid lives in the results column (the
+   container minus the filter rail and the layout gap) and splits it three
+   ways. The track spans the full container, so it has to subtract the same
+   two chunks itself. Both resolve against the same 1336px content box, so
+   the two widths land on the same sub-pixel. */
 .v2 .srp-sold__track {
+  --sold-rail: 268px;                                        /* .srp-filters */
+  --sold-layout-gap: clamp(var(--space-5), 3vw, var(--space-6)); /* .srp-layout */
+  --sold-gap: var(--space-5);                                /* .srp-grid gap */
+
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 31.4%;          /* 3 across + a slice of the 4th */
-  gap: var(--space-5);
+  grid-auto-columns: calc(
+    (100% - var(--sold-rail) - var(--sold-layout-gap) - 2 * var(--sold-gap)) / 3
+  );
+  gap: var(--sold-gap);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   /* Snapped cards would otherwise clip their focus ring against the
@@ -426,12 +440,31 @@ html:not(.js) .v2 .srp-filters {
   margin-top: clamp(var(--space-6), 3vw, var(--space-7));
 }
 
-@media (max-width: 1024px) {
-  .v2 .srp-sold__track { grid-auto-columns: 47%; }
+/* The breakpoints below mirror .srp-grid's exactly (1200 / 900 / 560). If the
+   grid's columns ever change, these have to move with them or the two card
+   sizes drift apart again. */
+@media (max-width: 1200px) {          /* grid drops to 2 across, rail still open */
+  .v2 .srp-sold__track {
+    grid-auto-columns: calc(
+      (100% - var(--sold-rail) - var(--sold-layout-gap) - var(--sold-gap)) / 2
+    );
+  }
+}
+@media (max-width: 900px) {           /* rail becomes a sheet: grid gets the full width */
+  .v2 .srp-sold__track {
+    grid-auto-columns: calc((100% - var(--sold-gap)) / 2);
+  }
 }
 @media (max-width: 720px) {
   .v2 .srp-sold__head { flex-direction: column; align-items: flex-start; }
-  .v2 .srp-sold__track { grid-auto-columns: 82%; }
+}
+/* Below 560 the grid is a single full-width column. Matching that exactly
+   would leave nothing peeking past the edge, and the peek is the only thing
+   telling a phone user the rail scrolls — so the card gives up ~14% here.
+   Nobody can compare the two sizes at this width anyway: the grid is a long
+   scroll away, not beside it. */
+@media (max-width: 560px) {
+  .v2 .srp-sold__track { grid-auto-columns: 86%; }
 }
 
 /* Someone who asked for less motion still needs the rail to work — the
