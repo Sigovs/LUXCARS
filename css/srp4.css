@@ -379,6 +379,24 @@
     justify-content: center;
   }
 
+  /* The scope switch spans the width too, split evenly. At their natural size
+     the two tabs sat as a small island against a full-width button below —
+     stretched, the whole bar reads as one stack of controls. Even halves also
+     stop "Available" from looking like the bigger, more important choice
+     purely because it is the longer word. */
+  .v2 .srp-scope {
+    flex: 1 0 100%;
+    width: 100%;
+  }
+  .v2 .srp-scope__tab { flex: 1; justify-content: center; }
+
+  /* "8 vehicles" goes on phones — with the tabs at full width it was left
+     stranded on a row of its own, and the grid underneath already answers
+     "how many". Hidden, not deleted: the filter code still writes to it, and
+     screen readers get the number from the separate live region (#srpLive),
+     which announces "N vehicles match your filters" on every change. */
+  .v2 .srp-count { display: none; }
+
   /* Sort stacks directly beneath it, also full width, so the two read as one
      block of controls rather than as scattered chrome. */
   .v2 .srp-sort {
@@ -411,6 +429,15 @@
     color: var(--red-300);
   }
   .v2 .srp-sort .filter-field select { padding-left: 42px; }
+
+  /* Scrolled down, the bar keeps only Filters. Three rows of chrome pinned to
+     the top was eating ~250px — a third of the screen — for controls nobody
+     is using while they scan cars. Scroll back up and the rest returns, so
+     sorting is one flick away rather than a trip to the top of the page. */
+  .v2 .srp-toolbar.is-condensed .srp-scope,
+  .v2 .srp-toolbar.is-condensed .srp-count,
+  .v2 .srp-toolbar.is-condensed .srp-chips,
+  .v2 .srp-toolbar.is-condensed .srp-sort { display: none; }
 
   .v2 .srp-layout { grid-template-columns: 1fr; }
   .v2 .srp-grid { grid-template-columns: repeat(2, 1fr); }

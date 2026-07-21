@@ -165,10 +165,22 @@
   }
 
   /* ------------------------------------------------- sorting ----- */
-  var order = cards.slice();   // original ("Featured") order
+  var order = cards.slice();   // original document order, the stable base
+
+  /* A card's heading leads with the model year — "2019 Ferrari Portofino" —
+     so sorting the heading as-is would order by YEAR and only then by name,
+     and the result would look like no particular order at all. The year is
+     stripped first so A–Z means what it says. */
+  function vehicleName(card) {
+    var h = card.querySelector('h3');
+    return h ? h.textContent.trim().replace(/^\d{4}\s+/, '') : '';
+  }
+
   function sort() {
     var v = sortEl.value;
     var list = order.slice();
+    if (v === 'name-asc')   list.sort(function (a, b) { return vehicleName(a).localeCompare(vehicleName(b)); });
+    if (v === 'name-desc')  list.sort(function (a, b) { return vehicleName(b).localeCompare(vehicleName(a)); });
     if (v === 'price-asc')  list.sort(function (a, b) { return a.dataset.price - b.dataset.price; });
     if (v === 'price-desc') list.sort(function (a, b) { return b.dataset.price - a.dataset.price; });
     if (v === 'year-desc')  list.sort(function (a, b) { return b.dataset.year - a.dataset.year; });
@@ -277,6 +289,10 @@
   paintPrice();
   applyUrlParams();
   apply();
+  /* The first option is now a real ordering, not "however the page happened to
+     be written", so the grid has to be put in that order on load — otherwise
+     the control claims A–Z while the cards sit in document order. */
+  sort();
 })();
 
 /* =====================================================================
@@ -326,4 +342,55 @@
   window.addEventListener('resize', syncArrows);
 
   syncArrows();
+})();
+
+/* =====================================================================
+   Condensed toolbar (phones only).
+   Pinned, the full bar costs ~250px — a third of the screen — for controls
+   nobody touches while scanning cars. Scrolling down strips it to Filters;
+   scrolling up brings the rest straight back, so sorting is a flick away
+   rather than a trip to the top of the page.
+
+   Direction-driven, not position-driven, for exactly that reason. Without
+   JS the bar simply stays expanded — nothing here is required to shop.
+   ===================================================================== */
+(function () {
+  'use strict';
+
+  var bar = document.querySelector('.srp-toolbar');
+  if (!bar) return;
+
+  var phone = window.matchMedia('(max-width: 900px)');
+  // Below this the bar is always whole: near the top of the page there is
+  // nothing to reclaim, and collapsing it there would just look like a glitch.
+  var FLOOR = 180;
+  // Ignore scroll jitter and iOS rubber-banding, which otherwise flip the
+  // bar back and forth while a finger rests on the screen.
+  var DELTA = 8;
+
+  var last = window.pageYOffset;
+  var queued = false;
+
+  function update() {
+    queued = false;
+    if (!phone.matches) { bar.classList.remove('is-condensed'); return; }
+
+    var y = window.pageYOffset;
+    if (y <= FLOOR) { bar.classList.remove('is-condensed'); last = y; return; }
+
+    var moved = y - last;
+    if (Math.abs(moved) < DELTA) return;
+    bar.classList.toggle('is-condensed', moved > 0);
+    last = y;
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!queued) { queued = true; requestAnimationFrame(update); }
+  }, { passive: true });
+
+  // A rotation can cross the breakpoint while the bar is condensed.
+  if (phone.addEventListener) phone.addEventListener('change', update);
+  window.addEventListener('resize', update);
+
+  update();
 })();
