@@ -57,6 +57,13 @@
         <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
         <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6.5 3.5h3l1.5 4-2 1.4a12 12 0 0 0 5.6 5.6l1.4-2 4 1.5v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5z"/></symbol>
         <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></symbol>
+        <!-- Stands in for the word "Sort" on phones, where the label is hidden
+             to save a row. Two opposed arrows, not the usual descending bars:
+             bars would be near-identical to i-filter, which sits directly
+             above it in the same toolbar. Four strokes, so it still reads at
+             16px — an earlier version packed in bars AND an arrowhead and
+             turned to mush at this size. -->
+        <symbol id="i-sort" viewBox="0 0 24 24"><path d="M8 4v16M4.5 16.5L8 20l3.5-3.5"/><path d="M16 20V4M12.5 7.5L16 4l3.5 3.5"/></symbol>
         <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
         <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></symbol>
         <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
@@ -177,6 +184,10 @@
         <div class="srp-sort">
           <label class="srp-sort__label" for="srpSort">Sort</label>
           <div class="filter-field">
+            <!-- Carries the meaning of the label on phones, where the word
+                 itself is hidden. Decorative: the accessible name still comes
+                 from the <label>, so this must not be announced twice. -->
+            <svg class="icon srp-sort__icon" aria-hidden="true"><use href="#i-sort"/></svg>
             <select id="srpSort">
               <option value="featured">Featured</option>
               <option value="price-asc">Price: low to high</option>
